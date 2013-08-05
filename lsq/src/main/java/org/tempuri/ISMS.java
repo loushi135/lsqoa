@@ -1,0 +1,10 @@
+package org.tempuri;
+
+public interface ISMS extends java.rmi.Remote {
+    public void sendSMSAsync(java.lang.String[] phones, java.lang.String message, java.lang.String senderSysID, java.lang.String senderName, java.lang.String sourceApp, java.util.Calendar replyPeriodTime, java.lang.String replyToMobile, org.datacontract.schemas._2004._07.GoldMantis_SMS_Common.Priority priority, java.lang.String refID, java.lang.Boolean needAppDeal) throws java.rmi.RemoteException;
+    public org.datacontract.schemas._2004._07.GoldMantis_SMS_Common.ReceiptSMS readRecMsg(java.lang.String msgID) throws java.rmi.RemoteException;
+    public org.datacontract.schemas._2004._07.GoldMantis_SMS_Common.SendSMS readSendMsg(java.lang.String msgID) throws java.rmi.RemoteException;
+    public void readRecMsgList(java.lang.String sendMsgID, java.lang.Integer pageIndex, java.lang.Integer pageSize, org.datacontract.schemas._2004._07.GoldMantis_SMS_Common.holders.ArrayOfReceiptSMSHolder readRecMsgListResult, javax.xml.rpc.holders.IntegerWrapperHolder recordCount) throws java.rmi.RemoteException;
+    public void getSendList(java.lang.String phone, java.lang.String content, java.lang.Integer status, java.util.Calendar sendDateFrom, java.util.Calendar sendDateTo, java.lang.String senderSysID, java.lang.String sourceApp, java.lang.Integer replyStatus, java.util.Calendar replyDateFrom, java.util.Calendar replyDateTo, java.lang.Integer pageIndex, java.lang.Integer pageSize, org.datacontract.schemas._2004._07.GoldMantis_SMS_Common.holders.ArrayOfSendSMSHolder getSendListResult, javax.xml.rpc.holders.IntegerWrapperHolder recordCount) throws java.rmi.RemoteException;
+    public void getReceiptList(java.lang.String phone, java.lang.String content, java.util.Calendar recDateFrom, java.util.Calendar recDateTo, java.lang.String senderSysID, java.lang.Integer readStatus, java.lang.Integer pageIndex, java.lang.Integer pageSize, org.datacontract.schemas._2004._07.GoldMantis_SMS_Common.holders.ArrayOfReceiptSMSHolder getReceiptListResult, javax.xml.rpc.holders.IntegerWrapperHolder recordCount) throws java.rmi.RemoteException;
+}

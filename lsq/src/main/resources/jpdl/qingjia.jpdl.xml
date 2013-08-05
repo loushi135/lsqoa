@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="qingjia" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="399,3,48,48" name="开始">
+      <transition g="-25,-17" name="提交申请" to="人事审批"/>
+   </start>   
+   <task name="人事审批" g="188,-1,92,52">
+      <transition name="提交" to="分支1" g="-33,-12"/>
+      <transition name="取消" to="驳回1" g="20,35:64,0">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			 <field name="roleName">  
+		        		<string value="人事审批"/>  
+		     	  </field>  
+	      </event-listener>
+      </transition>
+   </task>
+   <task g="40,146,92,52" name="部门经理审批">
+   	   <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-部门经理"/>  
+     	  </field>  
+   	  </assignment-handler>
+      <transition g="-28,-8" name="提交" to="部门经理提交审批"/>
+      <transition g="21,171:-10,-16" name="取消" to="驳回1">
+      		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			 <field name="roleName">  
+		        		<string value="部门经理"/>  
+		     	  </field>  
+	      </event-listener>
+      </transition>
+   </task>
+   <task g="189,233,92,52" name="分管领导审批">
+   	   <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-分管领导"/>  
+     	  </field>  
+   	  </assignment-handler>
+      <transition g="-24,-7" name="提交" to="分管副总提交审批"/>
+      <transition g="-19,-23" name="取消" to="驳回2">
+      		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			 <field name="roleName">  
+		        		<string value="分管副总"/>  
+		     	  </field>  
+	      </event-listener>
+      </transition>
+   </task>
+   <task g="344,332,92,52" name="总经理审批">
+   	  <transition g="-19,-12" name="至结束" to="结束">
+      		<event-listener class="com.xpsoft.oa.workflow.event.LeaveapplyListener">
+	      </event-listener>
+      </transition>
+      <transition g="8,-14" name="取消" to="驳回3">
+      		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			 <field name="roleName">  
+		        		<string value="总经理"/>  
+		     	  </field>  
+	      </event-listener>
+      </transition>
+   </task>
+   <decision g="211,83,48,48" name="分支1">
+      <handler class="com.xpsoft.oa.workflow.event.LeaveDecisionFirstHandler" />
+      <transition g="389,141:7,14" name="至总经理" to="总经理审批"/>
+      <transition g="85,108:19,-16" name="至部门经理审批" to="部门经理审批"/>
+      <transition g="477,109;478,444:-26,-26" name="至结束" to="结束">
+      		<event-listener class="com.xpsoft.oa.workflow.event.LeaveapplyListener">
+	      </event-listener>
+      </transition>
+      <transition g="-85,-11" name="至分管领导审批" to="分管领导审批"/>
+   </decision>
+   <decision expr="#{totalDays gt 3.0 ? '3天以上': '至结束'}" g="61,239,48,48" name="部门经理提交审批">     
+      <transition g="-22,-20" name="3天以上" to="分管领导审批"/>
+      <transition g="85,450:-18,-133" name="至结束" to="结束">
+      	<event-listener class="com.xpsoft.oa.workflow.event.LeaveapplyListener">
+	      </event-listener>
+      </transition>
+      
+   </decision>
+   <decision g="210,336,48,48" name="分管副总提交审批">
+   	   <handler class="com.xpsoft.oa.workflow.event.LeaveDecisionSecondHandler" />
+      <transition g="-45,-20" name="2天以上" to="总经理审批"/>
+      <transition g="-37,-9" name="至结束" to="结束">
+      	  <event-listener class="com.xpsoft.oa.workflow.event.LeaveapplyListener">
+	      </event-listener>
+      </transition>
+   </decision>
+   <end g="211,425,48,48" name="结束"/>
+   <end-cancel g="1,406,48,48" name="驳回1"/>
+   <end-cancel g="98,391,48,48" name="驳回2"/>
+   <end-cancel g="429,390,48,48" name="驳回3"/>
+</process>

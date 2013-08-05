@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.xpsoft.oa.model.statistics.Prequalificareport"
+		table="prequalificareport" select-before-update="false"
+		dynamic-update="false" dynamic-insert="false" optimistic-lock="version">
+		<id name="id" column="id" type="java.lang.Long" length="19">
+			<generator class="native" />
+		</id>
+		<!--         <many-to-one-->
+		<!--			name="project"-->
+		<!--			class="com.xpsoft.oa.model.statistics.ProjectNew"-->
+		<!--            not-null="false"-->
+		<!--			fetch="join"-->
+		<!--		>-->
+		<!--			<column name="proId" />-->
+		<!--		</many-to-one>-->
+		
+		<property name="proName" type="java.lang.String" update="true"
+			insert="true" access="property" column="proName" length="128"
+			not-null="false" unique="false" />
+		<property name="designUnit" type="java.lang.String" update="true"
+			insert="true" access="property" column="designUnit" length="128"
+			not-null="false" unique="false" />
+		<property name="buildUnit" type="java.lang.String" update="true"
+			insert="true" access="property" column="buildUnit" length="128"
+			not-null="false" unique="false" />
+		<property name="bidType" type="java.lang.String" update="true"
+			insert="true" access="property" column="bidType" length="128"
+			not-null="false" unique="false" />
+		<property name="bidProxy" type="java.lang.String" update="true"
+			insert="true" access="property" column="bidProxy" length="128"
+			not-null="false" unique="false" />
+		<property name="proEstimatPrice" type="java.math.BigDecimal"
+			update="true" insert="true" access="property" column="ProEstimatPrice"
+			precision="25" scale="8" not-null="false" unique="false" />
+		<property name="timeNotice" type="java.util.Date" update="true"
+			insert="true" access="property" column="timeNotice" length="19"
+			not-null="false" unique="false" />
+		<property name="timePreQualifica" type="java.util.Date"
+			update="true" insert="true" access="property" column="timePreQualifica"
+			length="19" not-null="false" unique="false" />
+		<property name="timePerBidOpen" type="java.util.Date" update="true"
+			insert="true" access="property" column="timePerBidOpen" length="19"
+			not-null="false" unique="false" />
+		<property name="requireConstrLevel" type="java.lang.String"
+			update="true" insert="true" access="property" column="requireConstrLevel"
+			length="128" not-null="false" unique="false" />
+		<property name="sureArrivalPreQ" type="java.lang.String"
+			update="true" insert="true" access="property" column="sureArrivalPreQ"
+			length="128" not-null="false" unique="false" />
+		<property name="sureArrivalBid" type="java.lang.String"
+			update="true" insert="true" access="property" column="sureArrivalBid"
+			length="128" not-null="false" unique="false" />
+		<property name="suggestConstructor" type="java.lang.String"
+			update="true" insert="true" access="property" column="suggestConstructor"
+			length="128" not-null="false" unique="false" />
+		<many-to-one name="materialFitDept" class="com.xpsoft.oa.model.system.Department"
+			not-null="false" fetch="join">
+			<column name="materialFitDeptId" />
+		</many-to-one>
+		<property name="reqEnterpriseQua" type="java.lang.String"
+			update="true" insert="true" access="property" column="reqEnterpriseQua"
+			length="5000" not-null="false" unique="false" />
+		<property name="reqPerformance" type="java.lang.String"
+			update="true" insert="true" access="property" column="reqPerformance"
+			length="5000" not-null="false" unique="false" />
+		<property name="reqOther" type="java.lang.String" update="true"
+			insert="true" access="property" column="reqOther" length="5000"
+			not-null="false" unique="false" />
+
+		<many-to-one name="applyUser" class="com.xpsoft.oa.model.system.AppUser"
+			not-null="false" fetch="join">
+			<column name="applyUserId" />
+		</many-to-one>
+		<property name="processRunId" type="java.lang.Long" update="true"
+			insert="true" access="property" column="processRunId" length="19"
+			not-null="false" unique="false" />
+	</class>
+</hibernate-mapping>

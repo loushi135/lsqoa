@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="opinion" label="审批意见" type="varchar" length="1000"/>
+	<field name="meetingRoom" label="会议室" type="varchar" length="512"/>
+	<field name="startTime" label="开始时间" type="datetime"/>
+	<field name="endTime" label="结束时间" type="datetime"/>
+</fields>

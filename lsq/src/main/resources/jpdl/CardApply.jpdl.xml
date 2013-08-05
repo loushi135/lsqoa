@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="CardApply" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="345,8,48,48" name="开始">
+      <transition g="288,43:-23,-14" name="决策" to="决策3"/>
+   </start>
+   <task g="321,73,92,52" name="部门经理">
+    <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-部门经理"/>  
+     	  </field>  
+   	</assignment-handler>
+      <transition g="5,-12" name="至分管领导" to="分管领导"/>
+      <transition g="548,220:6,-20" name="取消" to="审批不通过">
+        <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="部门经理"/>  
+			     	  </field>  
+		      </event-listener>
+		</transition>
+   </task>
+   <task g="323,170,92,52" name="分管领导">
+     <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-分管领导"/>  
+     	  </field>  
+   	</assignment-handler>
+      <transition g="-17,-10" name="决策" to="决策1"/>
+      <transition g="494,280:-8,-40" name="取消" to="审批不通过">
+       <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="分管领导"/>  
+			     	  </field>  
+		      </event-listener>
+		</transition>
+   </task>
+   <task g="319,257,92,52" name="人事部">
+      <transition g="-10,-19" name="决策" to="决策2"/>
+      <transition g="466,312:3,-21" name="取消" to="审批不通过">
+      <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="人事部"/>  
+			     	  </field>  
+		      </event-listener>
+		</transition>
+   </task>
+   <task g="318,328,92,52" name="总经理">
+      <transition g="13,-8" name="至行政企划部" to="行政企划部"/>
+      <transition g="469,387:-1,-5" name="取消" to="审批不通过">
+       <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="总经理"/>  
+			     	  </field>  
+		      </event-listener>
+		</transition>
+   </task>
+   <task g="315,408,92,52" name="行政企划部">
+      <transition g="-50,-22" name="审批通过" to="审批通过">
+       <event-listener class="com.xpsoft.oa.workflow.event.CardApplyFinishListener">
+		      </event-listener>
+	  </transition>
+      <transition g="-64,-22" name="取消" to="审批不通过">
+         <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="行政企划部"/>  
+			     	  </field>  
+		      </event-listener>
+		</transition>
+   </task>
+   <end-cancel g="519,412,48,48" name="审批不通过"/>
+   <end g="155,414,48,48" name="审批通过"/>
+   <decision g="205,188,48,48" name="决策1">
+    <handler class="com.xpsoft.oa.workflow.event.CardApplyFirstHandler" />
+      <transition g="-7,-12" name="新印" to="人事部"/>
+      <transition g="62,310:-9,-17" name="重印" to="行政企划部"/>
+   </decision>
+   <decision g="206,265,48,48" name="决策2">
+   <handler class="com.xpsoft.oa.workflow.event.CardApplyThirdHandler" />
+      <transition g="287,353:6,-19" name="高印" to="总经理"/>
+      <transition g="305,396:-19,-25" name="其他" to="行政企划部"/>
+   </decision>
+   <decision g="207,70,48,48" name="决策3">
+    <handler class="com.xpsoft.oa.workflow.event.CardApplySecondHandler" />
+      <transition g="-25,-14" name="普通员工" to="部门经理"/>
+      <transition g="291,166:-39,-36" name="部门经理" to="分管领导"/>
+      <transition g="-55,-16" name="分管领导" to="决策1"/>
+   </decision>
+</process>

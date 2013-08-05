@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="companyName" label="所属公司" type="varchar" length="128" isShowed="true"/>
+	<field name="applyName" label="姓名" type="varchar" length="128" isShowed="true"/>
+	<field name="sex" label="性别" type="varchar" length="128" isShowed="true"/>
+	<field name="deptName" label="部门" type="varchar" length="128" isShowed="true"/>
+	<field name="workPosition" label="职位" type="varchar" length="128" isShowed="true"/>
+	<field name="comeInDate" label="进公司日期" type="datetime"  isShowed="true"/>
+	<field name="leaveReason" label="离职原因" type="varchar" length="1000"  isShowed="true"/>
+	<field name="applyDate" label="离职申请日期" type="datetime"  isShowed="true"/>
+	<field name="leaveDate" label="正式离职日期" type="datetime"  isShowed="true"/>
+</fields>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.EndInnerCheck"
+        table="end_inner_check"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+        <property
+            name="checkTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="checkTime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="score"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="score"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="customerSatisfy"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="customerSatisfy"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="conclusion"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="conclusion"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="rewardOrPunish"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="rewardOrPunish"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="processRunId"
+            type="java.lang.Long"
+            update="false"
+            insert="true"
+            access="property"
+            column="processRunId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <many-to-one
+			name="project"
+			class="com.xpsoft.oa.model.statistics.ProjectNew"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="proId" />
+		</many-to-one>
+		
+		<many-to-one
+			name="checkUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="checkUserId" />
+		</many-to-one>
+		
+		<many-to-one
+			name="applyUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="applyUserId" />
+		</many-to-one>
+		
+		<set name="fileAttachs" table="end_inner_check_file" lazy="true" cascade="save-update,delete-orphan">
+        	<key column="endId"></key>
+        	<many-to-many column="fileId" class="com.xpsoft.oa.model.system.FileAttach" fetch="join" />
+    	</set>
+     </class>
+</hibernate-mapping>

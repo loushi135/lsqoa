@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.hrm.Photo"
+        table="photo"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+        <many-to-one
+			name="photoFolder"
+			class="com.xpsoft.oa.model.hrm.PhotoFolder"
+            not-null="false"
+			fetch="join"
+		>	
+			<column name="folderId" />
+		</many-to-one>
+		
+        <many-to-one
+			name="user"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>	
+			<column name="userId" />
+		</many-to-one>
+        <property
+            name="photoName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="photoName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="photoDesc"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="photoDesc"
+            length="500"
+            not-null="false"
+            unique="false"
+        />
+        <many-to-one
+			name="file"
+			class="com.xpsoft.oa.model.system.FileAttach"
+            not-null="false"
+			fetch="join"
+		>	
+			<column name="fileId" />
+		</many-to-one>
+        <property
+            name="createDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="createDate"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

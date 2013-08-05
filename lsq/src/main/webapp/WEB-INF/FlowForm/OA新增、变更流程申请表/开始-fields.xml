@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="flowApply.flowName" label="流程名称" type="varchar" length="128" isShowed="true"/>
+	<field name="flowApply.background" label="需求背景" type="text" isShowed="true"/>
+	<field name="flowApply.flowDesc" label="流程描述" type="text" isShowed="true"/>
+	<field name="flowApply.relatedUser.fullname" label="相关部门" type="varchar" length="128" isShowed="true"/>
+	<field name="flowApply.relatedUser.userId" label="相关部门" type="varchar" length="128" isShowed="false"/>
+	<field name="flowApply.flowNode" label="流程节点" type="text" isShowed="true"/>
+	<field name="flowApply.remark" label="备注" type="text" isShowed="true"/>
+	<field name="flowApply.attachFiles" label="附件" type="file" isShowed="true"/>
+	<field name="flowApply.attachIds" label="附件" type="text" isShowed="false"/>
+	<field name="flowApply.applyUser.fullname" label="经办人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowApply.applyUser.userId" label="经办人" type="varchar" length="128" isShowed="false"/>
+</fields>

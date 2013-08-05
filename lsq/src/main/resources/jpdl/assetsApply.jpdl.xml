@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="assetsApply" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="21,2,48,48" name="开始">
+      <transition g="-19,-13" name="提交" to="决策4"/>
+   </start>
+   <task g="509,80,92,52" name="项目经理">
+      <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-项目经理"/>  
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-22,-21" name="提交" to="区域经理"/>
+      <transition g="-4,-21" name="取消" to="取消4">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="项目经理"/>
+		     	</field>
+	    </event-listener>
+      </transition>
+   </task>
+   <task g="733,79,92,52" name="区域经理">
+      <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-部门经理"/>
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-31,-21" name="提交" to="采购部询价"/>
+      <transition g="-22,-18" name="取消" to="取消4">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="区域经理"/>
+		     	</field>
+	    </event-listener>
+      </transition>
+   </task>
+   <task g="262,219,92,52" name="部门经理">
+      <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-部门经理"/>  
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-94,6" name="提交" to="采购部询价"/>
+      <transition g="-5,-24" name="取消" to="取消1">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="部门经理"/>
+		     	</field>
+	      </event-listener>
+      </transition>
+   </task>
+   <task g="736,211,92,52" name="采购部询价">
+      <transition g="-37,-12" name="提交" to="决策1"/>
+      <transition g="-64,-22" name="取消" to="取消1">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="采购部询价"/>
+		     	</field>
+	    </event-listener>
+      </transition>
+   </task>
+   <task g="539,343,92,52" name="分管领导">
+   	  <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-分管领导"/>
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-4,-18" name="提交" to="决策3"/>
+      <transition g="-15,-23" name="取消" to="取消5">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="分管领导"/>
+		     	</field>
+	    </event-listener>
+      </transition>
+   </task>
+   <task g="249,412,92,52" name="常务副总">
+      <transition g="-63,-5" name="提交" to="决策2"/>
+      <transition g="-30,6" name="取消" to="取消2">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="常务副总"/>
+		     	</field>
+	    </event-listener>
+      </transition>
+   </task>
+   <task g="247,552,92,52" name="总经理">
+   	  <transition g="-11,3" name="提交" to="集团备案"/>
+      <transition g="-24,-18" name="取消" to="取消2">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="总经理"/>
+		     	</field>
+	    </event-listener>
+      </transition>
+   </task>
+   <task g="609,552,92,52" name="集团备案">
+      <transition g="8,-5" name="提交" to="企划部"/>
+      <transition g="-17,-19" name="取消" to="取消3">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="董事长"/>
+		     	</field>
+	    </event-listener>
+      </transition>
+   </task>
+   <task g="887,389,92,52" name="企划部">
+      <transition g="-23,-19" name="审批通过" to="审批通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.AsstesApplyFinishListener"/>
+      </transition>
+      <transition g="-5,-3" name="取消" to="取消3">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="行政企划部"/>
+		     	</field>
+	    </event-listener>
+      </transition>
+   </task>
+   <task name="企划部1" g="281,3,92,52">
+      <transition name="决策" to="决策" g="-45,-20"/>
+      <transition name="取消" to="取消6" g="-32,-14">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">
+		        	<string value="行政企划部"/>
+		     	</field>
+	    </event-listener>
+      </transition>
+   </task>
+   <decision g="285,83,48,48" name="决策">
+      <handler class="com.xpsoft.oa.workflow.event.AssetsApplyFistHandler" />
+      <transition g="-46,-22" name="普通员工" to="部门经理"/>
+      <transition g="-57,-28" name="部门经理及以上" to="采购部询价"/>
+      <transition g="-33,-20" name="施工部门" to="项目经理"/>
+   </decision>
+   <decision g="270,304,48,48" name="决策1">
+   	  <handler class="com.xpsoft.oa.workflow.event.AssetsApplySecondHandler" />
+      <transition g="-49,-1" name="普通员工或部门经理" to="分管领导"/>
+      <transition g="-56,-15" name="分管领导金额大于等于3000" to="常务副总"/>
+      <transition g="655,284:-301,-18" name="分管领导金额小于3000" to="企划部"/>
+   </decision>
+   <decision g="621,490,48,48" name="决策2">
+      <handler class="com.xpsoft.oa.workflow.event.AssetsApplyThirdHandler" />
+      <transition g="-57,-22" name="金额大于等于20000" to="总经理"/>
+      <transition g="-64,-10" name="金额小于20000" to="企划部"/>
+   </decision>
+   <decision g="750,389,48,48" name="决策3">
+   	  <handler class="com.xpsoft.oa.workflow.event.AssetsApplyFourthHandler" />
+      <transition g="-77,-17" name="金额大于等于3000" to="常务副总"/>
+      <transition g="-47,-16" name="金额小于3000" to="企划部"/>
+   </decision>
+   <decision name="决策4" g="114,3,48,48">
+   	  <handler class="com.xpsoft.oa.workflow.event.AssetsApplyFivethHandler" />
+      <transition name="补贴" to="企划部1" g="-4,-18"/>
+      <transition name="不补贴" to="决策" g="-32,-11"/>
+   </decision>
+   <end g="1026,394,48,48" name="审批通过"/>
+   <end-cancel g="419,184,48,48" name="取消1"/>
+   <end-cancel g="351,469,48,48" name="取消2"/>
+   <end-cancel g="930,552,48,48" name="取消3"/>
+   <end-cancel g="647,146,48,48" name="取消4"/>
+   <end-cancel g="718,330,48,48" name="取消5"/>
+   <end-cancel g="504,9,48,48" name="取消6"/>
+</process>

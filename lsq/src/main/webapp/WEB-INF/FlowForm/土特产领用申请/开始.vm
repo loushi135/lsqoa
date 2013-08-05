@@ -1,0 +1,389 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "土特产领用申请",
+	labelWidth : 30,
+	labelAlign : "left",
+	layout : "form",
+	width : 800,
+	height : 450,
+	padding : "10px",
+	initComponent : function() {
+		var summary = new Ext.ux.grid.GridSummary();
+		this.items = [{
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '报告人：',
+								columnWidth : .15
+							}, {
+								xtype : 'textfield',
+								name : 'localProductApply.applyUser.fullname',
+								id : 'flow_localProductApply.applyUser.fullname',
+								columnWidth : .15,
+								readOnly:true,
+								value:__currentUser
+							}, {
+								xtype : "hidden",
+								name : "localProductApply.applyUser.userId",
+								id : "flow_localProductApply.applyUser.userId",
+								value:__currentUserId
+							},{
+								text : '所属部门：',
+								style:'margin-left:10px;',
+								columnWidth : .15
+							}, {
+								xtype : 'textfield',
+								name : 'localProductApply.dept.depName',
+								id : 'flow_localProductApply.dept.depName',
+								columnWidth : .15,
+								readOnly:true,
+								value:__currentUserDept
+							}, {
+								xtype : "hidden",
+								name : "localProductApply.dept.depId",
+								id : "flow_localProductApply.dept.depId",
+								value:__currentUserDeptId
+							}, {
+								text : '报告时间：',
+								style : 'margin-left:10px;',
+								columnWidth : .15
+							}, {
+								xtype : 'datefield',
+								name : 'localProductApply.applyDate',
+								id : 'flow_localProductApply.applyDate',
+								allowBlank : false,
+								columnWidth : .15,
+								format : 'Y-m-d',
+								value : new Date()
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '报告详情：'
+							}, {
+								style : 'color:red',
+								id : 'flow_localProductApplyErrorLabel',
+								text : '(*必填)'
+							}]
+				}, {
+					xtype : 'container',
+					style : 'padding-left:0px;margin-bottom:10px',
+					layout : 'column',
+					items : [{
+								name : 'localProductApply.resultGridData',
+								xtype : 'hidden',
+								id : 'flow_localProductApply.resultGridData'
+							}, {
+								name : 'localProductApply.dataList',
+								xtype : 'hidden',
+								id : 'flow_localProductApply.dataList'
+							}, {
+								xtype : 'grid',
+								id : 'flow_localProductApply.resultGridDataGrid',
+								height : 220,
+								width : '98%',
+								stripeRows : true,
+								trackMouseOver : true,
+								clicksToEdit : 1,
+								plugins : [new Ext.ux.grid.RowEditor({
+											saveText : '保存',
+											cancelText : '取消',
+											errorText : '请输入完整信息',
+											errorSummary : false
+										}), summary],
+								store : new Ext.data.ArrayStore({
+									url : '',
+									remoteSort : false,
+									fields : ['id', 'name', 'price', 'num', 'amount', 'proId','proName'],
+									listeners : {
+										'update' : function(value) {
+											var r = this.getRange();
+											var resultArray = [];
+											var jsonArr = [];
+											var sum = 0;
+											var rlen = r.length;
+											for (var i = 0; i < rlen; i++) {
+												resultArray.push([]);
+												if (r[i].fields) {
+													var fields = r[i].fields;
+													var flen = fields.length;
+													var obj = {
+														project:{
+															id:null
+														}
+													};
+													var emptyNum = 0;//为空的次数 
+													for (var z = 0; z < flen; z++) {
+														var fieldValue = r[i].get(fields.keys[z]);
+														if (Ext.isEmpty(fieldValue) || fieldValue == '请双击选择' || fieldValue == '请双击填写') {
+															emptyNum++;
+														}
+														if (fields.keys[z] == 'id') {
+															resultArray[i].push('ID:' + fieldValue);
+															if (fieldValue != '') {
+																obj.id = fieldValue;
+															}
+														} else if (fields.keys[z] == 'name') {
+															resultArray[i].push('名称:' + fieldValue);
+															obj.name = fieldValue;
+														} else if (fields.keys[z] == 'price') {
+															resultArray[i].push('单价（元）:' + fieldValue);
+															obj.price = fieldValue;
+														} else if (fields.keys[z] == 'num') {
+															resultArray[i].push('数量:' + fieldValue);
+															obj.num = fieldValue;
+														} else if (fields.keys[z] == 'amount') {
+															resultArray[i].push('总价（元）:' + fieldValue);
+															obj.amount = fieldValue;
+														} else if (fields.keys[z] == 'proId') {
+															resultArray[i].push('项目ID:' + fieldValue);
+															obj.project.id = fieldValue;
+														} else if (fields.keys[z] == 'proName') {
+															resultArray[i].push('项目名称:' + fieldValue+ ';');
+														}
+													}
+													if(flen!=emptyNum){//长度 不等于 为空的次数（一行数据全为空）
+														   jsonArr.push(obj);
+													}else{//相等时 删除resultArray中加的数据
+														   resultArray.splice(i,1,"");
+													}
+												}
+											}
+											//删除空元素
+											for (var i = 0; i < resultArray.length; i++) {
+												if (resultArray[i].length == 0) {
+													resultArray.splice(i, 1);
+													i--;
+												}
+											}
+											Ext.getCmp('flow_localProductApply.dataList').setValue(Ext.util.JSON.encode(jsonArr));
+											Ext.getCmp('flow_localProductApply.resultGridData').setValue(resultArray);
+										}
+									}
+								}),
+								cm : new Ext.grid.ColumnModel({
+									columns : [new Ext.grid.RowNumberer(), {
+												dataIndex : 'id',
+												width : 50,
+												hidden : true
+											}, {
+												header : '名称',
+												dataIndex : 'name',
+												editor : new Ext.grid.GridEditor(new Ext.form.TextField({
+													allowBlank : false,
+													maxLength : 64,
+													listeners : {
+														focus : function(field) {
+															if (field.getValue() == '请双击填写') {
+																field.setValue('');
+															}
+														}
+													}
+												})),
+												width : 200,
+												summaryRenderer : function(v, params, data) {
+													return '<font color="red">合计:</font>';
+												}
+											}, {
+												header : '单价（元）',
+												dataIndex : 'price',
+												editor : new Ext.grid.GridEditor(new Ext.form.NumberField({
+													allowBlank : false,
+													maxLength : 13,
+													id:'flow_localProductApply.price',
+													regex:/^(([1-9]\d{0,10})|0)(\.\d{1,2})?$/,
+													regexText : '请输入正确格式的金额',
+													enableKeyEvents : true,
+													listeners:{
+														keyup:function(){
+															var num = Ext.getCmp('flow_localProductApply.num').getValue();
+															var price = Ext.getCmp('flow_localProductApply.price').getValue();
+															if(!Ext.isEmpty(num)&&!Ext.isEmpty(price)){
+																Ext.getCmp('flow_localProductApply.amount').setValue(num*price);
+															}
+														}
+													}
+												}))
+											}, {
+												header : '数量',
+												dataIndex : 'num',
+												editor : new Ext.grid.GridEditor(new Ext.form.NumberField({
+													allowBlank : false,
+													maxLength : 13,
+													id:'flow_localProductApply.num',
+													regex:/^(([1-9]\d{0,10})|0)(\.\d{1,2})?$/,
+													regexText : '请输入正确格式的金额',
+													enableKeyEvents : true,
+													listeners:{
+														keyup:function(){
+															var num = Ext.getCmp('flow_localProductApply.num').getValue();
+															var price = Ext.getCmp('flow_localProductApply.price').getValue();
+															if(!Ext.isEmpty(num)&&!Ext.isEmpty(price)){
+																Ext.getCmp('flow_localProductApply.amount').setValue(num*price);
+															}
+														}
+													}
+												}))
+											}, {
+												header : '总价（元）',
+												dataIndex : 'amount',
+												summaryType : 'sum',
+												editor : new Ext.grid.GridEditor(new Ext.form.NumberField({
+													allowBlank : false,
+													maxLength : 13,
+													id:'flow_localProductApply.amount',
+													readOnly:true,
+													regex:/^(([1-9]\d{0,10})|0)(\.\d{1,2})?$/,
+													regexText : '请输入正确格式的金额'
+												}))
+//												summaryRenderer : function(v, params, data) {
+//													var amount = data.gridData['amount'];
+//													var amountBig = AmountInWords(amount)
+//													Ext.getCmp('flow_localProductApply.amount').setValue(amount);
+//													Ext.getCmp('flow_localProductApply.amountBig').setValue(amountBig);
+//													return '<font color="red">大写:</font>' + amountBig;
+//												}
+											}, {
+												header : '',
+												dataIndex : 'proId',
+												editor : new Ext.grid.GridEditor(new Ext.form.Hidden({
+													id : 'flow_localProductApply.proId'
+												})),
+												hidden:true
+											}, {
+												header : '项目名称',
+												dataIndex : 'proName',
+												width : 220,
+												editor : new Ext.grid.GridEditor(new Ext.form.TextField({
+													id : 'flow_localProductApply.proName',
+													readOnly:true,
+													allowBlank : false,
+													emptyText:'请选择项目',
+													listeners:{
+														focus:function(){
+															ProjectNewSelector.getView(function(proId, proName, proNo) {
+																Ext.getCmp("flow_localProductApply.proId").setValue(proId);
+																Ext.getCmp("flow_localProductApply.proName").setValue(proName);
+															}, true, true).show();
+														}
+													}
+												}))
+											}
+											],
+									defaults : {
+										sortable : false,
+										menuDisabled : false,
+										width : 100
+									}
+								}),
+								tbar : new Ext.Toolbar({
+									height : 30,
+									items : [{
+												iconCls : 'btn-add',
+												text : '添加',
+												xtype : 'button',
+												handler : function() {
+													var DataRecord = Ext.data.Record.create([{
+																name : 'id'
+															}, {
+																name : 'name'
+															}, {
+																name : 'price'
+															}, {
+																name : 'num'
+															}, {
+																name : 'amount'
+															}, {
+																name : 'proId'
+															}, {
+																name : 'proName'
+															}]);
+													var store = Ext.getCmp('flow_localProductApply.resultGridDataGrid').store;
+													var grid = Ext.getCmp('flow_localProductApply.resultGridDataGrid');
+
+													var n1 = '请双击填写';
+													var n2 = '';
+													
+													var newRowData = {
+														name : n1,
+														price : n1,
+														num:n2,
+														amount : n2,
+														proId:n2,
+														proName:n2
+													};
+													var newRecord = new DataRecord(newRowData);
+													store.add([newRecord]);
+
+													grid.getSelectionModel().on('selectionchange', function(sm) {
+														Ext.getCmp('flow_localProductApply.removeBtn').setDisabled(sm.getCount() < 1);
+													});
+												}
+											}, {
+												iconCls : 'btn-del',
+												text : '删除',
+												id : 'flow_localProductApply.removeBtn',
+												xtype : 'button',
+												handler : function() {
+													var store = Ext.getCmp('flow_localProductApply.resultGridDataGrid').store;
+													var grid = Ext.getCmp('flow_localProductApply.resultGridDataGrid');
+													var s = grid.getSelectionModel().getSelections();
+													for (var i = 0, r; r = s[i]; i++) {
+														store.remove(r);
+													}
+													store.fireEvent("update");//更新事件
+												}
+											}]
+								})
+							}]
+				}, {
+					xtype : 'textfield',
+					hidden : true,
+					validator : function() {
+						var resultGridData = Ext.getCmp('flow_localProductApply.resultGridData').getValue();
+						var errorLabel = Ext.getCmp("flow_localProductApplyErrorLabel");
+						if (Ext.isEmpty(resultGridData)) {//为空显示提示
+							errorLabel.setText('请填写报告详情');
+							return false;
+						}
+						return true
+					}
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 80,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '物品及申购事由：',
+								columnWidth : .15
+							}, {
+								xtype : 'textarea',
+								height : 80,
+								name : 'localProductApply.applyReason',
+								id : 'flow_localProductApply.applyReason',
+								columnWidth : .83
+							}]
+				}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

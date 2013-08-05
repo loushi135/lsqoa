@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.xpsoft.oa.model.info">
+  <class name="Notice" table="notice">
+  	<id name="noticeId" type="java.lang.Long">
+  		<generator class="native"></generator>
+  	</id>
+  	<property name="postName" not-null="true"></property>
+  	<property name="noticeTitle" not-null="true"></property>
+  	<property name="noticeContent"></property>
+  	<property name="effectiveDate" type="java.util.Date"></property>
+  	<property name="expirationDate" type="java.util.Date"></property>
+  	<property name="viewCounts" type="java.lang.Integer"></property>
+  	<property name="state" type="java.lang.Short"/>
+  	<set name="attachFiles" table="notice_file" cascade="save-update" inverse="false" lazy="true">
+        	<key column="noticeId"/>
+        	<many-to-many fetch="join" class="com.xpsoft.oa.model.system.FileAttach" column="fileId"/>
+    </set>
+  </class>
+</hibernate-mapping>

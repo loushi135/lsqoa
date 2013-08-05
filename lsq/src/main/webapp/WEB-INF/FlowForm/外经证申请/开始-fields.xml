@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="projectChargerUserId" label="项目经理ID" type="varchar" length="128" isShowed="false"/>
+	<field name="outTaxApply.proId" label="项目ID" type="varchar" length="128" isShowed="false"/>
+	<field name="outTaxApply.proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="outTaxApply.proNo" label="项目编号" type="varchar" isShowed="true"/>
+	<field name="outTaxApply.proAddress" label="项目地点" type="varchar" isShowed="true"/>
+	<field name="outTaxApply.attathType" label="附件类型" type="varchar" isShowed="true"/>
+	<field name="outTaxApply.amountXX" label="金额小写" type="decimal" isShowed="true"/>
+	<field name="outTaxApply.amountDX" label="金额大写" type="varchar" isShowed="true"/>
+	<field name="outTaxApply.attachIds" label="合同附件ID" type="varchar" length="512"  isShowed="false"/>
+	<field name="outTaxApply.attachFiles" label="合同附件" type="file" length="512"/>
+	<field name="outTaxApply.userCreate" label="经办人" type="varchar" isShowed="true"/>
+</fields>

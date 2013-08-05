@@ -1,0 +1,324 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "零星用工申请",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 670,
+			height : 450,
+			padding : "10px",
+			initComponent : function() {
+				var thiz = this;
+				this.items = [
+							{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'项目名称：',
+										columnWidth:.15
+									},{
+										xtype:'hidden',
+										id:'flow_projectChargerUserId',
+										name:'projectChargerUserId'
+									},{
+										xtype:'hidden',
+										id:'flow_oddEmployapplyDepartmentId',
+										name:'oddEmployapplyDepartmentId'
+									},
+									{
+										xtype:'textfield',
+										id:'flow_oddEmployapply.proName',
+										name:'oddEmployapply.proName',
+										maxLength : 64,
+										allowBlank :false,
+										emptyText:'请选择材料发包合同',
+										columnWidth:.3,
+										listeners:{
+											focus:thiz.selectMaterialContract
+										}
+									},
+									{
+										text:'合同编号：',
+										style:'margin-left:10px;',
+										columnWidth:.16
+									},{
+										xtype:'textfield',
+										id:'flow_oddEmployapply.contract.contractNo',
+										name:'oddEmployapply.contract.contractNo',
+										maxLength : 64,
+										readOnly:true,
+										columnWidth:.39,
+										emptyText:'请选择材料发包合同',
+										listeners:{
+											focus:thiz.selectMaterialContract
+										}
+									},
+									{
+										xtype:'hidden',
+										id:'flow_oddEmployapply.contract.id',
+										name:'oddEmployapply.contract.id'
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'类别：',
+										columnWidth:.15
+									},{
+										xtype:'combo',
+										id:'flow_oddEmployapply.employType',
+										hiddenName:'oddEmployapply.employType',
+										editable:false,
+										triggerAction : 'all',
+										store:['施工单位','人员'],
+										columnWidth:.3,
+										value:'施工单位',
+										listeners:{
+											select:function(combo){
+												if(combo.getValue()=='人员'){
+													Ext.getCmp("flow_oddEmployapply.workUnit").disable();
+													Ext.getCmp("flow_oddEmployapply.num").allowBlank=false;
+													Ext.getCmp("flow_oddEmployapply.contact").allowBlank=false;
+												}else{
+													Ext.getCmp("flow_oddEmployapply.workUnit").enable();
+													Ext.getCmp("flow_oddEmployapply.num").allowBlank=true;
+													Ext.getCmp("flow_oddEmployapply.contact").allowBlank=true;
+												}
+											}
+										}
+									},{
+										text:'施工单位：',
+										style:'margin-left:10px;',
+										columnWidth:.16
+									},
+									{
+										xtype:'textfield',
+										id:'flow_oddEmployapply.workUnit',
+										name:'oddEmployapply.workUnit',
+										maxLength : 64,
+										style:"background:#F0F0F0;",
+										emptyText:'请选择材料发包合同',
+										columnWidth:.39,
+										listeners:{
+											focus:thiz.selectMaterialContract
+										}
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'人数：',
+										columnWidth:.15
+									},{
+										xtype:'numberfield',
+										id:'flow_oddEmployapply.num',
+										name:'oddEmployapply.num',
+										maxLength:9,
+										columnWidth:.3
+									},{
+										text:'姓名/联系方式：',
+										style:'margin-left:10px;',
+										columnWidth:.16
+									},
+									{
+										xtype:'textfield',
+										id:'flow_oddEmployapply.contact',
+										name:'oddEmployapply.contact',
+										maxLength : 100,
+										columnWidth:.39
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:35,
+								style:'margin-buttom:10px',
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'用工时间：',
+										columnWidth:.15
+									},{
+										xtype:'textfield',
+										id:'flow_oddEmployapply.employTime',
+										name:'oddEmployapply.employTime',
+										maxLength:64,
+										allowBlank:false,
+										columnWidth:.3
+									},{
+										text:'用工费用：',
+										style:'margin-left:10px;',
+										columnWidth:.16
+									},
+									{
+										xtype:'textfield',
+										id:'flow_oddEmployapply.employFee',
+										name:'oddEmployapply.employFee',
+										maxLength : 10,
+										columnWidth:.12,
+										allowBlank:false,
+										regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+										enableKeyEvents :true,
+										listeners:{
+											keyup : function(field){
+												  		var value = Ext.getCmp("flow_oddEmployapply.employFee").getValue();
+												  	    var employFee = AmountInWords(value);
+												  	    Ext.getCmp("flow_employFeeLabel").setText(employFee);
+												  	    Ext.getCmp("flow_employFeeBig").setValue(employFee);
+													}
+										}
+									},{
+										id:'flow_employFeeLabel',
+										columnWidth:.27,
+										style:'color:red'
+									},{
+										xtype:'hidden',
+										id:'flow_employFeeBig',
+										name:'employFeeBig'
+									}
+								]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '用工原因：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_oddEmployapply.employReason',
+											name:'oddEmployapply.employReason',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '用工内容：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_oddEmployapply.employContent',
+											name:'oddEmployapply.employContent',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+							},{
+								xtype : 'panel',
+								layout : 'column',
+								defaultType : 'label',
+								style:'padding-top:3px;margin-buttom:5px',
+								height: 70,
+								border:false,
+								items : [{
+											text : '附件：',
+											columnWidth:0.15
+										},{
+											xtype : 'hidden',
+											name : 'oddEmployapply.attachIDs',
+											id : 'flow_oddEmployapply.attachIDs'
+										},{
+											xtype : 'hidden',
+											name : 'oddEmployapply.attachFiles',
+											id : 'flow_oddEmployapply.attachFiles'
+										},{
+											xtype : 'panel',
+											id:'flow_oddEmployapply.displayAttach',
+											columnWidth : 0.75,
+											height: 60,
+											frame:true,
+											autoScroll:true,
+											html : ''
+										},{
+											xtype : 'button',
+											iconCls : 'btn-upload',
+											text : '上传',
+											columnWidth : 0.1,
+											handler : function() {
+												var dialog = App.createUploadDialog({
+																		file_cat : 'flow/oddEmployapply',
+																		callback : function(data) {
+																			Ext.getCmp('flow_oddEmployapply.displayAttach').body.update('');
+																			Ext.getCmp("flow_oddEmployapply.attachFiles").setValue('');
+																			Ext.getCmp('flow_oddEmployapply.attachIDs').setValue('');
+																			var entrantFile = Ext.getCmp("flow_oddEmployapply.attachFiles");
+																			var fileIds = Ext.getCmp('flow_oddEmployapply.attachIDs');
+																			var display = Ext.getCmp('flow_oddEmployapply.displayAttach');
+																			for (var i = 0; i < data.length; i++) {
+																				if (fileIds.getValue() != '') {
+																					fileIds.setValue(fileIds.getValue()+ ',');
+																					entrantFile.setValue(entrantFile.getValue()+ ',');
+																				}
+																				entrantFile.setValue(entrantFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+//																				entrantFile.setValue(entrantFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+																				fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																				Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																			}
+																		},
+																		permitted_max_size :1024*1024*20,
+																		permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+																	});
+													dialog.show(this);
+											}
+										}
+										]
+								}
+							]
+				Ext.MyForm.superclass.initComponent.call(this);
+			},
+			selectMaterialContract:function(){
+				new MaterialContractSelector(function(id,contractNo,contractAmount,proName,proNo,suppliersName,suppliersId,projectId,departmentId,departmentIdName,projectChargerId,projectChargerName){
+							Ext.getCmp("flow_oddEmployapply.proName").setValue(proName);			
+							Ext.getCmp("flow_oddEmployapply.workUnit").setValue(suppliersName);			
+							Ext.getCmp("flow_oddEmployapply.contract.contractNo").setValue(contractNo);			
+							Ext.getCmp("flow_oddEmployapply.contract.id").setValue(id);
+							Ext.getCmp("flow_projectChargerUserId").setValue(projectChargerId);
+							Ext.getCmp("flow_oddEmployapplyDepartmentId").setValue(departmentId);
+					},true).show();
+			}
+		})

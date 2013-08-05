@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="cardProposer" label="姓名" type="varchar" length="128" isShowed="true"/>
+	<field name="phone" label="电话" type="varchar" length="128" isShowed="true"/>
+	<field name="companyName" label="公司" type="varchar" length="128" isShowed="true"/>
+	<field name="fax" label="传真" type="varchar" length="128" isShowed="true"/>
+	<field name="deptId" label="部门" type="varchar" length="1000" isShowed="false"/>
+	<field name="deptName" label="部门名称" type="varchar" length="1000" isShowed="true"/>
+	<field name="mobile" label="手机" type="varchar" length="1000" isShowed="true"/>
+	<field name="position" label="职位" type="varchar" isShowed="true"/>
+	<field name="postalCode" label="邮编" type="varchar" length="128" isShowed="true"/>
+	<field name="Email" label="邮箱" type="varchar" length="128" isShowed="true"/>
+	<field name="other" label="其他" type="varchar" length="128" isShowed="true"/>
+	<field name="amount" label="数量" type="varchar"  length="128" isShowed="true"/>
+	<field name="type" label="类型" type="varchar"  length="128" isShowed="true"/>
+	<field name="isType" label="高印类型" type="varchar"  length="128" isShowed="true"/>
+	<field name="cardAttachIDs" label="上传文件id" type="varchar" length="512"  isShowed="false"/>
+	<field name="cardAttachFile" label="文件" type="file" length="512"  isShowed="true"/>
+</fields>

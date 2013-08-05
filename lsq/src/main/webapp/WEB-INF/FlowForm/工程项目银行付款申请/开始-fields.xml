@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="bpaProjectName" label="项目名称" type="varchar" length="50" isShowed="true"/>
+	<field name="bpaProjectNo" label="项目编号" type="varchar" length="50" isShowed="true"/>
+	<field name="bpaProId" label="项目编号" type="varchar" length="50" isShowed="false"/>
+	<field name="bpaPayType" label="付款类别" type="varchar" length="50" isShowed="true"/>
+	<field name="bpaReceiptDept" label="收款单位" type="varchar" length="50"  isShowed="true"/>
+	<field name="bpaReceiptDeptId" label="收款单位" type="varchar" length="50"  isShowed="false"/>
+	<field name="bpaReceiptDept" label="收款单位" type="varchar" length="50"  isShowed="true"/>
+	<field name="receiptSuppliersbank" label="开户行" type="varchar" length="255"  isShowed="true"/>
+	<field name="receiptBankAccount" label="账号" type="varchar" length="255"  isShowed="true"/>
+	<field name="bpaReceiptReason" label="收款事由" type="varchar" length="200"  isShowed="true"/>
+	<field name="bpaContract" label="合同/结算金额" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaSumMoney" label="累计已付款" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaSumMoneyRatio" label="已付款比例(%)" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaFundBalance" label="资金结余" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaPayRatio" label="垫资审批额度" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaInvoiceBalance" label="发票结余" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaApplyMoneyXX" label="本次申请用款(小写)" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaApplyMoneyDX" label="本次申请用款(大写)" type="varchar" length="50"  isShowed="true"/>
+	<field name="bpaRemark" label="经办人员（备注）" type="varchar" length="500"  isShowed="true"/>
+	<field name="bpaDeptType" label="类型" type="varchar" length="255" isShowed="true"/>
+	<field name="bpaDeptId" label="施工区域" type="varchar" length="255" isShowed="false"/>
+	<field name="payprojectRegional" label="施工区域" type="varchar" length="255" isShowed="true"/>
+	<field name="bpaYfk" label="预付款" type="varchar"/>
+	<field name="bpaJdk" label="进度款" type="varchar" length="512"/>
+	<field name="bpaWgk" label="完工款" type="varchar" length="512"/>
+	<field name="bpaJsk" label="结算款" type="varchar" length="512"/>
+	<field name="bpaZbj" label="质保金" type="varchar" length="512"/>
+	<field name="bpaDeptChargerId" label="区域经理" type="varchar" length="255" isShowed="false"/>
+	<field name="bpaDeptCharger" label="区域经理" type="varchar" length="255" isShowed="true"/>
+	<field name="bpaPreCalcUserId" label="预决算员" type="varchar" length="255" isShowed="false"/>
+	<field name="bpaPreCalcUsername" label="预决算员" type="varchar" length="255" isShowed="true"/>
+	<field name="bpaAttachIDs" label="合同附件ID" type="varchar" length="512"  isShowed="false"/>
+	<field name="bpaAttachFile" label="合同附件" type="file" length="512"/>
+	<field name="materialContractId" label="材料发包合同主键" type="varchar" length="512" isShowed="false"/>
+</fields>

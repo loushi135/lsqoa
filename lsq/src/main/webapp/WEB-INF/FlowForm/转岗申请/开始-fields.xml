@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="staffChangejobapply@companyName" label="公司" type="varchar" length="128" isShowed="true"/>
+	<field name="staffChangejobapply@changeJobUserName" label="员工姓名" type="varchar" length="128" isShowed="true"/>
+	<field name="staffChangejobapply@changeJobUser@userId" label="员工姓名" type="varchar" length="128" isShowed="false"/>
+	<field name="staffChangejobapply@oldDepTreeSelector" label="原部门" type="varchar" length="128" isShowed="true"/>
+	<field name="staffChangejobapply@oldDept@depId" label="原部门" type="varchar" length="128" isShowed="false"/>
+	<field name="staffChangejobapply@oldJobName" label="原任职位" type="varchar" length="128" isShowed="true"/>
+	<field name="staffChangejobapply@newDepTreeSelector" label="新部门" type="varchar" length="128" isShowed="true"/>
+	<field name="staffChangejobapply@newDept@depId" label="新部门" type="varchar" length="128" isShowed="false"/>
+	<field name="staffChangejobapply@newJobName" label="新任职位" type="varchar" length="128" isShowed="true"/>
+	<field name="staffChangejobapply@newJob@jobId" label="新任职位" type="varchar" length="128" isShowed="false"/>
+	<field name="staffChangejobapply@changeJobDate" label="转岗日期" type="datetime" isShowed="true"/>
+	<field name="staffChangejobapply@changeJobReason" label="转岗原因" type="text" isShowed="true"/>
+</fields>

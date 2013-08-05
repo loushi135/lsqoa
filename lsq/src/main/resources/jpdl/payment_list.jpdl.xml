@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="payment" xmlns="http://jbpm.org/4.0/jpdl">
+	<start g="43,-12,58,58" name="开始">
+      <transition g="17,-11" name="提交" to="决策"/>
+	</start>
+	<task g="261,53,85,49" name="部门领导">
+		<assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-部门经理"/>  
+     	  </field>  
+   	  	</assignment-handler>
+	    <transition g="-24,-16" name="提交" to="分管领导"/>
+	    <transition g="-33,-50" name="取消" to="审批不通过">
+	    <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="部门领导"/>  
+			     	  </field>
+		      </event-listener>
+		</transition>
+	</task>
+	<task g="264,139,81,46" name="分管领导">
+		<assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-分管领导"/>
+     	  </field>
+   	  	</assignment-handler>
+	    <transition g="-26,-10" name="提交" to="财务审批"/>
+		<transition g="-49,-30" name="取消" to="审批不通过">
+		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="分管领导"/>
+			     	  </field>
+		      </event-listener>
+		 </transition>
+	</task>
+	<task g="258,205,88,45" name="财务审批">
+	    <transition g="-43,-17" name="至财务决策" to="财务决策"/>
+		<transition g="-24,-16" name="取消" to="审批不通过">
+			<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+		      			 <field name="roleName">
+				        		<string value="财务审批"/>
+				     	  </field>
+			</event-listener>
+		</transition>
+	</task>
+	<task g="264,305,86,45" name="常务副总">
+	  <transition g="-23,-19" name="提交" to="总经理"/>
+      <transition g="-55,10" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="常务副总"/>  
+			     	  </field>  
+		      </event-listener>
+	 </transition>
+   </task>
+	<task g="264,431,81,44" name="总经理">
+	   <transition g="4,-9" name="审批通过" to="出纳"/>
+	   <transition g="-1,1" name="取消" to="审批不通过">
+		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+     			 <field name="roleName">
+	        		<string value="总经理"/>
+	     	  	 </field>
+		</event-listener>
+	   </transition>
+	</task>
+	<task g="260,518,92,52" name="出纳">
+	   <transition g="-28,5" name="办理" to="审批通过">
+    		<event-listener class="com.xpsoft.oa.workflow.event.PaymentListApplyFinishListener"/>
+      </transition>
+   </task>
+	<end g="51,517,58,58" name="审批通过"/>
+	<end-cancel g="481,173,58,58" name="审批不通过"/>
+   <decision g="42,61,48,48" name="决策">
+      <handler class="com.xpsoft.oa.workflow.event.PaymentListHandler" />
+      <transition g="-26,-23" name="普通员工" to="部门领导"/>
+      <transition g="-55,-3" name="分管领导" to="财务审批"/>
+      <transition g="-10,-17" name="部门领导" to="分管领导"/>
+   </decision>
+   <decision g="42,211,48,48" name="财务决策">
+      <handler class="com.xpsoft.oa.workflow.event.PaymentListSecondHandler" />
+      <transition g="-36,-21" name="备用金大于等于2万" to="常务副总"/>
+      <transition g="-67,-26" name="税金大于等于5万" to="总经理"/>
+      <transition g="69,437:-60,-29" name="备用金小于2万或税金小于5万" to="出纳"/>
+   </decision>
+</process>

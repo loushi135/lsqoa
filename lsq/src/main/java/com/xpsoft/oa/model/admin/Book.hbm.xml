@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.xpsoft.oa.model.admin.Book" table="book"
+		select-before-update="false" dynamic-update="false"
+		dynamic-insert="false" optimistic-lock="version">
+		<id name="bookId" column="bookId" type="java.lang.Long"
+			length="19">
+			<generator class="native" />
+		</id>
+		<property name="bookName" type="java.lang.String" update="true"
+			insert="true" access="property" column="bookName" length="128"
+			not-null="false" unique="false" />
+		<property name="sn" type="java.lang.String" update="true"
+			insert="true" access="property" column="sn" length="50"
+			unique="false" />
+		<property name="author" type="java.lang.String" update="true"
+			insert="true" access="property" column="author" length="128"
+			not-null="false" unique="false" />
+		<property name="isbn" type="java.lang.String" update="true"
+			insert="true" access="property" column="isbn" length="64"
+			not-null="false" unique="false" />
+		<property name="publisher" type="java.lang.String" update="true"
+			insert="true" access="property" column="publisher" length="128"
+			not-null="false" unique="false" />
+		<property name="projectId" type="java.lang.String" update="true"
+			insert="true" access="property" column="projectId" length="10"
+			unique="false" />
+		<property name="projectName" type="java.lang.String" update="true"
+			insert="true" access="property" column="projectName" length="128"
+			unique="false" />
+		<property name="department" type="java.lang.String"
+			update="true" insert="true" access="property" column="department"
+			length="64" not-null="false" unique="false" />
+		<property name="amount" type="java.lang.Integer" update="true"
+			insert="true" access="property" column="amount" length="10"
+			not-null="false" unique="false" />
+		<property name="leftAmount" type="java.lang.Integer"
+			update="true" insert="true" access="property" column="leftAmount"
+			length="10" not-null="false" unique="false" />
+		<property name="pageCount" type="java.lang.Integer"
+			update="true" insert="true" access="property" column="pageCount"
+			length="10" not-null="false" unique="false" />
+		<property name="secretLevel" type="java.lang.Integer"
+			update="true" insert="true" access="property" column="secretLevel"
+			length="10" not-null="false" unique="false" />
+
+
+		<property name="createDate" type="java.util.Date" update="true"
+			insert="true" access="property" column="createDate" not-null="false"
+			unique="false" />
+
+		<property name="expirationDate" type="java.util.Date"
+			update="true" insert="true" access="property" column="expirationDate"
+			unique="false" />
+
+		<property name="createUser" type="java.lang.String"
+			update="true" insert="true" access="property" column="createUser"
+			length="128" not-null="false" unique="false" />
+
+		<property name="state" type="java.lang.Integer" update="true"
+			insert="true" access="property" column="state" length="10"
+			unique="false" />
+
+		<property name="complete" type="java.lang.Boolean" update="true"
+			insert="true" access="property" column="complete" not-null="false"
+			unique="false" />
+
+		<property name="pcFile" type="java.lang.Boolean" update="true"
+			insert="true" access="property" column="pcFile" not-null="false"
+			unique="false" />
+		<property name="paperFile" type="java.lang.Boolean"
+			update="true" insert="true" access="property" column="paperFile"
+			not-null="false" unique="false" />
+
+		<property name="operator" type="java.lang.String" update="true"
+			insert="true" access="property" column="operator" length="128"
+			not-null="false" unique="false" />
+
+		<property name="remark" type="java.lang.String" update="true"
+			insert="true" access="property" column="remark" length="2000"
+			unique="false" />
+
+		<property name="filePath" type="java.lang.String" update="true"
+			insert="true" access="property" column="filePath" length="1000"
+			unique="false" />
+			
+		<property name="fileName" type="java.lang.String" update="true"
+			insert="true" access="property" column="fileName" length="500"
+			unique="false" />
+			
+		<property name="fileDate" type="java.util.Date"
+			update="true" insert="true" access="property" column="fileDate"
+			unique="false" />
+		<property name="makeFileDate" type="java.util.Date"
+			update="true" insert="true" access="property" column="makeFileDate"
+			unique="false" />
+		<one-to-one name="bookDel" class="com.xpsoft.oa.model.admin.BookDel" />  
+		
+		<!-- imported bi-directional many-to-one association to BookType -->
+		<many-to-one name="bookType"
+			class="com.xpsoft.oa.model.admin.BookType" not-null="false"
+			fetch="select">
+			<column name="typeId" />
+		</many-to-one>
+		<!-- exported bi-directional one-to-many association to BookSn -->
+		<!-- -->
+		<set name="bookSns" table="book_sn" lazy="true" inverse="true"
+			cascade="save-update,delete-orphan" sort="unsorted">
+			<key>
+				<column name="bookId" />
+			</key>
+			<one-to-many class="com.xpsoft.oa.model.admin.BookSn" />
+		</set>
+		
+		<!-- exported bi-directional one-to-many association to ContractFile 	--> 
+		<set name="bookFiles"
+		     table="book_file"
+		     lazy="true"
+		     cascade="save-update,delete-orphan"
+		>
+			<key>
+				<column name="bookId"/>
+			</key>
+			<many-to-many
+				class="com.xpsoft.oa.model.system.FileAttach"
+				column="fileId"
+				fetch="join"
+			/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="proNo" label="项目编号" type="varchar" length="128" isShowed="true"/>
+	<field name="contractId" label="合同id" type="varchar" length="128" isShowed="false"/>
+	<field name="contractNo" label="合同编号" type="varchar" length="128" isShowed="true"/>
+	<field name="contractAmount" label="合同价" type="varchar" length="128" isShowed="true"/>
+	<field name="proAddr" label="工程地点" type="varchar" length="128" isShowed="true"/>
+	<field name="area" label="所属区域" type="varchar" length="256" isShowed="true"/>
+	<field name="deptId" label="部门主键" type="varchar" length="256" isShowed="false"/>
+	<field name="proCharger" label="项目负责人" type="varchar" length="128" isShowed="true"/>
+	<field name="proChargerId" label="项目负责人" type="varchar" length="128" isShowed="false"/>
+	<field name="proChargerTel" label="联系电话" type="varchar" length="128" isShowed="true"/>
+	<field name="proFollower" label="跟踪预算员" type="varchar" length="128" isShowed="true"/>
+	<field name="proFollowerTel" label="联系电话" type="varchar" length="128"  isShowed="true"/>
+	<field name="designUnit" label="设计单位" type="varchar" length="128" isShowed="true"/>
+	<field name="designCharger" label="项目负责人" type="varchar" length="128" isShowed="true"/>
+	<field name="designChargerTel" label="联系电话" type="varchar" length="128" isShowed="true"/>
+	<field name="buildUnit" label="建设单位" type="varchar" length="128" isShowed="true"/>
+	<field name="buildCharger" label="现场负责人" type="varchar" length="128" isShowed="true"/>
+	<field name="buildChargerTel" label="联系电话" type="varchar" length="128" isShowed="true"/>
+	<field name="watchUnit" label="监理单位" type="varchar" length="128" isShowed="true"/>
+	<field name="watchCharger" label="现场负责人" type="varchar" length="128" isShowed="true"/>
+	<field name="watchChargerTel" label="联系电话" type="varchar" length="128" isShowed="true"/>
+	<field name="totalUnit" label="总包单位" type="varchar" length="128" isShowed="true"/>
+	<field name="totalCharger" label="现场负责人" type="varchar" length="128" isShowed="true"/>
+	<field name="totalChargerTel" label="联系电话" type="varchar" length="128" isShowed="true"/>
+	
+	<field name="startDate" label="开工日期" type="datetime" isShowed="true"/>
+	<field name="endDate" label="竣工日期" type="datetime" isShowed="true"/>
+	<field name="businessMain" label="业务主办" type="varchar" length="128" isShowed="true"/>
+	<field name="enterDate" label="进场日期" type="datetime" isShowed="true"/>
+	<field name="manager" label="项目经理" type="varchar" length="128" isShowed="true"/>
+	<field name="applyDate" label="申请日期" type="varchar" length="128" isShowed="false"/>
+</fields>

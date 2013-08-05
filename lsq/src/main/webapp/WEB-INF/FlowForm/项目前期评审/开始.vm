@@ -1,0 +1,414 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "项目前期评审",
+	labelWidth : 100,
+	labelAlign : "left",
+	layout : "form",
+	width : 680,
+	height : 520,
+	padding : "10px",
+	listeners : {
+		'afterrender' : function() {
+			if (!/^.*团队$/.test(__currentUserDept)) {
+				Ext.getCmp('startFlowBtn').disable();
+			} else {
+				Ext.getCmp('startFlowBtn').enable();
+			}
+		}
+	},
+	initComponent : function() {
+		this.items = [{
+			xtype : "label",
+			html : "a.本表为项目前期评审、标前评审专用。</br>b.评审由业务人员、业务经理报团队负责人，同意后登记、跟踪。未经同意，产生费用由业务人员个人承担。</br>c.<b>3000</b>万以上总经理审批。",
+			width : ""
+			//					style : "padding-left:290px;font-weight:bold;font-size:20px;"
+		}, {
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '业务人员:',
+					width : 60
+				}, {
+					xtype : 'textfield',
+					id : 'flow_businessUser',
+					name : 'businessUser',
+					allowBlank : false,
+					width : 120,
+					readOnly : true,
+					style : "background:#F0F0F0;margin-left:15px",
+					value : __currentUser
+				}, {
+					style : 'margin-left:15px',
+					text : '所属团队:',
+					width : 60
+				}, {
+					xtype : 'textfield',
+					id : 'flow_team',
+					name : 'team',
+					allowBlank : false,
+					width : 150,
+					readOnly : true,
+					style : "background:#F0F0F0;margin-left:15px",
+					value : __currentUserDept
+				}, {
+					style : 'margin-left:15px',
+					text : '报告时间:',
+					width : 60
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_applyDate',
+					name : 'applyDate',
+					width : 120,
+					readOnly : true,
+					value : new Date().format('Y-m-d')
+				}]
+		}, {
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '项目名称:',
+					width : 60
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_proName',
+					name : 'proName',
+					allowBlank : false,
+					width : 558
+				}]
+		}, {
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '工程规模:',
+					width : 60
+				}, {
+					style : 'margin-left:15px',
+					text : '（甲方造价预算',
+					width : 100
+				}, {
+					xtype : 'numberfield',
+					id : 'flow_buildPrice',
+					name : 'buildPrice',
+					allowBlank : false,
+					width : 60
+				}, {
+					style : 'margin-left:15px',
+					text : '万元）、（面积',
+					width : 90
+				}, {
+					xtype : 'numberfield',
+					id : 'flow_buildArea',
+					name : 'buildArea',
+					allowBlank : false,
+					width : 60
+				}, {
+					style : 'margin-left:15px',
+					text : '平方米）',
+					width : 60
+				}]
+		}, {
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '项目信息来源:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_proInfoSource',
+					name : 'proInfoSource',
+					allowBlank : false,
+					width : 508
+				}]
+		}, {
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '装饰施工跟踪部门:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_constructFollowDept',
+					name : 'constructFollowDept',
+					width : 508
+				}]
+		}, {
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '项目地址:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_proAddr',
+					name : 'proAddr',
+					allowBlank : false,
+					width : 508
+				}]
+		}, {
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '项目性质及用途:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					id : 'flow_proUseful',
+					name : 'proUseful',
+					allowBlank : false,
+					width : 508,
+					xtype : 'radiogroup',
+					items : [{
+							name : 'proUseful',
+							boxLabel : '政府',
+							inputValue : '政府'
+						}, {
+							name : 'proUseful',
+							boxLabel : '国企',
+							inputValue : '国企'
+						}, {
+							name : 'proUseful',
+							boxLabel : '民营',
+							inputValue : '民营'
+						}, {
+							name : 'proUseful',
+							boxLabel : '外企',
+							inputValue : '外企'
+						}]
+				}]
+		},{
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '项目投资主体单位:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_proMainUnit',
+					name : 'proMainUnit',
+					allowBlank : false,
+					width : 508
+				}]
+		},{
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '与业主关系:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_owerRelation',
+					name : 'owerRelation',
+					width : 508
+				}]
+		},{
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '投标的大概时间:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_bidDuringTime',
+					name : 'bidDuringTime',
+					allowBlank : false,
+					width : 508
+				}]
+		},{
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '目前项目整体进展情况:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_progressInfo',
+					name : 'progressInfo',
+					allowBlank : false,
+					width : 508
+				}]
+		},{
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '设计是否单独收费:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					id : 'flow_chargeDesign',
+					name : 'chargeDesign',
+					allowBlank : false,
+					width : 150,
+					xtype : 'radiogroup',
+					items : [{
+							name : 'chargeDesign',
+							boxLabel : '是',
+							inputValue : '是'
+						}, {
+							name : 'chargeDesign',
+							boxLabel : '否',
+							inputValue : '否'
+						}]
+				},{
+					style : 'margin-left:15px',
+					text : '是否做过评审:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					id : 'flow_doReview',
+					name : 'doReview',
+					allowBlank : false,
+					width : 150,
+					xtype : 'radiogroup',
+					items : [{
+							name : 'doReview',
+							boxLabel : '是',
+							inputValue : '是'
+						}, {
+							name : 'doReview',
+							boxLabel : '否',
+							inputValue : '否'
+						}]
+				}]
+		},{
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '投标适用的定额及地方法规:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_bidQuotaLocalLaws',
+					name : 'bidQuotaLocalLaws',
+					width : 508
+				}]
+		},{
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '竞争对手公司的名称、与业主关系、优劣势:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_competitionCompany',
+					name : 'competitionCompany',
+					width : 508
+				}]
+		},{
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '推荐设计部门:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					xtype : 'textfield',
+					id : 'flow_recommendDesignDept',
+					name : 'recommendDesignDept',
+					width : 508
+				}]
+		},{
+			xtype : 'panel',
+			layout : 'column',
+			border : false,
+			defaultType : 'label',
+			style : "padding-top:3px;",
+			items : [{
+					style : 'margin-left:15px',
+					text : '项目分类:',
+					width : 110
+				}, {
+					style : 'margin-left:15px',
+					id : 'flow_proClassify',
+					name : 'proClassify',
+					allowBlank : false,
+					width : 150,
+					xtype : 'radiogroup',
+					items : [{
+							name : 'proClassify',
+							boxLabel : 'A',
+							inputValue : 'A'
+						}, {
+							name : 'proClassify',
+							boxLabel : 'B',
+							inputValue : 'B'
+						}, {
+							name : 'proClassify',
+							boxLabel : 'C',
+							inputValue : 'C'
+						}]
+				}]
+		}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

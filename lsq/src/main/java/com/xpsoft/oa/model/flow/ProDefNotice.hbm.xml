@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.flow.ProDefNotice"
+        table="pro_def_notice"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="defId"
+            column="defId"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="foreign">
+            	<param name="property">proDefinition</param>
+            </generator>
+        </id>
+        <one-to-one name="proDefinition" constrained="true" class="com.xpsoft.oa.model.flow.ProDefinition"></one-to-one> 
+         <property
+            name="noticeUserIds"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="noticeUserIds"
+            length="1000"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="noticeUserNames"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="noticeUserNames"
+            length="1000"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="noticeDepIds"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="noticeDepIds"
+            length="1000"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="noticeDepNames"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="noticeDepNames"
+            length="1000"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="noticeRoleIds"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="noticeRoleIds"
+            length="1000"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="noticeRoleNames"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="noticeRoleNames"
+            length="1000"
+            not-null="false"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

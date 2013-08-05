@@ -1,0 +1,114 @@
+@CHARSET "UTF-8";
+
+.rowBox a {
+	color : black;
+	font-size : 13px;
+	text-decoration: none;
+}
+
+.rowBox a:hover {
+	background-color : #DBEDFF;
+	color : black;
+	font-size : 15px;
+	text-decoration: none;
+}
+
+.rowBox p {
+	margin-bottom: 10px;
+	color : blue;
+}
+
+.rowBox span {
+	color :gray;
+	font-size : 10px;
+	margin-right : 50px;
+}
+
+.italk-row tr {
+	font-size: 12px;
+}
+
+.user-info {
+	background-image: url(../image/userinfo.gif) !important;
+}
+
+.italk-row tr span {
+	margin-left: 20px;
+}
+
+.italk-row {
+	border: 1px #CCCCCC solid;
+}
+
+.otherInfo tr  ,.otherInfo td {
+	font-size:12px;
+}
+
+
+
+.content {
+	padding: 10px;
+	word-wrap:break-word; overflow:hidden;
+}
+
+.descBox {
+	border: 1px #666666 dotted;
+	height: 75px;
+}
+
+.right-time span {
+	color: #0099FF
+}
+
+#saveBtn {
+	margin-left: 50%;
+}
+
+.descBox {
+	padding: 5px;
+}
+.autoHeight {
+	height:700px;
+}
+.button{
+ background:#ADD8E6 repeat-x;
+ padding-top:3px;
+ border-top:1px solid #708090;
+ border-right:1px solid #708090;
+ border-bottom:1px solid #708090;
+ border-left:1px solid #708090; 
+ width:40px;
+ height:auto;
+ font-size:10pt;
+ cursor:hand;
+}
+.button1{
+ background:#ADD8E6 repeat-x;
+ padding-top:3px;
+ border-top:1px solid #708090;
+ border-right:1px solid #708090;
+ border-bottom:1px solid #708090;
+ border-left:1px solid #708090; 
+ width:40px;
+ height:auto;
+ font-size:10pt;
+ cursor:hand;
+}
+.bbsLogo{
+	//background: url('../images/header-li.jpg') no-repeat;
+	//background-image:url('../images/bbs_hot_1.jpg');
+    background-repeat:no-repeat;
+    background-position:4px 3px;
+}
+.btn-topic {
+	background: url(../images/btn/topicBtn.png) no-repeat !important;
+}
+.btn-reply {
+	background: url(../images/btn/replyBtn.png) no-repeat !important;
+}
+.btn-bbsTop {
+	background: url(../images/btn/bbsTopBtn.png) no-repeat !important;
+}
+.btn-sign{
+	background: url(../images/btn/signBtn.png) no-repeat !important;
+}

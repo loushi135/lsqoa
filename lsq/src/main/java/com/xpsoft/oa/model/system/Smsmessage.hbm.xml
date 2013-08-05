@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.system.Smsmessage"
+        table="smsMessage"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="smsId"
+            column="smsId"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="inceptId"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="inceptId"
+            length="40"
+            not-null="true"
+            unique="false"
+        />
+         <property
+            name="name"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="name"
+            length="40"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="sendTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="sendTime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+         <property
+            name="sender"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="sender"
+            length="40"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="phoneNo"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="phoneNo"
+            length="40"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="massage"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="massage"
+            length="200"
+            not-null="true"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

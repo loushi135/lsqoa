@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="gbk"?>
+
+<process name="project" xmlns="http://jbpm.org/4.0/jpdl">
+   <start name="开始" g="227,20,48,48">
+      <transition name="提交" to="区域经理" g="-29,-20"/>
+   </start>
+   <task name="区域经理" g="205,134,92,52">
+   	  <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-部门经理"/>  
+     	  </field>  
+   	  </assignment-handler>
+      <transition name="提交" to="工管部" g="-29,-18"/>
+      <transition name="取消" to="取消" g="-22,-27">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			 <field name="roleName">  
+		        		<string value="区域经理"/>  
+		     	  </field>
+	      </event-listener>
+      </transition>
+   </task>
+   <task name="工管部" g="206,242,92,52">
+      <transition name="提交" to="财务部" g="-32,-19"/>
+      <transition name="取消" to="取消" g="-29,-18">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			 <field name="roleName">  
+		        		<string value="工管部"/>  
+		     	  </field>
+	      </event-listener>
+      </transition>
+   </task>
+   <task name="财务部" g="206,341,92,52">
+      <transition name="审批通过" to="结束" g="-35,-23">
+      	<event-listener class="com.xpsoft.oa.workflow.event.ProjectFinishListener">
+	      </event-listener>
+      </transition>
+      <transition name="取消" to="取消" g="-57,5">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			 <field name="roleName">  
+		        		<string value="财务部"/>  
+		     	  </field>
+	      </event-listener>
+      </transition>
+   </task>
+   <end name="结束" g="426,341,48,48"/>
+   <end-cancel name="取消" g="426,178,48,48"/>
+
+</process>

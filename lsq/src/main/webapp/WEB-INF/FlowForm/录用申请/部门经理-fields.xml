@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="staffEmployapply@professional" label="专业知识" type="varchar" length="128" isShowed="true" />
+	<field name="staffEmployapply@experience" label="工作经历" type="varchar" length="128" isShowed="true" />
+	<field name="staffEmployapply@confident" label="自信度" type="varchar" length="128" isShowed="true" />
+	<field name="staffEmployapply@thinkability" label="思维能力" type="varchar" length="128" isShowed="true" />
+	<field name="staffEmployapply@expressability" label="表达能力" type="varchar" length="128" isShowed="true" />
+	<field name="staffEmployapply@looks" label="仪表" type="varchar" length="128" isShowed="true" />
+	<field name="staffEmployapply@agreeEnterType" label="同意新进" type="varchar" length="128" isShowed="true" />
+	<field name="staffEmployapply@inspect" label="似定考察期(月)" type="decimal" isShowed="true" />
+	<field name="staffEmployapply@inspectSalary" label="考察期月薪(元/月)" type="decimal" isShowed="true" />
+	<field name="staffEmployapply@probation" label="似定试用期(月)" type="decimal" isShowed="true" />
+	<field name="staffEmployapply@probationSalary" label="试用期月薪(元/月)" type="decimal" isShowed="true" />
+	<field name="superOption" label="审批意见"/>
+</fields>

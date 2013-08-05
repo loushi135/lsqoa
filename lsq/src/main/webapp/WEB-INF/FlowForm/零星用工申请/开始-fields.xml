@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="oddEmployapply.proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="oddEmployapply.contract.contractNo" label="合同编号" type="varchar" length="128" isShowed="true"/>
+	<field name="oddEmployapply.contract.id" label="合同编号" type="varchar" length="128" isShowed="false"/>
+	<field name="oddEmployapply.employType" label="类别" type="varchar" length="128" isShowed="true"/>
+	<field name="oddEmployapply.workUnit" label="施工单位" type="varchar" length="128" isShowed="true"/>
+	<field name="oddEmployapply.num" label="人数" type="varchar" length="128" isShowed="true"/>
+	<field name="oddEmployapply.contact" label="姓名/联系方式" type="varchar" length="128" isShowed="true"/>
+	<field name="oddEmployapply.employTime" label="用工时间" type="varchar" length="128" isShowed="true"/>
+	<field name="oddEmployapply.employFee" label="用工费用" type="varchar" length="128" isShowed="true"/>
+	<field name="employFeeBig" label="用工费用大写" type="text" isShowed="true"/>
+	<field name="oddEmployapply.employReason" label="用工原因" type="text" isShowed="true"/>
+	<field name="oddEmployapply.employContent" label="用工内容" type="text" isShowed="true"/>
+	<field name="oddEmployapply.attachFiles" label="附件" type="file" length="5000" isShowed="true" />
+	<field name="oddEmployapply.attachIDs" label="附件" type="varchar" length="200" isShowed="false" />
+	<field name="projectChargerUserId" label="项目经理" type="varchar" length="200" isShowed="false" />
+	<field name="oddEmployapplyDepartmentId" label="区域" type="varchar" length="200" isShowed="false" />
+</fields>

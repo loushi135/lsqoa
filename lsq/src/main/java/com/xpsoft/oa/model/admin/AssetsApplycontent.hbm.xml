@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.admin.AssetsApplycontent"
+        table="assets_applycontent"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="name"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="name"
+            length="24"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="model"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="model"
+            length="24"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="brand"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="brand"
+            length="24"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="num"
+            type="java.math.BigDecimal"
+            update="true"
+            insert="true"
+            access="property"
+            column="num"
+            length="10"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="unit"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="unit"
+            length="12"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="price"
+            type="java.math.BigDecimal"
+            update="true"
+            insert="true"
+            access="property"
+            column="price"
+            precision="10"
+            scale="2"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="arrivalDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="arrivalDate"
+            length="19"
+            not-null="true"
+            unique="false"
+        />
+     <!-- imported bi-directional many-to-one association to AssetsApply -->
+		<many-to-one
+			name="assetsApply"
+			class="com.xpsoft.oa.model.admin.AssetsApply"
+            not-null="false"
+			fetch="select"
+			lazy="false" insert="true" update="true"
+		>	
+			<column name="assetsapplyId" />
+		</many-to-one>
+    </class>
+</hibernate-mapping>

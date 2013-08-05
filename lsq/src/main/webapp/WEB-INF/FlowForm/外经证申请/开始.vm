@@ -1,0 +1,265 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "外出经营活动税收管理证明申请",
+	layout : "form",
+	border : true,
+	autoScroll : true,
+	bodyStyle : 'padding:10px 10px 10px 10px;',
+	defaults : {
+		anchor : '98%,98%'
+	},
+	defaultType : 'textfield',
+	width : 500,
+	autoHeight : true,
+	padding : "10px",
+	initComponent : function() {
+		this.items = [{
+				xtype : "container",
+				layout : "column",
+				height : 25,
+				defaults : {
+					xtype : 'label',
+					style : {
+						margin : '0px 0px 3px 0px'
+					}
+				},
+				items : [{
+						xtype : 'hidden',
+						name : 'projectChargerUserId',
+						id : 'flow_projectChargerUserId'
+					}, {
+						xtype : 'hidden',
+						name : 'outTaxApply.proId',
+						id : 'flow_outTaxApply.proId'
+					}, {
+						text : '项目名称：',
+						width : 100
+					}, {
+						xtype : 'textfield',
+						name : 'outTaxApply.proName',
+						id : 'flow_outTaxApply.proName',
+						allowBlank : false,
+						emptyText : '请选择项目',
+						width : 130,
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(function(proId, proName, proNo, contractId, contractNo, contractAmount, proAreaId, proArea, proChargerUserId, proChargerUserName, proChargerUserTel, proAdress) {
+									Ext.getCmp("flow_outTaxApply.proId").setValue(proId);
+									Ext.getCmp("flow_outTaxApply.proName").setValue(proName);
+									Ext.getCmp("flow_projectChargerUserId").setValue(proChargerUserId);
+									Ext.getCmp("flow_outTaxApply.proNo").setValue(proNo);
+									Ext.getCmp("flow_outTaxApply.proAddress").setValue(proAdress);
+								}, true, true).show();
+							}
+						}
+					}, {
+						text : '项目编号：',
+						width : 100
+					}, {
+						xtype : 'textfield',
+						name : 'outTaxApply.proNo',
+						id : 'flow_outTaxApply.proNo',
+						allowBlank : false,
+						emptyText : '请选择项目',
+						width : 130,
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(function(proId, proName, proNo, contractId, contractNo, contractAmount, proAreaId, proArea, proChargerUserId, proChargerUserName, proChargerUserTel, proAdress) {
+									Ext.getCmp("flow_outTaxApply.proId").setValue(proId);
+									Ext.getCmp("flow_outTaxApply.proName").setValue(proName);
+									Ext.getCmp("flow_outTaxApply.proNo").setValue(proNo);
+									Ext.getCmp("flow_projectChargerUserId").setValue(proChargerUserId);
+									Ext.getCmp("flow_outTaxApply.proAddress").setValue(proAdress);
+								}, true, true).show();
+							}
+						}
+
+					}]
+			}, {
+				xtype : "container",
+				layout : "column",
+				height : 25,
+				defaults : {
+					xtype : 'label',
+					style : {
+						margin : '0px 0px 3px 0px'
+					}
+				},
+				items : [{
+						text : '项目地点：',
+						width : 100
+					}, {
+						xtype : 'textfield',
+						name : 'outTaxApply.proAddress',
+						id : 'flow_outTaxApply.proAddress',
+						allowBlank : false,
+						emptyText : '请选择项目',
+						width : 130,
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(function(proId, proName, proNo, contractId, contractNo, contractAmount, proAreaId, proArea, proChargerUserId, proChargerUserName, proChargerUserTel, proAdress) {
+									Ext.getCmp("flow_outTaxApply.proId").setValue(proId);
+									Ext.getCmp("flow_outTaxApply.proName").setValue(proName);
+									Ext.getCmp("flow_outTaxApply.proNo").setValue(proNo);
+									Ext.getCmp("flow_projectChargerUserId").setValue(proChargerUserId);
+									Ext.getCmp("flow_outTaxApply.proAddress").setValue(proAdress);
+								}, true, true).show();
+							}
+						}
+
+					}, {
+						text : '附件类型：',
+						width : 100
+					}, {
+						xtype : 'combo',
+						triggerAction : 'all',
+						editable : false,
+						name : 'outTaxApply.attathType',
+						id : 'flow_outTaxApply.attathType',
+						store : ["合同", "审定报告"],
+						allowBlank : false,
+						width : 125
+					}]
+			}, {
+				xtype : "container",
+				layout : "column",
+				border : false,
+				unstyled : false,
+				defaults : {
+					xtype : 'label',
+					style : {
+						margin : '0px 0px 3px 0px'
+					}
+				},
+				items : [{
+						text : '金额小写(元)：',
+						width : 100
+					}, {
+						name : 'outTaxApply.amountXX',
+						id : 'flow_outTaxApply.amountXX',
+						allowBlank : false,
+						width : 354,
+						xtype : 'numberfield',
+						regex : /^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+						maxLength : 12,
+						enableKeyEvents : true,
+						listeners : {
+							keyup : function(field) {
+								var value = Ext.getCmp("flow_outTaxApply.amountXX").getValue();
+								var loanMoneyBig = AmountInWords(value);
+								Ext.getCmp("flow_outTaxApply.amountDX").setValue(loanMoneyBig);
+							}
+						}
+
+					}]
+			}, {
+				xtype : "container",
+				layout : "column",
+				height : 25,
+				defaults : {
+					xtype : 'label',
+					style : {
+						margin : '0px 0px 3px 0px'
+					}
+				},
+				items : [{
+						text : '金额大写(元)：',
+						width : 100
+					}, {
+						xtype : 'textfield',
+						name : 'outTaxApply.amountDX',
+						id : 'flow_outTaxApply.amountDX',
+						allowBlank : false,
+						readOnly : true,
+						style : "background:#F0F0F0;",
+						width : 354
+					}]
+			}, {
+				xtype : 'container',
+				autoHeight : true,
+				layout : 'column',
+				autoWidth : true,
+				defaultType : 'label',
+				style : 'padding-left:0px;padding-bottom:5px;',
+				items : [{
+						text : '附件:',
+						width : 95,
+						style : "margin-top:15px;"
+					}, {
+						xtype : 'hidden',
+						name : 'outTaxApply.attachIds',
+						id : 'flow_outTaxApply.attachIds'
+					}, {
+						xtype : 'hidden',
+						name : 'outTaxApply.attachFiles',
+						id : 'flow_outTaxApply.attachFiles'
+					}, {
+						xtype : 'panel',
+						id : 'flow_outTaxApply.displayAttach',
+						columnWidth : .95,
+						height : 65,
+						frame : false,
+						autoScroll : true,
+						style : 'padding-left:10px;padding-top:0px;',
+						html : ''
+					}, {
+						xtype : 'button',
+						iconCls : 'btn-upload',
+						text : '上传',
+						handler : function() {
+							var dialog = App.createUploadDialog({
+								file_cat : 'flow/outTaxApply',
+								callback : function(data) {
+									var attachFiles = Ext.getCmp("flow_outTaxApply.attachFiles");
+									var fileIds = Ext.getCmp('flow_outTaxApply.attachIds');
+									var display = Ext.getCmp('flow_outTaxApply.displayAttach');
+									display.body.update('');
+									attachFiles.setValue('');
+									fileIds.setValue('');
+									for (var i = 0; i < data.length; i++) {
+										if (fileIds.getValue() != '') {
+											fileIds.setValue(fileIds.getValue() + ',');
+											attachFiles.setValue(attachFiles.getValue() + ',');
+										}
+										attachFiles.setValue(attachFiles.getValue() + data[i].filepath + ":" + data[i].filename.replace(/\s+/g, ""));
+										fileIds.setValue(fileIds.getValue() + data[i].fileId);
+										Ext.DomHelper.append(display.body, '<span><a href="#" onclick="FileAttachDetail.show(' + data[i].fileId + ')">' + data[i].filename.replace(/\s+/g, "") + '</a>&nbsp;|&nbsp;</span>');
+									}
+								},
+								permitted_max_size : 1024 * 1024 * 20
+							});
+							dialog.show(this);
+						}
+					}]
+			}, {
+				xtype : "panel",
+				layout : "column",
+				border : false,
+				unstyled : false,
+				defaults : {
+					xtype : 'label',
+					style : {
+						margin : '0px 0px 3px 0px'
+					}
+				},
+				items : [{
+						text : '经办人：',
+						width : 100
+					}, {
+						xtype : 'textfield',
+						name : 'outTaxApply.userCreate',
+						id : 'flow_outTaxApply.userCreate',
+						allowBlank : false,
+						readOnly : true,
+						width : 354,
+						style : "background:#F0F0F0;",
+						value : __currentUser
+					}]
+			}, {
+				xtype : 'label',
+				style : 'color:red',
+				html : "备注：外经证申请自审批之日起两个工作日内开具，项目人员有妥善保管理外经证的责任，在外经证到期前15个工作日需加盖项目所在地主管税务局印章后归还财务部。"
+			}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

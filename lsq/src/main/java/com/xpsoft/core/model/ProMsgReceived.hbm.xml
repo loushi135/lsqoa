@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.core.model.ProMsgReceived"
+        table="pro_msg_received"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="mobile"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="mobile"
+            length="50"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="result"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="result"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="resNote"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="resNote"
+            length="500"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="receivetime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="receivetime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="strId"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="str_id"
+            length="100"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="finished"
+            type="java.lang.Integer"
+            update="true"
+            insert="true"
+            access="property"
+            column="finished"
+            length="11"
+            not-null="false"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

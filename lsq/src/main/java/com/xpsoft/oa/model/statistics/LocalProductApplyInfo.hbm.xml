@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.LocalProductApplyInfo"
+        table="local_product_apply_info"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+        <property
+            name="name"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="name"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="price"
+            type="java.math.BigDecimal"
+            update="true"
+            insert="true"
+            access="property"
+            column="price"
+            precision="13"
+            scale="2"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="num"
+            type="java.lang.Integer"
+            update="true"
+            insert="true"
+            access="property"
+            column="num"
+            length="10"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="amount"
+            type="java.math.BigDecimal"
+            update="true"
+            insert="true"
+            access="property"
+            column="amount"
+            precision="13"
+            scale="2"
+            not-null="false"
+            unique="false"
+        />
+        <many-to-one name="localProductApply" class="com.xpsoft.oa.model.statistics.LocalProductApply"
+        	fetch="join"
+        >
+        	<column name="applyId"></column>
+        </many-to-one>
+        <many-to-one name="project" class="com.xpsoft.oa.model.statistics.ProjectNew"
+        	fetch="join"
+        >
+        	<column name="proId"></column>
+        </many-to-one>
+     </class>
+</hibernate-mapping>

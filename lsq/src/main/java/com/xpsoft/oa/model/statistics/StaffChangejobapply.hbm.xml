@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.StaffChangejobapply"
+        table="staff_changejobapply"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="companyName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="companyName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <many-to-one name="changeJobUser" 
+        	class="com.xpsoft.oa.model.system.AppUser"
+			not-null="false" fetch="join">
+			<column name="changeJobUserId"></column>
+		</many-to-one>
+		
+		<many-to-one name="oldDept" 
+        	class="com.xpsoft.oa.model.system.Department"
+			not-null="false" fetch="join">
+			<column name="oldDeptId"></column>
+		</many-to-one>
+		
+		<many-to-one name="oldJob" 
+        	class="com.xpsoft.oa.model.hrm.Job"
+			not-null="false" fetch="join">
+			<column name="oldJobId"></column>
+		</many-to-one>
+		
+		<many-to-one name="newDept" 
+        	class="com.xpsoft.oa.model.system.Department"
+			not-null="false" fetch="join">
+			<column name="newDeptId"></column>
+		</many-to-one>
+		
+		<many-to-one name="newJob" 
+        	class="com.xpsoft.oa.model.hrm.Job"
+			not-null="false" fetch="join">
+			<column name="newJobId"></column>
+		</many-to-one>
+        
+        <property
+            name="changeJobDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="changeJobDate"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="changeJobReason"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="changeJobReason"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="processRunId"
+            type="java.lang.Long"
+            update="false"
+            insert="true" 
+            access="property"
+            column="processRunId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

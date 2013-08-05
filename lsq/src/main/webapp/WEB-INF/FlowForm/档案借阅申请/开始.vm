@@ -1,0 +1,386 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "档案借阅申请",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 670,
+			height : 440,
+			padding : "10px",
+			initComponent : function() {
+				this.items = [{
+							name : 'bookresultGridData',
+							xtype : 'hidden',
+							id : 'flow_bookresultGridData',
+							anchor : '95.5%',
+							allowBlank : false,
+							width : 150,
+							editable : true,
+							readOnly : false
+						},{
+							xtype : 'container',
+							style : 'padding-left:0px;margin-bottom:10px',
+							layout : 'column',
+							items : [{
+										xtype : 'label',
+										text : '申请人:',
+										style:'margin-top:3px;',
+										width:55
+									}, {
+										xtype : 'textfield',
+										style : 'margin-left:12px',
+										width : '40%',
+										id : 'flow_borrower',
+										name : 'borrower',
+										allowBlank:false,
+										readOnly : true,
+										style:"background:#F0F0F0;",
+										value : __currentUser
+									}, {
+										xtype : 'label',
+										text : '申请部门:',
+										style:'padding-left:3px;margin-top:3px;'
+									}, {
+										xtype : 'textfield',
+										readOnly : true,
+										style:"background:#F0F0F0;",
+										width:'40%',
+										allowBlank:false,
+										id : 'flow_borrowerDept',
+										name : 'borrowerDept',
+										value : __currentUserDept
+									}]
+						}, {
+							xtype : 'container',
+							layout : 'column',
+							height : 25,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '档案详情：'
+									}, {
+										style : 'color:red',
+										id : 'flow_bookresultErrorLabel',
+										text : '(*必填)'
+									}]
+						}
+						,{
+							xtype : 'container',
+							style : 'padding-left:0px;margin-bottom:10px',
+							layout : 'column',
+							items : [{
+										xtype:'grid',
+										id : 'flow_bookresultGridDataGrid',
+										height:220,
+										width:'98%',
+										stripeRows:true,
+										trackMouseOver : true,
+										clicksToEdit:1, 
+										plugins:[new Ext.ux.grid.RowEditor({
+											saveText: '保存',
+											cancelText:'取消',
+											errorText:'请输入完整信息',
+											errorSummary:false
+										})],
+											store: new Ext.data.ArrayStore({
+												url : '',
+												remoteSort : false,
+												fields : ['bookId','isbn','bookName','bookType','department','amount','returnTime'],
+												listeners:{
+												'update':function(value){
+													var r=this.getRange();								
+													var resultArray = [];  
+													var sum=0;
+													var rlen = r.length;  
+													for (var i = 0; i < rlen; i++) {  
+														resultArray.push([]);  
+														if (r[i].fields) {
+														    var fields = r[i].fields; 
+														    var flen = fields.length;  
+														    for (var z = 0; z < flen; z++) {
+																var fieldValue = r[i].get(fields.keys[z]);
+																if (Ext.isEmpty(fieldValue)||fieldValue == '请双击选择' || fieldValue == '请双击填写' ) {
+																		continue;
+																}
+																if(fields.keys[z]=='bookId'){
+																	resultArray[i].push('编号:'+fieldValue); 
+																}else if(fields.keys[z]=='isbn'){
+																	resultArray[i].push('档案编号:'+fieldValue); 
+																}else if(fields.keys[z]=='bookName'){
+																	resultArray[i].push('档案名称:'+fieldValue); 
+																}else if(fields.keys[z]=='bookType'){
+																	resultArray[i].push('档案类别:'+fieldValue); 
+																}else if(fields.keys[z]=='department'){
+																	resultArray[i].push('所属部门:'+fieldValue); 
+																}else if(fields.keys[z]=='amount'){
+																	resultArray[i].push('借阅数量:'+fieldValue); 
+																}else if(fields.keys[z]=='returnTime'){
+																	if(fieldValue != ''){
+																		resultArray[i].push('归还时间:'+FormatGMTtoLocal(fieldValue,"yyyy-MM-dd")+';'); 
+																	}else{
+																		resultArray[i].push('归还时间:'+fieldValue+';'); 
+																	}
+																	
+																}
+														    }
+														}  
+													}
+													
+													 //删除空元素
+												    for(var i = 0; i < resultArray.length; i++){
+												    	if(resultArray[i].length==0){
+												    		resultArray.splice(i,1);
+												    		i--;
+												    	}
+												    }
+													Ext.getCmp('flow_bookresultGridData').setValue(resultArray);
+												}
+											}
+										}),
+										cm:new Ext.grid.ColumnModel({
+												columns : [new Ext.grid.RowNumberer(),{
+													dataIndex : 'leftAmount',
+													hidden:true,
+													editor:new Ext.grid.GridEditor(
+																new Ext.form.TextField({ 
+																	id:'flow_leftAmount',
+																	readOnly:true
+							                        }))
+												},{
+													header : '序号',
+													dataIndex : 'bookId',
+													width:50,
+													editor:new Ext.grid.GridEditor(
+																new Ext.form.TextField({ 
+																	id:'flow_bookId',
+																	readOnly:true
+							                        }))
+												},{
+													header : '档案编号',
+													dataIndex : 'isbn',
+													width:100,
+													editor:new Ext.grid.GridEditor(
+																new Ext.form.TextField({ 
+																	id:'flow_isbn',
+																	readOnly:true,
+																	listeners:{
+																		'focus':function(){
+																			BookSelector.getView(function(bookId, bookName,isbn,bookType,location,department,leftAmount) {
+																				var bookIdField = Ext.getCmp('flow_bookId');
+																				bookIdField.setValue(bookId);
+																				
+																				var leftAmountField = Ext.getCmp('flow_leftAmount');
+																				leftAmountField.setValue(leftAmount);
+																				
+																				var bookNameField = Ext.getCmp('flow_bookName');
+																				bookNameField.setValue(bookName);
+																				var bookIsbnField = Ext.getCmp('flow_isbn');
+																				if(!Ext.isEmpty(isbn)&&isbn!='null'){
+																					bookIsbnField.setValue(isbn);
+																				}else{
+																					bookIsbnField.setValue("无");
+																				}
+																				var bookTypeField = Ext.getCmp('flow_bookType');
+																				bookTypeField.setValue(bookType);
+																				var departmentField = Ext.getCmp('flow_department');
+																				departmentField.setValue(department==''?'无':department);
+																				if(Ext.isEmpty(Ext.getCmp('flow_amount').getValue())){
+																					Ext.getCmp('flow_amount').setValue(1);
+																				}
+																			}, true).show();			
+																		}
+																	}
+							                        }))
+												}
+												,{
+													header : '档案名称',	
+													dataIndex : 'bookName',
+													width:100,
+													editor:new Ext.grid.GridEditor(
+																new Ext.form.TextField({ 
+																	id:'flow_bookName',
+																	name:'bookName',
+																	allowBlank: false,
+																	blankText:'档案名称不能为空',
+																	readOnly:true
+																	
+							                        }))
+												}
+												,{
+													header : '档案类别',	
+													dataIndex : 'bookType',
+													width:100,
+													editor:new Ext.grid.GridEditor(
+															new Ext.form.TextField({ 
+																	allowBlank: false,
+																	blankText:'档案类别不能为空' ,
+																	id:'flow_bookType',
+																	readOnly:true
+													}))
+												}
+												,{
+													header : '所属部门',	
+													dataIndex : 'department',
+													editor:new Ext.grid.GridEditor(
+															new Ext.form.TextField({ 
+																	allowBlank: false,
+																	id:'flow_department',
+																	readOnly:true
+													}))
+												},{
+													header : '借阅数量',	
+													dataIndex : 'amount',
+													editor:new Ext.grid.GridEditor(
+															new Ext.form.TextField({ 
+																	allowBlank: false,
+																	blankText:'借阅数量不能为空',
+																	id:'flow_amount',
+																	listeners:{
+																		'change':function(txt){
+																			if(Ext.getCmp('flow_leftAmount').getValue()<txt.getValue()){
+																				Ext.ux.Toast.msg("信息提示", "您想借阅的档案库存不足,最多只能借阅["+Ext.getCmp('flow_leftAmount').getValue()+"]份！");
+																				txt.setValue(Ext.getCmp('flow_leftAmount').getValue());
+																			}
+																		}
+																	}
+													})),
+													width:60
+												},{
+													header : '归还时间',	
+													dataIndex : 'returnTime',
+													editor:new Ext.grid.GridEditor(
+															new Ext.form.DateField({ 
+																	allowBlank: false,
+																	format : "Y-m-d",
+																	blankText:'归还时间不能为空',
+																	id:'flow_returnTime'
+													})),
+													width:80,
+													renderer:function(value){
+														if(value==''){
+															return '';
+														}else if(typeof value == "string"){
+															return value;
+														}else{
+															return formatDate(value,'yyyy-MM-dd'); 
+														}
+													}
+												}
+												],
+											defaults : {
+												sortable : false,
+												menuDisabled : false,
+												width : 100
+											}
+										}),
+										tbar :new Ext.Toolbar({
+											height : 30,				
+											items : [{
+													iconCls : 'btn-add',
+													text : '添加档案信息',
+													xtype : 'button',
+													handler :function () {
+														var DataRecord = Ext.data.Record.create([{name:'bookId'},{name:'isbn'},{name:'bookName'},{name:'bookType'},{name:'department'},{name:'amount'},{name:'returnTime'}]);
+														var store =Ext.getCmp('flow_bookresultGridDataGrid').store;
+														var grid = Ext.getCmp('flow_bookresultGridDataGrid'); 
+															
+															
+														var n1 = ''; var n2 = '请双击选择';var n3 = '';var n4='';var n5 = '';var n8='';var n9='1';
+
+														var newRowData = {bookId:n1,isbn:n2,bookName:n3,bookType:n4,department:n5,amount:n5,returnTime:n8}; 
+														var newRecord = new DataRecord(newRowData); 
+														store.add([newRecord]);
+															
+														grid.getSelectionModel().on('selectionchange', function(sm){  
+													        Ext.getCmp('bookremoveBtn').setDisabled(sm.getCount() < 1);  
+													    }); 
+													}
+												}
+											, {
+												iconCls : 'btn-del',
+												text : '删除档案信息',
+												id:'bookremoveBtn',
+												xtype : 'button',
+												handler :function () {
+													var store =Ext.getCmp('flow_bookresultGridDataGrid').store;
+													var grid = Ext.getCmp('flow_bookresultGridDataGrid'); 
+													var s = grid.getSelectionModel().getSelections();  
+									                for(var i = 0, r; r = s[i]; i++){  
+									                    store.remove(r);  
+									                }  
+													store.fireEvent("update");//更新事件
+									                    
+												}
+											}
+											]
+										})
+									}]
+						}, {
+							xtype : 'textfield',
+							hidden : true,
+							validator : function() {
+								var resultGridData = Ext.getCmp('flow_bookresultGridData').getValue();
+								var errorLabel = Ext.getCmp("flow_bookresultErrorLabel");
+								if (Ext.isEmpty(resultGridData)) {//为空显示提示
+									errorLabel.setText('请填写档案详情');
+									return false;
+								}
+								return true
+							}
+						}
+						,{
+							xtype : 'container',
+							style : 'padding-left:0px;margin-bottom:10px',
+							layout : 'column',
+							items : [{
+										xtype : 'label',
+										text : '备注:',
+										style:'margin-top:3px;',
+										width:55
+									}, {
+										xtype : 'textarea',
+										width:'88%',
+										id:'flow_remark',
+										name:'remark',
+										height:100
+									}]
+						}]
+				Ext.MyForm.superclass.initComponent.call(this);
+				
+				
+//				if(typeof(tempValue)!='undefined'){
+//					Ext.Ajax.request({
+//					url : __ctxPath + '/admin/getBook.do' ,
+//					method : 'post',
+//					params : {
+//							bookId : tempValue
+//					},
+//					success : function(response) {
+//						var result = Ext.util.JSON.decode(response.responseText);
+//						
+//						var bookIdField = Ext.getCmp('flow_bookId');
+//						bookIdField.setValue(result.data.bookId);
+//						
+//						var bookNameField = Ext.getCmp('flow_bookName');
+//						bookNameField.setValue(result.data.bookName);
+//						var bookIsbnField = Ext.getCmp('flow_isbn');
+//						bookIsbnField.setValue(result.data.isbn);
+//						
+//						var bookTypeField = Ext.getCmp('flow_bookType');
+//						bookTypeField.setValue(result.data.bookType.typeName);
+//						var departmentField = Ext.getCmp('flow_department');
+//						departmentField.setValue(result.data.department);
+//						var leftAmountField = Ext.getCmp('flow_leftAmount');
+//						leftAmountField.setValue(result.data.leftAmount);
+//						
+//					}
+//				});
+//				}
+				
+				
+			}
+		})

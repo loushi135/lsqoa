@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.system.AppUserUpdate"
+        table="app_user_update"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="foreign" >
+            	<param name="property">appUser</param>  
+            </generator>
+        </id>
+        <one-to-one name="appUser" constrained="true" class="com.xpsoft.oa.model.system.AppUser"></one-to-one> 
+         <property
+            name="updateTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="updateTime"
+            length="19"
+            not-null="true"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

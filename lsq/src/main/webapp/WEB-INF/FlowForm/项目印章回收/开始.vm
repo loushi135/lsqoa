@@ -1,0 +1,215 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "项目印章回收申请表",
+			layout : "form",
+			bodyStyle : 'padding:10px 10px 10px 10px',
+			border : true,
+			autoScroll : true,
+			bodyStyle : 'padding:10px 10px 10px 10px;',
+			defaults : {
+				anchor : '98%,98%'
+			},
+			defaultType : 'textfield',
+			width : 500,
+			autoHeight : true,
+			padding : "10px",
+			projectSealFocus : function() {
+				ProjectSealSelector.getView(
+						function(sealId, proName, content, applyUserName,
+								applyUserId, keeperUserName, keeperUserId,
+								proArea, proAreaId, proChargerUserName,
+								proChargerUserId) {
+							Ext.getCmp("flow_flowSealRecycle.sealId")
+									.setValue(sealId);
+							Ext.getCmp("flow_flowSealRecycle.proName")
+									.setValue(proName);
+							Ext.getCmp("flow_bpaDeptId")
+									.setValue(proAreaId);		
+									
+							Ext.getCmp("flow_projectManagerId")
+									.setValue(proChargerUserId);
+							Ext.getCmp("flow_flowSealRecycle.content")
+									.setValue(content);
+							Ext.getCmp("flow_flowSealRecycle.applyUserName")
+									.setValue(applyUserName);
+							Ext.getCmp("flow_flowSealRecycle.keeperUserName")
+									.setValue(keeperUserName);
+
+						}, true, true).show();
+			},
+			initComponent : function() {
+
+				this.items = [{
+							xtype : "container",
+							layout : "column",
+							height : 25,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										name : 'projectManagerId',
+										id : "flow_projectManagerId",
+										xtype : 'hidden'
+									}, {
+										xtype : 'hidden',
+										name : 'bpaDeptId',
+										id : 'flow_bpaDeptId'
+									}, {
+										xtype : 'hidden',
+										name : 'flowSealRecycle.sealApplyId',
+										id : 'flow_flowSealRecycle.sealId'
+									}, {
+										text : '项目名称：',
+										width : 120
+									}, {
+										xtype : 'textfield',
+										name : 'flowSealRecycle.proName',
+										id : 'flow_flowSealRecycle.proName',
+										allowBlank : false,
+										emptyText : '请选择项目印章申请',
+										width : 350,
+										listeners : {
+											'focus' : this.projectSealFocus.createCallback()
+										}
+									}]
+						}, {
+							xtype : "container",
+							layout : "column",
+							height : 25,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '项目章刻印内容：',
+										width : 120
+									}, {
+										xtype : 'textfield',
+										name : 'flowSealRecycle.content',
+										id : 'flow_flowSealRecycle.content',
+										allowBlank : false,
+										readOnly : true,
+										width : 350,
+										emptyText : '请选择项目印章申请',
+										listeners : {
+											'focus' : this.projectSealFocus.createCallback()
+										}
+									}]
+						}, {
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [
+
+							{
+										style : 'margin-top:5px',
+										text : '项目印章申请人：',
+										width : 120
+									}, {
+										style : 'margin-top:5px',
+										xtype : 'textfield',
+										name : 'flowSealRecycle.applyUserName',
+										id : 'flow_flowSealRecycle.applyUserName',
+										allowBlank : false,
+										readOnly : true,
+										width : 115,
+										emptyText : '请选择项目印章申请',
+										listeners : {
+											'focus' : this.projectSealFocus.createCallback()
+										}
+									}, {
+										style : 'margin-top:5px;margin-left:0px',
+										text : '项目印章保管人：',
+										width : 120
+									}, {
+										style : 'margin-top:5px',
+										xtype : 'textfield',
+										name : 'flowSealRecycle.keeperUserName',
+										id : 'flow_flowSealRecycle.keeperUserName',
+										allowBlank : false,
+										width : 120,
+										readOnly : true,
+										emptyText : '请选择项目印章申请',
+										listeners : {
+											'focus' : this.projectSealFocus.createCallback()
+										}
+									}]
+						}, {
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							style : {
+								margin : '5px 0px 3px 0px'
+							},
+							defaults : {
+								xtype : 'label'
+							},
+							items : [{
+										text : '项目完工内检时间：',
+										width : 120
+									}, {
+										xtype : 'datefield',
+										format : 'Y-m-d',
+										name : 'flowSealRecycle.innerCheckTime',
+										id : 'flow_flowSealRecycle.innerCheckTime',
+										allowBlank : false,
+										width : 110
+									}, {
+										text : '最晚归还时间：',
+										width : 120
+									}, {
+										xtype : 'datefield',
+										format : 'Y-m-d',
+										name : 'flowSealRecycle.lastReturnTime',
+										id : 'flow_flowSealRecycle.lastReturnTime',
+										allowBlank : false,
+										width : 115
+									}]
+						}, {
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										style : 'margin-top:5px',
+										text : '经办人：',
+										width : 120
+									}, {
+										style : 'margin-top:5px',
+										xtype : 'hidden',
+										name : 'flowSealRecycle.thisApplyUserId',
+										id : 'flow_flowSealRecycle.thisApplyUserId',
+										value : __currentUserId
+									}, {
+										style : 'margin-top:5px',
+										xtype : 'textfield',
+										name : 'flowSealRecycle.thisApplyUserName',
+										id : 'flow_flowSealRecycle.thisApplyUserName',
+										allowBlank : false,
+										readOnly : true,
+										width : 350,
+										value : __currentUser
+									}]
+						}]
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

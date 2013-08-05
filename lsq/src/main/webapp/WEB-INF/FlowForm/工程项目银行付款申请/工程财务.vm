@@ -1,0 +1,110 @@
+[
+	{
+		fieldLabel:'快速回复',
+		xtype:'combo',
+		mode : 'local',
+		editable : false,
+		anchor:'90%,90%',
+		triggerAction : 'all',
+		store :['同意','不同意'],
+		listeners:
+			{
+				select:{
+					fn:function(field,record,index){//select : ( Ext.form.ComboBox combo, Ext.data.Record record, Number index ) 
+						var options=Ext.getCmp('superOption');
+						if(options!=null){
+							options.setValue(field.getValue());
+							if(field.getValue()=='不同意'){
+								Ext.getCmp('pass').setDisabled(true);
+    							Ext.getCmp('unPass').setDisabled(false);
+							Ext.getCmp('backReturnBtn').setDisabled(false);
+								Ext.getCmp('freeTransCombo').setDisabled(false);
+							}else{
+								Ext.getCmp('pass').setDisabled(false);
+    							Ext.getCmp('unPass').setDisabled(true);
+							Ext.getCmp('backReturnBtn').setDisabled(true);
+								Ext.getCmp('freeTransCombo').setDisabled(true);
+							}
+						}
+					}
+				}
+			}
+	},
+	 {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					style:'margin-top:5px;margin-bottom:5px;',
+					items : [{
+								xtype : "label",
+								text : "资金结余:",
+								width : 105
+							}, {
+								xtype : "numberfield",
+								regex:/(^$)|^\-?(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,  //加上（^$）表示可为空  加\-?表示可以为负数
+								name : "bpaFundBalance",
+								id:'flow_bpaFundBalance',
+								allowBlank:true,
+								value:'${bpaFundBalance}',
+								width:120
+							}, {
+								xtype : "label",
+								text : "垫资审批额度:",
+								width : 90,
+								style : "padding-left:5px;"
+							}, {
+								xtype : "numberfield",
+								regex:/(^$)|^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,  //加上（^$）表示可为空
+								name : "bpaPayRatio",
+								value:'${bpaPayRatio}',
+								id:'flow_bpaPayRatio',
+								allowBlank:true,
+								width:120
+							}, {
+								xtype : "label",
+								text : "发票结余:",
+								width : 90,
+								style : "padding-left:5px;"
+							}, {
+								xtype : "numberfield",
+//							    regex:/(^$)|^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,  //加上（^$）表示可为空
+								name : "bpaInvoiceBalance",
+								id:'flow_bpaInvoiceBalance',
+								value:'${bpaInvoiceBalance}',
+								allowBlank:true,
+								width:120,
+								listeners:{
+									afterrender:function(){
+										//得到 资金结余等
+										var proNo = '${bpaProjectNo}';
+										var projectId = '${bpaProId}';
+										var suppliersId = '${bpaReceiptDeptId}';
+										var url2 = __ctxPath+'/statistics/getApplyDataBankpayapply.do';
+										var params2 = 'proNo='+proNo+"&materialId=1&projectId="+projectId+"&suppliersId="+suppliersId;
+										if(!Ext.isEmpty(proNo)&&!Ext.isEmpty(projectId)&&!Ext.isEmpty(suppliersId)&&projectId.indexOf('bpaProId')==-1){
+											var data2 = ajaxSyncCall(url2,params2).data;
+											if(!Ext.isEmpty(data2.leftMoney)){
+												Ext.getCmp('flow_bpaFundBalance').setValue(data2.leftMoney);
+											}
+											if(!Ext.isEmpty(data2.quota)){
+												Ext.getCmp('flow_bpaPayRatio').setValue(data2.quota);
+											}
+											if(!Ext.isEmpty(data2.leftBill)){
+												Ext.getCmp('flow_bpaInvoiceBalance').setValue(data2.leftBill);
+											}else{
+												Ext.getCmp('flow_bpaInvoiceBalance').setValue("");
+											}
+										}
+									}
+								}
+							}]
+				},
+	{
+		fieldLabel:'审批意见',
+		xtype:'textarea',
+		id:'superOption',
+		name:'superOption',
+		allowBlank:false,
+		anchor:'90%'
+	}
+]

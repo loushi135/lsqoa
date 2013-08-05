@@ -1,0 +1,357 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "暂支单",
+	labelWidth : 30,
+	labelAlign : "left",
+	layout : "form",
+	width : 720,
+	height : 430,
+	padding : "10px",
+	initComponent : function() {
+		this.items = [{
+			xtype : "container",
+			style : "padding-left:0px;margin-bottom:10px;",
+			layout : "column",
+			//			hidden:true,
+			id : 'flow_proContainer',
+			items : [{
+						xtype : 'label',
+						text : '项目名称：'
+					}, {
+						xtype : 'hidden',
+						name : 'proId',
+						id : 'flow_proId'
+					}, {
+						xtype : 'textfield',
+					    allowBlank : false,
+						id : 'flow_proName',
+						name : 'proName',
+						emptyText : '请选择项目',
+						width : 250,
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(
+										function(proId, proName, proNo,contractId, contractNo,contractAmount) {
+											Ext.getCmp("flow_proName").setValue(proName);
+											Ext.getCmp("flow_proNo").setValue(proNo);
+											Ext.getCmp("flow_proId").setValue(proId);
+											var url = __ctxPath + '/statistics/getOwedSumPaymentList.do';
+											var params = "proId="+proId;
+											var owedSum = ajaxSyncCall(url,params).owedSum;
+											var owedSumBig = AmountInWords(owedSum);
+										    Ext.getCmp("flow_owedSum").setValue(owedSum);
+										    Ext.getCmp("owedSumBig").setText("("+ owedSumBig+ ")");
+										}, true).show();
+							}
+
+						}
+					}, {
+						xtype : 'label',
+						text : '项目编号：',
+						style : 'margin-left:20px;padding-right:12px;'
+					}, {
+						xtype : 'textfield',
+						allowBlank : false,
+						id : 'flow_proNo',
+						emptyText : '请选择项目',
+						name : 'proNo',
+						width : 250,
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(
+										function(proId, proName, proNo,contractId, contractNo,contractAmount) {
+											Ext.getCmp("flow_proName").setValue(proName);
+											Ext.getCmp("flow_proNo").setValue(proNo);
+											Ext.getCmp("flow_proId").setValue(proId);
+											var url = __ctxPath + '/statistics/getOwedSumPaymentList.do';
+											var params = "proId="+proId;
+											var owedSum = ajaxSyncCall(url,params).owedSum;
+											var owedSumBig = AmountInWords(owedSum);
+										    Ext.getCmp("flow_owedSum").setValue(owedSum);
+										    Ext.getCmp("owedSumBig").setText("("+ owedSumBig+ ")");
+										}, true).show();
+							}
+						}
+					}
+					]
+		},{
+		    xtype : 'panel',
+			style:'margin-bottom:10px',
+			border : false,
+			layout : 'column',
+		    items:[{
+		           xtype:'label',
+		           text:'类别选择：'
+		        },
+		        {
+		        	xtype : "combo",
+					hiddenName : "payOption",
+					id : "flow_payOption",
+					allowBlank : false,
+					mode : 'local',
+					store : ['工程', '其他'],
+					value:'工程',
+					triggerAction : 'all',
+					width : 125,
+					editable : false,
+		        	listeners:{
+		        		select : function(combo,record,index){
+		        			if(combo.getValue()=='工程'){
+								Ext.getCmp("flow_proName").enable();
+								Ext.getCmp("flow_proNo").enable();
+								Ext.getCmp("flow_owedSum").enable();
+								Ext.getCmp("flow_proContainer").show();
+								var data = ['备用金', '税金'];
+							    Ext.getCmp("flow_paymentType").getStore().loadData(data);
+							    Ext.getCmp("flow_owedSum").setValue('');
+								Ext.getCmp("owedSumBig").setText('');
+		        			}else{
+		        				Ext.getCmp("flow_proContainer").hide();
+		        				Ext.getCmp("flow_proName").reset();
+		        				Ext.getCmp("flow_proNo").reset();
+		        				Ext.getCmp("flow_owedSum").reset();
+								Ext.getCmp("flow_proName").disable();
+								Ext.getCmp("flow_proNo").disable();
+								Ext.getCmp("flow_owedSum").disable();
+								var data = ['备用金', '税金', '个人借款'];
+								Ext.getCmp("flow_paymentType").getStore().loadData(data);
+								var url = __ctxPath + '/statistics/getOwedSumPaymentList.do';
+								var owedSum = ajaxSyncCall(url).owedSum;
+								var owedSumBig = AmountInWords(owedSum);
+							    Ext.getCmp("flow_owedSum").setValue(owedSum);
+							    Ext.getCmp("owedSumBig").setText("("+ owedSumBig+ ")");
+		        			}
+		        		}
+		        		
+		        	}
+		        	
+		        },{
+						xtype : 'label',
+						style:'margin-left:20px;',
+						text : '暂支类别：'
+					}, {
+						xtype : "combo",
+						hiddenName : "paymentType",
+						id : "flow_paymentType",
+						allowBlank : false,
+						mode : 'local',
+						store : ['备用金', '税金'],
+						triggerAction : 'all',
+						width : 125,
+						editable : false
+					}, {
+						xtype : 'label',
+						text : '目前欠款金额：',
+						style : 'padding-right:3px;margin-left:20px;'
+					}, {
+						xtype : 'numberfield',
+						name : 'owedSum',
+						allowBlank:false,
+						id : 'flow_owedSum',
+						emptyText : '系统自动生成',
+						style : "background:#F0F0F0;",
+						readOnly : true,
+						width : 130
+					}, {
+						xtype : 'label',
+						text : '元',
+						width : 15
+					}, {
+						xtype : 'label',
+						style : 'color:red',
+						id : 'owedSumBig'
+					}
+		        ]
+			
+		}, {
+			xtype : 'panel',
+			border : false,
+			layout : 'column',
+			height : 60,
+			items : [{
+						xtype : 'label',
+						text : '本次借款金额：',
+						width : 90
+					}, {
+						xtype : 'container',
+						width : 350,
+						style : 'padding-left:3px;',
+						defaults : {
+							xtype : 'textfield'
+						},
+						layout : 'form',
+						items : [{
+							xtype : 'container',
+							width : 300,
+							layout : 'column',
+							items : [{
+										xtype : 'label',
+										width : 30,
+										text : '小写:',
+										style : 'margin-right:5px;'
+									}, {
+										xtype : 'numberfield',
+										regex : /^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+										name : 'paymentSumSmall',
+										id : 'flow_paymentSumSmall',
+										maxLength : 12,
+										width : 110,
+										enableKeyEvents : true,
+										listeners : {
+														keyup : function(field) {
+															var value = Ext.getCmp("flow_paymentSumSmall").getValue();
+															var paymentSumBig = AmountInWords(value);
+															Ext.getCmp("flow_paymentSumBig").setValue(paymentSumBig);
+													}
+										}
+									}, {
+										xtype : 'label',
+										text : '元'
+									}, {
+										xtype : 'label',
+										width : 140,
+										text : '(填写此项,大写自动补全)',
+										style : 'color:red'
+									}]
+						}, {
+							fieldLabel : '大写',
+							name : 'paymentSumBig',
+							labelStyle : 'width:30px;',
+							style : 'margin-top:5px;',
+							readOnly : true,
+							id : 'flow_paymentSumBig',
+							width : 300
+						}]
+					},{
+							xtype : 'label',
+							text : '预计归还时间：',
+							width:90
+						},{
+							xtype : 'datefield',
+							editable:false,
+							format:'Y-m-d',
+							name:'preNowReturnTime',
+							id:'flow_preNowReturnTime'
+					}
+					]
+		}, {
+			xtype : 'container',
+			layout : 'column',
+			style : 'padding-left:0px;margin-bottom:4px',
+			border : false,
+			items : [{
+						xtype : 'label',
+						text : '暂支原因:'
+					}, {
+						xtype : 'textarea',
+						name : 'paymentCause',
+						allowBlank : false,
+						maxLength : 200,
+						id : 'flow_paymentCause',
+						height : 115,
+						width : 586
+					}]
+
+		},{
+			xtype : 'container',
+			autoHeight : true,
+			layout : 'column',
+			autoWidth : true,
+			defaultType : 'label',
+			style : 'padding-left:0px;padding-bottom:5px;',
+			items : [{
+						text : '附件:',
+						width : 43,
+						style : "margin-top:15px;"
+					},{
+						xtype : 'hidden',
+						name : 'payment.attachIds',
+						id : 'flow_payment.attachIds'
+					},{
+						xtype : 'hidden',
+						name : 'payment.attachFiles',
+						id : 'flow_payment.attachFiles'
+					},{
+						xtype : 'panel',
+						id:'flow_payment.displayAttach',
+						width : 550,
+						height: 65,
+						frame:false,
+						autoScroll:true,
+						style : 'padding-left:10px;padding-top:0px;',
+						html : ''
+					},{
+						xtype : 'button',
+						iconCls : 'btn-upload',
+						text : '上传',
+						handler : function() {
+							var dialog = App.createUploadDialog({
+													file_cat : 'flow/payment',
+													callback : function(data) {
+														Ext.getCmp('flow_payment.displayAttach').body.update('');
+														Ext.getCmp("flow_payment.attachFiles").setValue('');
+														Ext.getCmp('flow_payment.attachIds').setValue('');
+														var contractFile = Ext.getCmp("flow_payment.attachFiles");
+														var fileIds = Ext.getCmp('flow_payment.attachIds');
+														var display = Ext.getCmp('flow_payment.displayAttach');
+														for (var i = 0; i < data.length; i++) {
+															if (fileIds.getValue() != '') {
+																fileIds.setValue(fileIds.getValue()+ ',');
+																contractFile.setValue(contractFile.getValue()+ ',');
+															}
+//															contractFile.setValue(contractFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+															contractFile.setValue(contractFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+															fileIds.setValue(fileIds.getValue()+data[i].fileId);
+															Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+														}
+													},
+													permitted_max_size :1024*1024*20,
+													permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+												});
+								dialog.show(this);
+						}
+					}]
+		}
+		,{
+			xtype : 'panel',
+			border : false,
+			layout : 'column',
+			items : [{
+						xtype : 'label',
+						text : '部门：',
+						width : 53
+					}, {
+						xtype : 'textfield',
+						name : 'deptName',
+						id:'flow_deptName',
+						fieldLabel : '部门',
+						allowBlank : false,
+						style : "background:#F0F0F0;",
+						value : __currentUserDept,
+						readOnly : true,
+						width : 594
+					}]
+		}, {
+			xtype : 'panel',
+			border : false,
+			style:'padding-top:10px',
+			layout : 'column',
+			items : [{
+						xtype : 'label',
+						text : '借款人：',
+						width : 53
+					}, {
+						xtype : 'textfield',
+						name : 'borrower',
+						id:'flow_borrower',
+						fieldLabel : '借款人',
+						allowBlank : false,
+						style : "background:#F0F0F0;",
+						value : __currentUser,
+						readOnly : true,
+						width : 594
+					}]
+		}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

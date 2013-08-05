@@ -1,0 +1,378 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "晋升申请",
+			labelWidth : 3,
+			labelAlign : "left",
+			layout : "form",
+			width : 700,
+			height : 420,
+			padding : "10px",
+			initComponent : function() {
+				var url = __ctxPath + "/system/listDepartment.do?opt=appUser";
+//				var oldDepTreeSelector = new TreeSelector("flow_newDept@depIdoldDepTreeSelector", url, "所属部门", "flow_staffPromoteapply.oldDept@depId",null,150,"staffPromoteapply.oldDepTreeSelector");
+//				Ext.getCmp("flow_staffPromoteapply.oldDepTreeSelectorTree").on("click", function(g) {
+//					Ext.getCmp("flow_staffPromoteapply.oldJobName").setValue("");
+//					Ext.getCmp("flow_staffPromoteapply.oldJobName").getStore().removeAll();
+//					var depId = Ext.getCmp("flow_staffPromoteapply.oldDept@depId").getValue();
+//					if (!Ext.isEmpty(depId)) {
+//						Ext.getCmp("flow_staffPromoteapply.oldJobName").
+//							getStore().reload({
+//										params : {
+//											depId : depId
+//										}
+//									});
+//					}
+//				});
+				var newDepTreeSelector = new TreeSelector("flow_staffPromoteapply@newDepTreeSelector", url, "所属部门", "flow_staffPromoteapply@newDept@depId",false,165,"staffPromoteapply@newDepTreeSelector");
+				Ext.getCmp("flow_staffPromoteapply@newDepTreeSelectorTree").on("click", function(g) {
+					Ext.getCmp("flow_staffPromoteapply@newJobName").setValue("");
+					Ext.getCmp("flow_staffPromoteapply@newJobName").getStore().removeAll();
+					var depId = Ext.getCmp("flow_staffPromoteapply@newDept@depId").getValue();
+					if (!Ext.isEmpty(depId)) {
+						Ext.getCmp("flow_staffPromoteapply@newJobName").
+							getStore().reload({
+										params : {
+											depId : depId
+										}
+									});
+					}
+				});
+				
+				this.items = [
+							{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'员工姓名：',
+										width:80
+									},
+									{
+										xtype:'textfield',
+										name:'staffPromoteapply@promoteUserName',
+										id:'flow_staffPromoteapply@promoteUserName',
+										readOnly:true,
+										allowBlank:false,
+										emptyText:'请选择员工',
+										width:170,
+										listeners:{
+											focus:function(){
+												UserSelector.getView(function(ids, names) {
+														Ext.getCmp("flow_staffPromoteapply@promoteUserName").setValue(names);
+														Ext.getCmp("flow_staffPromoteapply@promoteUser@userId").setValue(ids);
+														Ext.getCmp("flow_staffPromoteapply@oldJobName").setValue('');
+														Ext.getCmp("flow_staffPromoteapply@oldDept@depId").setValue('');
+														Ext.getCmp("flow_staffPromoteapply@oldDepTreeSelector").setValue('');
+														if(!Ext.isEmpty(ids)){
+															Ext.Ajax.request({
+																url : __ctxPath
+																		+ "/system/getAppUser.do",
+																params : {
+																	userId : ids
+																},
+																method : "post",
+																success : function(response) {
+																	var e = Ext.util.JSON
+																			.decode(response.responseText).data[0];
+																	Ext.getCmp("flow_staffPromoteapply@oldJobName").setValue(e.position);
+																	Ext.getCmp("flow_staffPromoteapply@oldDept@depId").setValue(e.department.depId);
+																	Ext.getCmp("flow_staffPromoteapply@oldDepTreeSelector").setValue(e.department.depName);
+																}
+															});
+														}
+													}, true).show();
+											}
+										}
+									},
+									{
+										xtype:'hidden',
+										name:'staffPromoteapply@promoteUser@userId',
+										id:'flow_staffPromoteapply@promoteUser@userId'
+									},
+									{
+										text:'原部门：',
+										style:'margin-left:10px;',
+										width:80
+									},
+									{
+										xtype : "hidden",
+										name : "staffPromoteapply@oldDept@depId",
+										id : "flow_staffPromoteapply@oldDept@depId"
+									},
+									{
+										xtype:'textfield',
+										name:'staffPromoteapply@oldDepTreeSelector',
+										id:'flow_staffPromoteapply@oldDepTreeSelector',
+										readOnly:true,
+										style:"background:#F0F0F0;",
+										width:160
+									},
+									{
+										text:'原职位：',
+										style:'margin-left:10px;',
+										width:60
+									},{
+										xtype:'textfield',
+										name:'staffPromoteapply@oldJobName',
+										id:'flow_staffPromoteapply@oldJobName',
+										readOnly:true,
+										style:"background:#F0F0F0;",
+										width:110
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								style:'margin-top:10px;',
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'拟晋升部门：',
+										width:80
+									},
+									{
+										xtype : "hidden",
+										name : "staffPromoteapply@newDept@depId",
+										id : "flow_staffPromoteapply@newDept@depId"
+									},
+									newDepTreeSelector,
+									{
+										text:'拟晋升职位：',
+										style:'margin-left:10px;',
+										width:80
+									},
+									{
+										hiddenName:'staffPromoteapply@newJobName',
+										id:'flow_staffPromoteapply@newJobName',
+										xtype : "combo",
+										mode : "local",
+										width:150,
+										editable : false,
+										allowBlank:false,
+										valueField : "jobName",
+										displayField : "jobName",
+										triggerAction : "all",
+										store : new Ext.data.SimpleStore( {
+											url : __ctxPath
+													+ "/hrm/comboJob.do",
+											fields : [ "jobId", "jobName" ]
+										}),
+										listeners : {
+											focus : function(h) {
+												var depId = Ext.getCmp("flow_staffPromoteapply@newDept@depId").getValue();
+												if (Ext.isEmpty(depId)) {
+													Ext.ux.Toast.msg("操作信息","请先选择新部门！");
+												}
+											},
+											select : function(combo,record,index){
+												var jobId = record.data.jobId;
+												var jobName = record.data.jobName;
+												Ext.getCmp("flow_staffPromoteapply@newJob@jobId").setValue(jobId);
+											}
+										}
+									},
+									{
+										xtype:'hidden',
+										id:'flow_staffPromoteapply@newJob@jobId',
+										name:'staffPromoteapply@newJob@jobId'
+									},{
+										text:'生效日期：',
+										style:'margin-left:10px;',
+										width:70
+									},{
+										xtype:'datefield',
+										name:'staffPromoteapply@activeDate',
+										id:'flow_staffPromoteapply@activeDate',
+										format:'Y-m-d',
+										editable:false,
+										allowBlank:false
+									}
+								]
+							}, {
+								xtype : "panel",
+								layout : "column",
+								style:'padding-top:5px;',
+								border : false,
+								unstyled : false,
+								height : 80,
+								items : [{
+											xtype : "label",
+											text : "晋升理由:",
+											height : 50,
+											width : 80
+										}, {
+											xtype : "textarea",
+											name:'staffPromoteapply@promoteReason',
+											id:'flow_staffPromoteapply@promoteReason',
+											width: 580,
+											height:70,
+											allowBlank:false
+										}]
+							}, {
+								xtype : "panel",
+								layout : "column",
+								style:'padding-top:5px;',
+								border : false,
+								unstyled : false,
+								height : 80,
+								items : [{
+											xtype : "label",
+											text : "个人优点和需改进的方面:",
+											height : 50,
+											width : 80
+										}, {
+											xtype : "textarea",
+											name:'staffPromoteapply@advantageOrChange',
+											id:'flow_staffPromoteapply@advantageOrChange',
+											width: 580,
+											height:70,
+											allowBlank:false
+										}]
+							}, {
+								xtype : "panel",
+								layout : "column",
+								style:'padding-top:5px;',
+								border : false,
+								unstyled : false,
+								height : 80,
+								items : [{
+											xtype : "label",
+											text : "综合评价:",
+											height : 50,
+											columnWidth : .12
+										},{
+											xtype:'panel',
+											border:false,
+											columnWidth:.85,
+											height:75,
+											layout:'hbox',
+											items:[
+												{
+													xtype:'panel',
+													width:'50%',
+													layout:'vbox',
+													defaults:{
+														style:'margin:5px;'
+													},
+													height:75,
+													items:[
+														{
+															xtype:'label',
+															text:'专业能力',
+															height:30
+														},
+														{
+															xtype:'radiogroup',
+															name:'staffPromoteapply@professional',
+															id:'flow_staffPromoteapply@professional',
+															allowBlank:false,
+															items:[
+																{
+																	name:'staffPromoteapply@professional',
+																	boxLabel:'A',
+																	inputValue:'A'
+																},{
+																	name:'staffPromoteapply@professional',
+																	boxLabel:'B',
+																	inputValue:'B'
+																},{
+																	name:'staffPromoteapply@professional',
+																	boxLabel:'C',
+																	inputValue:'C'
+																}
+															]
+														}
+													]
+												},
+												{
+													xtype:'panel',
+													width:'50%',
+													layout:'vbox',
+													defaults:{
+														style:'margin:5px;'
+													},
+													height:75,
+													items:[
+														{
+															xtype:'label',
+															text:'综合能力',
+															height:30
+														},
+														{
+															xtype:'radiogroup',
+															name:'staffPromoteapply@mixedAbility',
+															id:'flow_staffPromoteapply@mixedAbility',
+															allowBlank:false,
+															items:[
+																{
+																	name:'staffPromoteapply@mixedAbility',
+																	boxLabel:'A',
+																	inputValue:'A'
+																},{
+																	name:'staffPromoteapply@mixedAbility',
+																	boxLabel:'B',
+																	inputValue:'B'
+																},{
+																	name:'staffPromoteapply@mixedAbility',
+																	boxLabel:'C',
+																	inputValue:'C'
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+										]
+							}, {
+								xtype : "panel",
+								layout : "column",
+								style:'padding-top:5px;',
+								border : true,
+								unstyled : false,
+								height : 70,
+								items : [
+										{
+											xtype:'label',
+											text:'注：',
+											columnWidth:.05
+										},
+										{
+										  xtype:'panel',
+										  layout:'vbox',
+										  border:false,
+										  columnWidth:.95,
+										  height : 65,
+										  defaults:{
+												style:'padding-top:3px;'
+										  },
+										  items:[
+											  	{
+													xtype : "label",
+													text : "专业能力：A为从事本专业岗位5年以上；B为从事本专业岗位3-5年；C为从事本专业岗位3年以下"
+												},{
+													xtype : "label",
+													text : "综合能力：A为沟通、协调、业务、责任心、创新等方面能力较强；B为沟通、协调、业务、责任心、创新等方面能力良好；C为沟通、协调、业务、责任心、创新等方面能力一般；"
+												}
+										  ]
+										}
+								]
+							}
+							]
+				
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

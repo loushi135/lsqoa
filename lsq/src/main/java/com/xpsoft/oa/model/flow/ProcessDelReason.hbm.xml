@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.flow.ProcessDelReason"
+        table="process_del_reason"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="flowName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="flowName"
+            length="128"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="flowCreater"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="flowCreater"
+            length="24"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="flowCreaterId"
+            type="java.lang.Long"
+            update="true"
+            insert="true"
+            access="property"
+            column="flowCreaterId"
+            length="24"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="flowCreaterDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="flowCreaterDate"
+            length="19"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="reason"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="reason"
+            length="500"
+            not-null="true"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

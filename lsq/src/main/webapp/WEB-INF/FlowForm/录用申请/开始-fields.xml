@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="staffEmployapply@staffName" label="员工姓名" type="varchar" length="128" isShowed="true"/>
+	<field name="innerFlowDeptName" label="部门" type="varchar" length="128" isShowed="true"/>
+	<field name="staffEmployapply@dept@depId" label="部门" type="varchar" length="128" isShowed="false"/>
+	<field name="staffEmployapply@jobName" label="岗位" type="varchar" length="128" isShowed="true"/>
+	<field name="staffEmployapply@job@jobId" label="岗位" type="varchar" length="128" isShowed="false"/>
+	<field name="staffEmployapply@score" label="分数" type="varchar" length="128" isShowed="true"/>
+	<field name="staffEmployapply@medicalCheck" label="体检情况" type="varchar" length="512" isShowed="true"/>
+	<field name="staffEmployapply@inviteWay" label="招聘渠道" type="varchar" length="128" isShowed="true"/>
+	<field name="staffEmployapply@publicWay" label="途径" type="varchar" length="128" isShowed="true"/>
+	<field name="inviteUserName" label="推荐人" type="varchar" length="128" isShowed="true"/>
+	<field name="inviteUserId" label="推荐人" type="varchar" length="128" isShowed="false"/>
+	<field name="staffEmployapply@attachIDs" label="附件Id" type="varchar" length="128" isShowed="false"/>
+	<field name="staffEmployapply@attachFile" label="附件" type="file" length="128" isShowed="true"/>
+</fields>

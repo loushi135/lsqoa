@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="examProject" label="考核项目" type="varchar" length="1000"  isShowed="true"/>
+	<field name="workAchieve" label="工作成果" type="varchar" length="1000"  isShowed="true"/>
+	<field name="workEfficiency" label="工作效率" type="varchar" length="128"  isShowed="true"/>
+	<field name="teamSpirit" label="团队精神" type="varchar" length="128"  isShowed="true"/>
+	<field name="businessLevel" label="业务水平" type="varchar" length="128"  isShowed="true"/>
+	<field name="consciousness" label="成本意识" type="varchar" length="128"  isShowed="true"/>
+	<field name="innovationAbility" label="创新能力" type="varchar" length="128"  isShowed="true"/>
+	<field name="developAbility" label="发展潜力" type="varchar" length="128"  isShowed="true"/>
+	<field name="workAttitude" label="工作态度" type="varchar" length="128"  isShowed="true"/>
+	<field name="character" label="品德言行" type="varchar" length="128"  isShowed="true"/>
+	<field name="salaryOption" label="工资方式选择" type="varchar" length="1"  isShowed="true"/>
+	<field name="salaryMonthA" label="考核期满后月薪(元)" type="varchar" length="128"  isShowed="true"/>
+	<field name="salaryBusinessA" label="按业绩考核定(元)" type="varchar" length="128"  isShowed="true"/>
+	<field name="contractOption" label="合同方式选择" type="varchar" length="1"  isShowed="true"/>
+	<field name="contractTime" label="合同年限选择" type="varchar" length="1"  isShowed="true"/>
+	<field name="salaryMonthB" label="转正后月薪" type="varchar" length="128"  isShowed="true"/>
+	<field name="salaryBusinessB" label="基本年薪" type="varchar" length="128"  isShowed="true"/>
+	<field name="staffActiveAttachIDs" label="上传文件id" type="varchar" length="200"  isShowed="false"/>
+	<field name="staffActiveAttachFiles" label="转正评估表" type="file" length="5000"  isShowed="true"/>
+</fields>

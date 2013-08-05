@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="businessUser" label="业务人员" type="varchar" length="128" isShowed="true"/>
+	<field name="team" label="所属团队" type="varchar" length="128" isShowed="true"/>
+	<field name="applyDate" label="报告时间" type="datetime" length="128" isShowed="true"/>
+	<field name="buildPrice" label="甲方造价预算(万元)" type="decimal" length="15" isShowed="true"/>
+	<field name="buildArea" label="工程规模面积(平方米)" type="decimal" length="15" isShowed="true"/>
+	<field name="proInfoSource" label="项目信息来源" type="varchar" length="128" isShowed="true"/>
+	<field name="constructFollowDept" label="装饰施工跟踪部门" type="varchar" length="128" isShowed="true"/>
+	<field name="proAddr" label="项目地址" type="varchar" length="128" isShowed="true"/>
+	<field name="proUseful" label="项目性质及用途" type="varchar" length="128" isShowed="true"/>
+	<field name="proMainUnit" label="项目投资主体单位" type="varchar" length="128" isShowed="true"/>
+	<field name="owerRelation" label="与业主关系" type="varchar" length="128" isShowed="true"/>
+	<field name="bidDuringTime" label="投标的大概时间" type="varchar" length="128" isShowed="true"/>
+	<field name="progressInfo" label="目前项目整体进展情况" type="varchar" length="128" isShowed="true"/>
+	<field name="chargeDesign" label="设计是否单独收费" type="varchar" length="10" isShowed="true"/>
+	<field name="doReview" label="是否做过评审" type="varchar" length="10" isShowed="true"/>
+	<field name="bidQuotaLocalLaws" label="投标适用的定额及地方法规" type="varchar" length="128" isShowed="true"/>
+	<field name="competitionCompany" label="竞争对手公司的名称、与业主关系、优劣势" type="varchar" length="128" isShowed="true"/>
+	<field name="recommendDesignDept" label="推荐设计部门" type="varchar" length="128" isShowed="true"/>
+	<field name="proClassify" label="项目分类" type="varchar" length="10" isShowed="true"/>
+</fields>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.CarSubsidy"
+        table="car_subsidy"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="reporter"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="reporter"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="companyName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="companyName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="carNo"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="carNo"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="brand"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="brand"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="displacement"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="displacement"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="boughtYear"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="boughtYear"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="subsidyReason"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="subsidyReason"
+            length="1000"
+            not-null="false"
+            unique="false"
+        />
+         <property
+            name="processRunId"
+            type="java.lang.Long"
+            update="false"
+            insert="true" 
+            access="property"
+            column="processRunId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <many-to-one name="dept" class="com.xpsoft.oa.model.system.Department"
+        	fetch="join"
+        	not-found="ignore"
+        >
+        	<column name="deptId"></column>
+        </many-to-one>
+        <set name="fileAttachs" table="car_subsidy_file" lazy="true" cascade="save-update,delete-orphan">
+        	<key column="subsidyId"></key>
+        	<many-to-many column="fileId" class="com.xpsoft.oa.model.system.FileAttach" fetch="join" />
+    	</set>
+     </class>
+</hibernate-mapping>

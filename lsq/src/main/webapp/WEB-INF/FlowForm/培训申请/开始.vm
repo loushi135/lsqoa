@@ -1,0 +1,154 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : '培训申请',
+	labelWidth : 100,
+	labelAlign : "left",
+	layout : "form",
+	width : 680,
+	height : 240,
+	padding : "10px",
+	initComponent : function() {
+		this.items = [{
+					xtype : 'container',
+					layout : 'column',
+					style : 'padding-left:0px;padding-bottom:8px;',
+					items : [{
+								xtype : 'label',
+								text : '申请人:',
+								width : 55
+							}, {
+								fieldLabel : '申请人',
+								xtype:'textfield',
+								width:260,
+								name : 'trainApply.applyUser.fullname',
+								id : 'flow_trainApply.applyUser.fullname',
+								value : __currentUser,
+								allowBlank : false
+							}, {
+								xtype : 'label',
+								text : '申请时间:',
+								style:'padding-left:3px'
+							}, {
+								xtype : 'datefield',
+								name : 'trainApply.createTime',
+								id:'flow_trainApply.createTime',
+								format : 'Y-m-d',
+								width:260,
+								value : new Date()
+							}, {
+								xtype : 'hidden',
+								name : 'trainApply.applyUser.userId',
+								value : __currentUserId,
+								id:'flow_trainApply.applyUser.userId'
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					style : 'padding-left:0px;padding-bottom:3px;',
+					items : [{
+								xtype : 'label',
+								text : '申请部门:',
+								width : 55
+							}, {
+								readOnly : true,
+								xtype:'textfield',
+								width:260,
+								cls : 'x-item-disabled',
+								name : 'trainApply.department.depName',
+								id:'flow_trainApply.department.depName',
+								value : __currentUserDept
+							}, {
+								xtype : 'hidden',
+								name : 'trainApply.department.depId',
+								id:'flow_trainApply.department.depId',
+								value : __currentUserDeptId
+							}, {
+								xtype : 'label',
+								text : '培训对象类型:',
+								style:'padding-left:3px'
+							}, {
+								xtype : 'combo',
+								triggerAction : 'all',
+								width:236,
+								editable : false,
+								store : [['部门培训', '部门培训'], ['公司培训', '公司培训']],
+								value : '公司培训',
+								name : 'trainApply.trainTarget',
+								id:'flow_trainApply.trainTarget',
+								listeners : {
+									'select' : function(obj, record, index) {
+										if (obj.value == '部门培训') {
+											Ext.getCmp('flow_trainApply.trainType')
+													.setDisabled(true);
+											Ext.getCmp('flow_trainApply.trainType')
+													.getEl().up('.x-form-item')
+													.setDisplayed(false);
+										} else if (obj.value == '公司培训') {
+											Ext.getCmp('flow_trainApply.trainType')
+													.setDisabled(false);
+											Ext.getCmp('flow_trainApply.trainType')
+													.getEl().up('.x-form-item')
+													.setDisplayed(true);
+										}
+									}
+								}
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					style : 'padding-left:0px;padding-bottom:3px;',
+					items : [{
+								xtype : 'label',
+								text : '培训类型:',
+								width : 55
+							}, {
+								id : 'flow_trainApply.trainType',
+								width:571,
+								xtype : 'combo',
+								triggerAction : 'all',
+								editable : false,
+								store : [['年度计划', '年度计划'], ['半年度计划', '半年度计划'],
+										['季度计划', '季度计划'], ['月度计划', '月度计划']],
+								name : 'trainApply.trainType'
+							}]
+
+				},{
+					xtype : 'container',
+					layout : 'column',
+					style : 'padding-left:0px;padding-bottom:3px;',
+					items : [{
+								xtype : 'label',
+								text : '培训课程:',
+								width : 55
+							}, {
+								xtype : 'textarea',
+								width:571,
+								name : 'trainApply.trainCourse.courseName',
+								id : 'flow_trainApply.trainCourse.courseName',
+								emptyText : '请选择培训课程',
+								allowBlank : false,
+								listeners : {
+									focus : function() {
+										CourseBoxSelector.getView(
+												function(courseId, courseNo,
+														courseName) {
+													Ext
+															.getCmp('flow_trainApply.trainCourse.courseName')
+															.setValue(courseName);
+													Ext.getCmp('flow_trainApply.trainCourse.courseId')
+															.setValue(courseId);
+												}, false).show();
+									}
+								}
+							}, {
+								xtype : 'hidden',
+								name : 'trainApply.trainCourse.courseId',
+								id : 'flow_trainApply.trainCourse.courseId'
+							}]
+
+				}
+
+		]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

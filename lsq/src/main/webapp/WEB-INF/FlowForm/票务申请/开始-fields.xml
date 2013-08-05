@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="reporter" label="报告人" type="varchar" length="128" isShowed="true"/>
+	<field name="deptName" label="所属部门" type="varchar" length="128" isShowed="true"/>
+	<field name="deptId" label="所属部门" type="varchar" length="128" isShowed="false"/>
+	<field name="company" label="所在公司" type="varchar" length="128" isShowed="true"/>
+	<field name="bookUsers" label="出行人员" type="varchar" length="1000" isShowed="false"/>
+	<field name="bookUserIds" label="出行人员" type="varchar" length="1000" isShowed="false"/>
+	<field name="ticketNum" label="需要申请票数" type="int" isShowed="true"/>
+	<field name="businessType" label="出差类型" type="varchar" length="128" isShowed="true"/>
+	<field name="projectName" label="项目" type="varchar" length="128" isShowed="true"/>
+	<field name="projectId" label="项目" type="varchar" length="128" isShowed="false"/>
+	<field name="departure" label="出发地" type="varchar"  length="128" isShowed="true"/>
+	<field name="destination" label="目的地" type="varchar"  length="128" isShowed="true"/>
+	<field name="ticketType" label="票务类型" type="varchar"  length="128" isShowed="true"/>
+	<field name="departureTime" label="出发时间" type="datetime"  isShowed="true"/>
+	<field name="departureDetail" label="具体" type="varchar" length="128" isShowed="true"/>
+	<field name="backOrNot" label="预订返程票" type="varchar" length="128" isShowed="true"/>
+	<field name="backTime" label="返程时间" type="datetime" isShowed="true"/>
+	<field name="backDetail" label="具体" type="varchar" length="128" isShowed="true"/>
+	<field name="applyReason" label="申请原因" type="varchar" length="1000" isShowed="true"/>
+	<field name="ticketGridData" label="出行人员列表" type="varchar" length="512"/>	
+	<field name="ticketDataList" label="列表" type="varchar" length="512" isShowed="false"/>	
+</fields>

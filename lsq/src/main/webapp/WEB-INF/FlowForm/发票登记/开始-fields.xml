@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="bill.userId" label="用户编号" type="varchar" length="512"  isShowed="false"/>
+	<field name="bill.userName" label="申请人" type="varchar" length="512"/>
+	<field name="bill.projectName" label="项目" type="varchar" length="512"/>
+	<field name="bill.providerName" label="供应商" type="varchar" length="512"/>
+	<field name="bill.projectId" label="项目ID" type="varchar" length="512" isShowed="false"/>
+	<field name="bill.providerId" label="供应商ID" type="varchar" length="512" isShowed="false"/>
+	<field name="bill.invoiceType" label="发票类型" type="varchar" length="512"/>
+	<field name="bill.invoiceCount" label="发票金额" type="varchar" length="512"/>
+	<field name="bill.invoiceCountBig" label="发票金额" type="varchar" length="512"/>
+	<field name="bill.billTime" label="发票时间" type="datetime"/>
+</fields>

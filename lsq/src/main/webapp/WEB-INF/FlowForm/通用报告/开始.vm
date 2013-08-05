@@ -1,0 +1,146 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "通用报告",
+	labelWidth : 100,
+	labelAlign : "left",
+	layout : "form",
+	width : 600,
+	height : 450,
+	padding : "10px",
+	initComponent : function() {
+		this.items = [{
+					xtype : 'container',
+					layout : 'column',
+					style : 'padding-left:0px;padding-bottom:5px;',
+					items : [{
+								xtype : "label",
+								text : "报告人:",
+								style:'padding-right:11px'
+							}, {
+								xtype : 'textfield',
+								allowBlank : false,
+								name : 'reporter',
+								id:'flow_reporter',
+								readOnly : true,
+								style:"background:#F0F0F0;",
+								value : __currentUser,
+								width:200
+							}, {
+								xtype : "label",
+								text : "所属部门:"
+							}, {
+								xtype : 'textfield',
+								allowBlank : false,
+								name : 'deptName',
+								id:'flow_deptName',
+								readOnly : true,
+								style:"background:#F0F0F0;",
+								value : __currentUserDept,
+							    width:200
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					style : 'padding-left:0px;padding-bottom:5px;',
+					items : [{
+								xtype : "label",
+								text : "类型:",
+								style:'padding-right:24px'
+							}, {
+								xtype : "combo",
+								editable : false,
+								width:195,
+								triggerAction : "all",
+								id : 'stateId',
+								store : [["0", "采购类"], ["1", "其它"]],
+								allowBlank : false,
+								name : 'state',
+								id:'flow_state',
+								listeners : {
+//									select : function() {
+//										if (Ext.getCmp("stateId").getValue() == 0) {
+//											Ext.getCmp("department")
+//													.setValue("材供部,财务部");
+//											Ext.getCmp("buttonId").disable();
+//										} else {
+//											Ext.getCmp("buttonId").enable();
+//											Ext.getCmp("department").reset()
+//										}
+//									}
+								}
+							}, {
+								xtype : "label",
+								text : "所在公司:"
+							},
+							{
+								xtype : 'textfield',
+								allowBlank : false,
+								readOnly : true,
+								style:"background:#F0F0F0;",
+								name : 'company',
+								id:'flow_company',
+								value : __companyName,
+								width:200
+							}]
+				}, {
+					xtype : "container",
+					style : "padding-left:0px;margin-bottom:4px;",
+					id : "depContainer",
+					layout : "column",
+					items : [{
+								xtype : "label",
+								style : "padding-left:0px;",
+								text : "抄送部门:"
+							}, {
+								xtype : "textfield",
+								name : "sendDept",
+								id : "flow_sendDept",
+								maxLength:120,
+								allowBlank : false,
+								editable : false,
+								width : 302
+							}, {
+								xtype : "button",
+								id : 'buttonId',
+								iconCls : "btn-dep-sel",
+								text : "选择部门",
+								handler : function() {
+									DepSelector.getView(function(b, a) {
+												Ext.getCmp("flow_sendDept")
+														.setValue(a);
+											}).show();
+								}
+							}, {
+								xtype : "button",
+								text : "清除记录",
+								iconCls : "reset",
+								handler : function() {
+									Ext.getCmp("flow_sendDept").setValue("");
+								}
+							}]
+				      }
+				   ,{    xtype : 'panel',
+						    border : false,
+						    layout : 'column',
+						    items:[{
+								xtype : "label",
+								style : "padding-left:0px;",
+								text : "报告内容:"
+					        },{
+							    xtype : 'textarea',
+								width : 443,
+								height : 300,
+								allowBlank : false,
+								name : 'content',
+								id:'flow_content'
+					    }]
+				
+				 }
+				 ]
+				
+				
+				
+
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

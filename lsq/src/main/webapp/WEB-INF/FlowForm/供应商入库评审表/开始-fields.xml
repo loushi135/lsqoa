@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="suppliersAssess.suppliersName" label="公司名称" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.cooperateType" label="合作类型" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.project.proName" label="项目名称" type="varchar" length="128" isShowed="true" />
+	<field name="suppliersAssess.project.id" label="项目名称" type="varchar" length="128" isShowed="false" />
+	<field name="suppliersAssess.suppliersNature" label="供应商性质" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.mainProduct" label="主要产品/业务范围" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.supplierAddress" label="注册地址" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.legalRepresentative" label="法人代表" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.registeredCapital" label="注册资金" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.establishDate" label="公司创立日期" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.supplierContacter" label="业务联系人" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.supplierPhone" label="联系电话" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.companyNature" label="公司所有制" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.suppliersbank" label="开户银行" type="varchar" length="128" isShowed="true"/>
+	<field name="suppliersAssess.bankAccount" label="开户账号" type="varchar" length="128" isShowed="true" />
+	<field name="suppliersAssess.staffNum" label="雇员总人数" type="int"  isShowed="true" />
+	<field name="suppliersAssess.managerNum" label="管理人员" type="int"  isShowed="true" />
+	<field name="suppliersAssess.salesNum" label="营销人员" type="int"  isShowed="true" />
+	<field name="suppliersAssess.techNum" label="技术人员" type="int"  isShowed="true" />
+	<field name="suppliersAssess.institutionNature" label="机构性质" type="varchar" length="128" isShowed="true" />
+	<field name="suppliersAssess.businessArea" label="营业范围" type="text" isShowed="true" />
+	<field name="suppliersAssess.brand" label="经营(代理) 品牌" type="varchar" length="128" isShowed="true" />
+	<field name="suppliersAssess.systemType" label="系统类别" type="varchar" length="128" isShowed="true" />
+	<field name="suppliersAssess.provinceCity" label="所在省市" type="varchar" length="128" isShowed="true" />
+	<field name="suppliersAssess.province.provinceId" label="省id" type="varchar" length="128" isShowed="false" />
+	<field name="suppliersAssess.city.cityId" label="市id" type="varchar" length="128" isShowed="false" />
+	<field name="suppliersAssess.recommendReason" label="推荐原因" type="text" isShowed="true" />
+	<field name="suppliersAssess.attachFiles" label="附件" type="file" isShowed="true"/>
+	<field name="suppliersAssess.attachIds" label="附件" type="text" isShowed="false"/>
+</fields>

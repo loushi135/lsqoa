@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+ <!--	<field name="staffType" label="员工层级" type="varchar" length="128"/> -->
+	<field name="superOption" label="审批意见"/>
+</fields>

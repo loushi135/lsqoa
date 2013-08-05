@@ -1,0 +1,63 @@
+<?xml  version="1.0"  encoding="UTF-8"?>
+<reponse>
+<header>
+</header>
+<body>
+<list>
+  <syncUserInfo>
+    <userId></userId>       					<!-- 员工主键 -->
+    <fullname></fullname>						<!-- 员工姓名 -->
+    <username></username>						<!-- 员工登录名 -->
+    <staffNo></staffNo>							<!-- 工号  -->
+    <depName></depName>							<!-- 部门 -->
+    <position></position>						<!-- 职位 -->
+    <phone></phone>								<!-- 直线 -->
+    <mobile></mobile>							<!-- 手机 -->
+    <mobile2></mobile2>							<!-- 手机2 -->
+    <fax></fax>									<!-- 分机 -->
+    <address></address>							<!-- 家庭住址 -->
+    <zip></zip>									<!-- 邮编 -->
+    <photo></photo>								<!-- 照片 -->
+    <assessionTime></assessionTime>				<!-- 入职时间 格式：2013-04-04 -->
+    <departureTime></departureTime>				<!-- 离职时间 格式：2013-04-04 -->
+    <status></status>							<!-- 状态 -->
+    <sex></sex>									<!-- 性别 -->
+    <faxPhone></faxPhone>						<!-- 传真 -->
+    <profileNo></profileNo>						<!-- 档案编号 -->
+    <birthday></birthday>						<!-- 生日  格式：2013-04-04 -->
+    <eduMajor></eduMajor>						<!-- 专业 -->
+    <eduCollege></eduCollege>					<!-- 毕业院校 -->
+    <startWorkDate></startWorkDate>				<!-- 参加工作时间  格式：2013-04-04 -->
+    <graduateDate></graduateDate>				<!-- 毕业时间  格式：2013-04-04 -->
+    <profilePlace></profilePlace>				<!-- 档案所在机构 -->
+    <idCard></idCard>							<!-- 身份证号 -->
+    <rePayWageTime></rePayWageTime>			    <!-- 补发工资时间  格式：2013-04-04 -->
+    <hrmTitleDesc></hrmTitleDesc>				<!-- 人事职称描述  -->
+    <innerCommentTitle></innerCommentTitle>     <!-- 内评职称/其他证书 -->
+    <healthStatus></healthStatus>		        <!-- 健康状况 -->
+    <newStaffTrain></newStaffTrain>             <!--新员工培训批次 -->
+    <approvalTime></approvalTime>         		<!--审批录入年月201304 -->
+    <masterCeremony></masterCeremony>			<!--拜师仪式 -->
+    <statisticsTime></statisticsTime>			<!--统计批次2013-04 -->
+    <workContractEndDate></workContractEndDate> <!--劳动合同到期时间 格式：2013-04-04 -->
+    <rosterJobName></rosterJobName>             <!--花名册岗位 -->
+    <dicEduDegree></dicEduDegree>				<!--学历 -->
+    <dicWorkContractType></dicWorkContractType> <!--劳动合同类型 -->
+    <dicMarriage></dicMarriage>					<!--婚姻状况 -->
+    <dicParty></dicParty>						<!--政治面貌 -->
+    <dicNationality></dicNationality>			<!--国籍 -->
+    <dicRace></dicRace>							<!--民族 -->
+    <dicBloodType></dicBloodType>				<!--血型 -->
+    <dicPlait></dicPlait>						<!--编制 -->
+    <dicProfessionType></dicProfessionType>		<!--职类 -->
+    <dicProfessionLevel></dicProfessionLevel>	<!--职级 -->
+    <dicHrmTitle></dicHrmTitle>					<!--人事职称 -->
+    <dicHrmTitleLevel></dicHrmTitleLevel>		<!--职级级别 -->
+    <dicNewTypeCommitment></dicNewTypeCommitment><!--新版承诺 -->
+    <dicProManagerLevel></dicProManagerLevel>	<!--项目经理等级-->
+    <dicSocialSecurityPlace></dicSocialSecurityPlace><!--社保缴纳地 -->
+    <version></version>
+  </syncUserInfo>
+</list>
+</body>
+</reponse>

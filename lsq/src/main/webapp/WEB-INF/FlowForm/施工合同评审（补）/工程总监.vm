@@ -1,0 +1,90 @@
+[
+	{
+		fieldLabel:'快速回复',
+		xtype:'combo',
+		mode : 'local',
+		editable : false,
+		anchor:'90%,90%',
+		triggerAction : 'all',
+		store :['同意','不同意'],
+		listeners:
+			{
+				select:{
+					fn:function(field,record,index){//select : ( Ext.form.ComboBox combo, Ext.data.Record record, Number index ) 
+						var options=Ext.getCmp('superOption');
+						if(options!=null){
+							options.setValue(field.getValue());
+							if(field.getValue()=='不同意'){
+								Ext.getCmp('pass').setDisabled(true);
+								Ext.getCmp('unPass').setDisabled(false);
+								Ext.getCmp('backReturnBtn').setDisabled(false);
+								Ext.getCmp('freeTransCombo').setDisabled(false);
+							}else{
+								Ext.getCmp('pass').setDisabled(false);
+								Ext.getCmp('unPass').setDisabled(true);
+								Ext.getCmp('backReturnBtn').setDisabled(true);
+								Ext.getCmp('freeTransCombo').setDisabled(true);
+							}
+						}
+					}
+				}
+			}
+	},
+	{
+		xtype:'container',
+		layout:'column',
+		style:'margin-bottom:3px',
+		items:[
+			{
+				xtype:'label',
+				text:'合同总价:',
+				style:'margin-right:50px'
+			},{
+				xtype:"numberfield",
+				name:"constructionContract.sumPrice",
+				id:'sumPriceId',
+				value:'${constructionContract_sumPrice}',
+				regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+				enableKeyEvents :true,
+				listeners:{
+					keyup : function(field){
+						  		var value = Ext.getCmp("sumPriceId").getValue();
+						  	    var sumPriceLabel = AmountInWords(value);
+						  	    Ext.getCmp("sumPriceLabelId").setText(sumPriceLabel);
+						  	    Ext.getCmp("sumPriceBigId").setValue(sumPriceLabel);
+							}
+				}
+			},{
+				xtype:'label',
+				id:'sumPriceLabelId',
+				text:'${constructionContract_sumPriceBig}',
+				style:'color:red'
+			},{
+				xtype:'hidden',
+				id:'sumPriceBigId',
+				name:'constructionContract.sumPriceBig',
+				value:'${constructionContract_sumPriceBig}'
+			}
+		]
+	},
+	{
+		xtype:"textarea",
+		name:"constructionContract.payWay",
+		value:'${constructionContract_payWay}',
+		fieldLabel:"付款方式",
+		anchor:"90%"
+	},
+	{
+		xtype:'hidden',
+		name:'preCalcUsername',
+		id:'preCalcUsername_manager'
+	},
+	{
+		fieldLabel:'审批意见',
+		xtype:'textarea',
+		id:'superOption',
+		name:'superOption',
+		allowBlank:false,
+		anchor:'90%'
+	}
+]

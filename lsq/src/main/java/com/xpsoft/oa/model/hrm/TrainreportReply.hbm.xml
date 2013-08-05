@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.hrm.TrainreportReply"
+        table="trainReport_reply"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="replyId"
+            column="replyId"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+        <many-to-one name="trainReport"
+            class="com.xpsoft.oa.model.hrm.TrainReport"
+            not-null="false"
+			fetch="select"
+        >
+        <column name="trainReportId" />
+        </many-to-one>
+        <property
+            name="content"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="content"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="createDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="createDate"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="fullname"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="fullname"
+            length="150"
+            not-null="false"
+            unique="false"
+        />
+         <many-to-one name="appUser"
+            class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="select"
+        >
+        <column name="userId" />
+        </many-to-one>
+     </class>
+</hibernate-mapping>

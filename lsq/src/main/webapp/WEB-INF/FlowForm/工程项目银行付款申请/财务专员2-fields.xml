@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="bpaFundBalance" label="资金结余" type="decimal" length="0" isShowed="true"/>
+	<field name="bpaPayRatio" label="垫资审批额度" type="decimal" length="0" isShowed="true"/> 
+	<field name="bpaInvoiceBalance" label="发票结余" type="decimal" length="0" isShowed="true"/> 
+	<field name="superOption" label="审批意见" type="varchar" isShowed="true"/> 
+</fields>

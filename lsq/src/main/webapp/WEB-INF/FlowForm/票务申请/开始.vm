@@ -1,0 +1,602 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "票务申请",
+	labelWidth : 30,
+	labelAlign : "left",
+	layout : "form",
+	width : 670,
+	height : 540,
+	padding : "10px",
+	initComponent : function() {
+		this.items = [{
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '报告人：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_reporter',
+								name : 'reporter',
+								maxLength : 64,
+								value : __currentUser,
+								allowBlank : false,
+								style : "background:#F0F0F0;",
+								columnWidth : 0.3
+							}, {
+								text : '所属部门：',
+								style : 'margin-left:10px;',
+								columnWidth : 0.15
+							}, {
+								xtype : 'hidden',
+								id : 'flow_deptId',
+								name : 'deptId',
+								value : __currentUserDeptId
+							}, {
+								xtype : 'textfield',
+								id : 'flow_deptName',
+								name : 'deptName',
+								value : __currentUserDept,
+								maxLength : 64,
+								style : "background:#F0F0F0;",
+								columnWidth : 0.4,
+								allowBlank : false
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '所在公司：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_company',
+								name : 'company',
+								allowBlank : false,
+								style : "background:#F0F0F0;",
+								value : __companyName,
+								// readOnly:true,
+								columnWidth : 0.85
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '需要申请票数：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_ticketNum',
+								name : 'ticketNum',
+								emptyText:'选择出行人员后自动生成',
+								maxLength : 64,
+								columnWidth : .85,
+								readOnly : true,
+								allowBlank : false
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '出差类型：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'combo',
+								id : 'flow_businessType',
+								editable : false,
+								hiddenName : 'businessType',
+								mode : 'local',
+								triggerAction : 'all',
+								store : ['朗捷通项目','前期项目','装饰项目', '其他'],
+								allowBlank : false,
+								columnWidth : 0.45,
+								listeners : {
+									select : function(combo, record, index) {
+										var businessType = combo.getValue();
+										var flow_projectName = Ext.getCmp("flow_projectName");
+										var flow_projectId = Ext.getCmp("flow_projectId");
+										if (businessType=='朗捷通项目') {
+											flow_projectName.enable();
+											flow_projectName.allowBlank = false;
+											flow_projectName.setValue('');
+											flow_projectId.setValue('');
+											flow_projectName.addListener('focus',focusEvent);
+										} else if (businessType=='前期项目'||businessType=='装饰项目') {
+											flow_projectName.enable();
+											flow_projectName.setValue('');
+											flow_projectId.setValue('');
+											flow_projectName.allowBlank = false;
+											flow_projectName.purgeListeners();
+										} else {
+											flow_projectName.disable();
+											flow_projectName.allowBlank = true;
+										}
+										function focusEvent() {
+											ProjectNewSelector.getView(function(proId, proName, proNo, contractId, contractNo, contractAmount, proAreaId, proArea) {
+												Ext.getCmp("flow_projectName").setValue(proName);
+												Ext.getCmp("flow_projectId").setValue(proId);
+											}, true, true).show();
+										}
+									}
+								}
+							}, {
+								text : '项目：',
+								style : 'margin-left:10px;',
+								columnWidth : 0.08
+							}, {
+								xtype : 'textfield',
+								id : 'flow_projectName',
+								name : 'projectName',
+								maxLength : 64,
+								columnWidth : 0.32,
+								disabled : true
+							}, {
+								xtype : 'hidden',
+								id : 'flow_projectId',
+								name : 'projectId'
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '出发地：',
+								columnWidth : .15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_departure',
+								name : 'departure',
+								maxLength : 64,
+								columnWidth : .15
+							}, {
+								text : '目的地：',
+								style : 'margin-left:10px;',
+								columnWidth : 0.1
+							}, {
+								xtype : 'textfield',
+								id : 'flow_destination',
+								name : 'destination',
+								maxLength : 64,
+								columnWidth : 0.2
+							}, {
+								text : '票务类型：',
+								style : 'margin-left:10px;',
+								columnWidth : 0.15
+							}, {
+								xtype : 'combo',
+								id : 'flow_ticketType',
+								editable : false,
+								hiddenName : 'ticketType',
+								mode : 'local',
+								triggerAction : 'all',
+								store : ['飞机', '火车软卧'],
+								allowBlank : false,
+								columnWidth : 0.25
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '出发时间：',
+								columnWidth : .15
+							}, {
+								xtype : 'datefield',
+								id : 'flow_departureTime',
+								name : 'departureTime',
+								emptyText : '---请选择日期---',
+								format : 'Y-m-d',
+								editable : false,
+								minValue : new Date().add(Date.DAY,-1),
+								allowBlank : false,
+								maxLength : 64,
+								columnWidth : .25,
+								listeners:{
+									select:function(field,date){
+										var hour = date.format('Y-m-d H:i').substring(11,13);
+										if(parseInt(hour)<12){
+											Ext.getCmp('flow_departureDetail').setValue('上午');
+										}else if(parseInt(hour)==12){
+											Ext.getCmp('flow_departureDetail').setValue('中午');
+										}else if(parseInt(hour)>12&&parseInt(hour)<18){
+											Ext.getCmp('flow_departureDetail').setValue('下午');
+										}else if(parseInt(hour)>=18){
+											Ext.getCmp('flow_departureDetail').setValue('晚上');
+										}
+									}
+								}
+							}, {
+								xtype : 'combo',
+								id : 'flow_departureDetail',
+								hiddenName : 'departureDetail',
+								editable : false,
+								mode : 'local',
+								triggerAction : 'all',
+								store : ['上午', '中午', '下午', '晚上'],
+								allowBlank : false,
+								columnWidth : 0.1
+							}, {
+								text : '预订返程票：',
+								style : 'margin-left:10px;',
+								columnWidth : 0.15
+							}, {
+								xtype : 'combo',
+								id : 'flow_backOrNot',
+								hiddenName : 'backOrNot',
+								editable : false,
+								mode : 'local',
+								triggerAction : 'all',
+								store : ['是', '否'],
+								allowBlank : false,
+								columnWidth : 0.35,
+								listeners : {
+									select : function(combo, record, index) {
+										if (combo.getValue() == '是') {
+											Ext.getCmp("flow_backTime").enable();
+											Ext.getCmp("flow_backTime").allowBlank = false;
+											Ext.getCmp("flow_backDetail").enable();
+											Ext.getCmp("flow_backDetail").allowBlank = false;
+										} else {
+											Ext.getCmp("flow_backTime").disable();
+											Ext.getCmp("flow_backTime").allowBlank = true;
+											Ext.getCmp("flow_backTime").reset();
+											Ext.getCmp("flow_backDetail").disable();
+											Ext.getCmp("flow_backDetail").allowBlank = true;
+											Ext.getCmp("flow_backDetail").reset();
+										}
+									}
+								}
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '返程时间：',
+								columnWidth : .15
+							}, {
+								xtype : 'datefield',
+								id : 'flow_backTime',
+								name : 'backTime',
+								format : 'Y-m-d',
+								editable : false,
+								disabled : true,
+								minValue : new Date().add(Date.DAY,-1),
+								columnWidth : 0.25,
+								listeners:{
+									select:function(field,date){
+										var hour = date.format('Y-m-d H:i').substring(11,13);
+										if(parseInt(hour)<12){
+											Ext.getCmp('flow_backDetail').setValue('上午');
+										}else if(parseInt(hour)==12){
+											Ext.getCmp('flow_backDetail').setValue('中午');
+										}else if(parseInt(hour)>12&&parseInt(hour)<18){
+											Ext.getCmp('flow_backDetail').setValue('下午');
+										}else if(parseInt(hour)>=18){
+											Ext.getCmp('flow_backDetail').setValue('晚上');
+										}
+									}
+								}
+							}, {
+								xtype : 'combo',
+								id : 'flow_backDetail',
+								hiddenName : 'backDetail',
+								editable : false,
+								disabled : true,
+								mode : 'local',
+								triggerAction : 'all',
+								store : ['上午', '中午', '下午', '晚上'],
+								allowBlank : false,
+								columnWidth : 0.1
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 80,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '申请原因：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'textarea',
+								id : 'flow_applyReason',
+								maxlength : 500,
+								name : 'applyReason',
+								allowBlank : false,
+								// readOnly:true,
+								columnWidth : 0.85
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 250,
+					id : 'ticketContainer',
+					style : 'padding-left:0px;padding-top:10px;',
+					items : [{
+								name : 'ticketGridData',
+								xtype : 'hidden',
+								id : 'flow_ticketGridData',
+								anchor : '95.5%',
+								allowBlank : false,
+								width : 150,
+								editable : true,
+								readOnly : false
+							}, {
+								name : 'ticketDataList',
+								xtype : 'hidden',
+								id : 'flow_ticketDataList'
+							},{
+								xtype : 'hidden',
+								id : 'flow_bookUserIds',
+								name : 'bookUserIds'
+							}, {
+								xtype : 'label',
+								style : 'padding-left:0px;padding-top:3px;',
+								text : '出行人员列表:',
+								width : 80
+							}, {
+								xtype : 'label',
+								style : 'padding-left:0px;padding-top:3px;color:red',
+								text : '(*必填)',
+								width : 60
+							}, {
+								xtype : 'label',
+								id : 'ticketLabelId',
+								text : '',
+								style : 'padding-left:0px;padding-top:3px;color:red'
+							}, {
+								xtype : 'grid',
+								id : 'flow_ticketGridDataGrid',
+								height : 300,
+								width : 650,
+								stripeRows : true,
+								trackMouseOver : true,
+								clicksToEdit : 1,
+								plugins : [new Ext.ux.grid.RowEditor({
+									saveText : '保存',
+									cancelText : '取消',
+									errorText : '请输入完整信息',
+									errorSummary : false
+								})],
+								store : new Ext.data.ArrayStore({
+									url : '',
+									remoteSort : false,
+									fields : ['userId', 'name', 'idCard'],
+									listeners : {
+										'update' : function(value) {
+											var r = this.getRange();
+											var resultArray = [];
+											var rlen = r.length;
+											var jsonArr = new Array();
+											for (var i = 0; i < rlen; i++) {
+												resultArray.push([]);
+												if (r[i].fields) {
+													var ticketIdno = {
+														// id :'',
+														userId : null,
+														userName : null,
+														idCard : null
+													}
+													var isAdd = false;
+													var fields = r[i].fields;
+													var flen = fields.length;
+													for (var z = 0; z < flen; z++) {
+														var fieldValue = r[i].get(fields.keys[z]);
+														if (fieldValue == '请双击选择' || Ext.isEmpty(fieldValue)) {
+															continue;
+														}
+														// if (fields.keys[z] ==
+														// 'id') {
+														// //alert(!Ext.isEmpty(fieldValue));
+														// if(!Ext.isEmpty(fieldValue))
+														// {
+														// ticketIdno.id =
+														// fieldValue;
+														// }
+														// }
+														if (fields.keys[z] == 'userId') {
+															ticketIdno.userId = fieldValue;
+															resultArray[i].push('ID:' + fieldValue);
+															isAdd = true;
+														} else if (fields.keys[z] == 'name') {
+															resultArray[i].push('出行人员:' + fieldValue);
+															ticketIdno.userName = fieldValue;
+														} else if (fields.keys[z] == 'idCard') {
+															resultArray[i].push('身份证号码:' + fieldValue+';');
+															ticketIdno.idCard = fieldValue;
+														}
+													}
+													if(isAdd){
+													  jsonArr.push(ticketIdno);
+													}
+												}
+
+											}
+											// if (rlen == 0) {
+											// Ext.getCmp('flow_totalPrice').setValue(0);
+											// }
+											// 删除空元素
+											if (jsonArr != '') {
+												Ext.getCmp("flow_ticketNum").setValue(jsonArr.length);
+											} else {
+												Ext.getCmp("flow_ticketNum").setValue('');
+											}
+											for (var i = 0; i < resultArray.length; i++) {
+												if (resultArray[i].length == 0) {
+													resultArray.splice(i, 1);
+													i--;
+												}
+											}
+											Ext.getCmp('flow_ticketGridData').setValue(resultArray);
+											Ext.getCmp('flow_ticketDataList').setValue(Ext.util.JSON.encode(jsonArr));
+										}
+									}
+								}),
+								cm : new Ext.grid.ColumnModel({
+									columns : [new Ext.grid.RowNumberer(), {
+												dataIndex : 'userId',
+												hidden : true,
+												editor : new Ext.grid.GridEditor(new Ext.form.TextField({
+													id : 'userId',
+													name : 'userId',
+													allowBlank : false,
+													blankText : '员工编号不能为空',
+													readOnly : true
+												}))
+											}, {
+												header : '出行人员',
+												dataIndex : 'name',
+												width : 280,
+												editor : new Ext.grid.GridEditor(new Ext.form.TextField({
+													id : 'name',
+													name : 'name',
+													allowBlank : false,
+													blankText : '员工姓名不能为空',
+													readOnly : true,
+													listeners : {
+														'focus' : function() {
+															UserSelector.getView(function(userId, userName, mobile) {
+																Ext.getCmp('userId').setValue(userId);
+																Ext.getCmp('name').setValue(userName);
+																Ext.getCmp('idCard').setValue("");
+																Ext.Ajax.request({
+																	url :  __ctxPath + "/system/geIdCardAppUser.do?userId="+userId,
+																	method : "GET",
+																	success : function(e, f) {
+																		var d = e.responseText;
+																		Ext.getCmp('idCard').setValue(d);
+																	},
+																	failure : function(d, e) {
+																	},
+																	scope : this
+																});
+																
+																
+															}, true).show();
+														}
+													}
+												}))
+											}, {
+												header : '身份证号码',
+												dataIndex : 'idCard',
+												width : 337,
+												editor : new Ext.grid.GridEditor(new Ext.form.TextField({
+													allowBlank : false,
+													id : 'idCard',
+													name : 'idCard',
+													blankText : '身份证号码不能为空'
+													// readOnly : true
+											}	))
+											}],
+									defaults : {
+										sortable : false,
+										menuDisabled : false,
+										width : 100
+									}
+								}),
+								tbar : new Ext.Toolbar({
+									height : 30,
+									items : [{
+												iconCls : 'btn-add',
+												text : '添加出行人员',
+												xtype : 'button',
+												handler : function() {
+													var DataRecord = Ext.data.Record.create([{
+																name : 'userId'
+															}, {
+																name : 'name'
+															}, {
+																name : 'idCard'
+															}]);
+													var store = Ext.getCmp('flow_ticketGridDataGrid').store;
+													var grid = Ext.getCmp('flow_ticketGridDataGrid');
+													var n1 = '';
+													var n2 = '请双击选择';
+													var n3 = '';
+													var n4 = '';
+													var newRowData = {
+														userId : n1,
+														name : n2,
+														idCard : n3
+													};
+													var newRecord = new DataRecord(newRowData);
+													store.add([newRecord]);
+													grid.getSelectionModel().on('selectionchange', function(sm) {
+														Ext.getCmp('ticketremoveBtn').setDisabled(sm.getCount() < 1);
+													});
+												}
+											}, {
+												iconCls : 'btn-del',
+												text : '删除出行人员',
+												id : 'ticketremoveBtn',
+												xtype : 'button',
+												handler : function() {
+													var store = Ext.getCmp('flow_ticketGridDataGrid').store;
+													var grid = Ext.getCmp('flow_ticketGridDataGrid');
+													var s = grid.getSelectionModel().getSelections();
+													for (var i = 0, r; r = s[i]; i++) {
+														store.remove(r);
+													}
+													store.fireEvent("update");// 更新事件
+												}
+											}]
+								})
+							}]
+				}
+
+		]
+
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

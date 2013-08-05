@@ -1,0 +1,116 @@
+[{
+		fieldLabel : '快速回复',
+		xtype : 'combo',
+		mode : 'local',
+		editable : false,
+		anchor : '90%,90%',
+		triggerAction : 'all',
+		store : ['同意', '不同意'],
+		listeners : {
+			select : {
+				fn : function(field, record, index) {//select : ( Ext.form.ComboBox combo, Ext.data.Record record, Number index ) 
+					var options = Ext.getCmp('superOption');
+					if (options != null) {
+						options.setValue(field.getValue());
+						if (field.getValue() == '不同意') {
+							Ext.getCmp('pass').setDisabled(true);
+							Ext.getCmp('unPass').setDisabled(false);
+							Ext.getCmp('backReturnBtn').setDisabled(false);
+							Ext.getCmp('freeTransCombo').setDisabled(false);
+						} else {
+							Ext.getCmp('pass').setDisabled(false);
+							Ext.getCmp('unPass').setDisabled(true);
+							Ext.getCmp('backReturnBtn').setDisabled(true);
+							Ext.getCmp('freeTransCombo').setDisabled(true);
+						}
+					}
+				}
+			}
+		}
+	}, {
+		xtype : "panel",
+		layout : "column",
+		border : false,
+		unstyled : false,
+		style : 'margin-top:5px;margin-bottom:5px;',
+		items : [{
+				xtype : "label",
+				text : "项目名称:",
+				columnWidth:.145
+			}, {
+				xtype : "textfield",
+				name : "bpaProjectName",
+				id : 'flow_bpaProjectName',
+				allowBlank : false,
+				readOnly : true,
+				columnWidth:.4,
+				style : "background:#F0F0F0;",
+				value:'${bpaProjectName}'
+			},{
+				xtype : "label",
+				text : "合同编号:",
+				style:'margin-left:10px;',
+				columnWidth:.1
+			}, {
+				xtype : "textfield",
+				name : "materialContractNo",
+				id : 'flow_materialContractNo',
+				allowBlank : false,
+				style : "background:#F0F0F0;",
+				readOnly : true,
+				columnWidth:.255
+			}]
+	}, {
+		xtype : "panel",
+		layout : "column",
+		border : false,
+		unstyled : false,
+		style : 'margin-top:5px;margin-bottom:5px;',
+		items : [{
+				xtype : "label",
+				text : "收款单位:",
+				columnWidth:.145
+			}, {
+				xtype : "textfield",
+				name : "bpaReceiptDept",
+				id : 'flow_bpaReceiptDept',
+				allowBlank : false,
+				style : "background:#F0F0F0;",
+				columnWidth:.4,
+				readOnly : true,
+				value:'${bpaReceiptDept}'
+			},{
+				xtype : "label",
+				text : "系统类别:",
+				style:'margin-left:10px;',
+				columnWidth:.1
+			}, {
+				xtype : "textfield",
+				name : "materialContractSysItem",
+				id : 'flow_materialContractSysItem',
+				allowBlank : false,
+				style : "background:#F0F0F0;",
+				readOnly : true,
+				columnWidth:.255
+			}]
+	}, {
+		fieldLabel : '审批意见',
+		xtype : 'textarea',
+		id : 'superOption',
+		name : 'superOption',
+		allowBlank : false,
+		anchor : '90%',
+		listeners:{
+			afterrender:function(){
+				var materialContractId = '${materialContractId}';
+				if(!Ext.isEmpty(materialContractId)){
+					var url =  __ctxPath + '/statistics/getMaterialContract.do?id='+materialContractId;
+					var data = ajaxSyncCall(url).data;
+					if(!Ext.isEmpty(data)){
+						Ext.getCmp('flow_materialContractNo').setValue(data.contractNo);
+						Ext.getCmp('flow_materialContractSysItem').setValue(data.sysItem);
+					}
+				}
+			}
+		}
+	}]

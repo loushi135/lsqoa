@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.hrm.TrainUser"
+        table="train_user"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <many-to-one
+			name="trainPlan"
+			class="com.xpsoft.oa.model.hrm.TrainPlan"
+            not-null="false"
+			fetch="join"
+		>	
+		<column name="trainPlanId" />
+		</many-to-one>
+		 <many-to-one
+			name="appUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>	
+		<column name="userId" />
+		</many-to-one>
+        <property
+            name="regist"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="regist"
+            length="20"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="attend"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="attend"
+            length="20"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="year"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="year"
+            length="20"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="credit"
+            type="java.lang.Float"
+            update="true"
+            insert="true"
+            access="property"
+            column="credit"
+            length="12"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="courseScore"
+            type="java.lang.Float"
+            update="true"
+            insert="true"
+            access="property"
+            column="courseScore"
+            length="12"
+            not-null="false"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

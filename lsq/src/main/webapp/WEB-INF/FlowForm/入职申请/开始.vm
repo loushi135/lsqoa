@@ -1,0 +1,169 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "入职申请",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 670,
+			height : 150,
+			padding : "10px",
+			initComponent : function() {
+				var url = __ctxPath + "/system/listDepartment.do?opt=appUser";
+				var depTreeSelector = new TreeSelector("flow_staffEntryapply@depTreeSelector", url, "所属部门", "flow_staffEntryapply@dept@depId",false,247,"staffEntryapply@depTreeSelector");
+				Ext.getCmp("flow_staffEntryapply@depTreeSelectorTree").on("click", function(g) {
+					Ext.getCmp("flow_staffEntryapply@jobName").setValue("");
+					Ext.getCmp("flow_staffEntryapply@jobName").getStore().removeAll();
+					var deptId = Ext.getCmp("flow_staffEntryapply@dept@depId").getValue();
+					if (!Ext.isEmpty(deptId)) {
+						Ext.getCmp("flow_staffEntryapply@jobName").
+							getStore().reload( {
+										params : {
+											depId : deptId
+										}
+									});
+					}
+				});
+				
+				this.items = [
+							{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'入职公司：',
+										width:97
+									},
+									{
+										xtype:'textfield',
+										id:'flow_staffEntryapply@companyName',
+										name:'staffEntryapply@companyName',
+										maxLength : 64,
+										value:__companyName,
+										allowBlank :false,
+										style:"background:#F0F0F0;",
+										width:200
+									},
+									{
+										text:'入职部门：',
+										style:'margin-left:10px;',
+										width:97
+									},
+									{
+										xtype : "hidden",
+										name : "staffEntryapply@dept@depId",
+										id : "flow_staffEntryapply@dept@depId"
+									},
+									depTreeSelector
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'姓名：',
+										width:97
+									},
+									{
+										xtype:'textfield',
+										id:'flow_staffEntryapply@entryUserName',
+										name:'staffEntryapply@entryUserName',
+										maxLength : 64,
+										allowBlank :false,
+										width:200
+									},
+									{
+										text:'担任岗位：',
+										style:'margin-left:10px;',
+										width:97
+									},
+									{
+										id:'flow_staffEntryapply@jobName',
+										hiddenName:'staffEntryapply@jobName',
+										xtype : "combo",
+										mode : "local",
+										width:247,
+										editable : false,
+										allowBlank:false,
+										valueField : "jobName",
+										displayField : "jobName",
+										triggerAction : "all",
+										store : new Ext.data.SimpleStore( {
+											url : __ctxPath
+													+ "/hrm/comboJob.do",
+											fields : [ "jobId", "jobName" ]
+										}),
+										listeners : {
+											focus : function(h) {
+												var deptId = Ext.getCmp("flow_staffEntryapply@dept@depId").getValue();
+												if (Ext.isEmpty(deptId)) {
+													Ext.ux.Toast.msg("操作信息","请先选择部门！");
+												}
+											},
+											select : function(combo,record,index){
+												var jobId = record.data.jobId;
+												var jobName = record.data.jobName;
+												Ext.getCmp("flow_staffEntryapply@job@jobId").setValue(jobId);
+											}
+										}
+									},
+									{
+										xtype:'hidden',
+										id:'flow_staffEntryapply@job@jobId',
+										name:'staffEntryapply@job@jobId'
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label'
+								},
+								items:[
+									{
+										text:'联系方式：',
+										columnWidth:.15
+									},
+									{
+										xtype:'textfield',
+										id:'flow_staffEntryapply@contact',
+										name:'staffEntryapply@contact',
+										columnWidth:0.3,
+										maxLength:250,
+										editable:false,
+										allowBlank :false
+									},
+									{
+										text:'拟报到日期：',
+										style:'margin-left:10px;',
+										columnWidth:.165
+									},
+									{
+										xtype:'datefield',
+										id:'flow_staffEntryapply@entryDate',
+										name:'staffEntryapply@entryDate',
+										format:'Y-m-d',
+										columnWidth:0.385,
+										editable:false,
+										allowBlank :false
+									}
+								]
+							}
+							]
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

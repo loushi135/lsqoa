@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="bpaApplyMoneyXX" label="本次申请用款(小写)" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaApplyMoneyDX" label="本次申请用款(大写)" type="varchar" length="50"  isShowed="true"/>
+	<field name="superOption" label="审批意见"/>
+</fields>

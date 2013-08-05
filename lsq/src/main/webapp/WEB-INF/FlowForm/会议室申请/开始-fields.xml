@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="department" label="申请部门" type="varchar" length="512"/>
+	<field name="applyUser" label="申请人" type="varchar" length="512"/>
+	<field name="userId" label="userId" type="varchar" length="20" isShowed="false"/>
+	<field name="startTime" label="开始时间" type="datetime"/>
+	<field name="endTime" label="结束时间" type="datetime"/>
+	<field name="meetingTitle" label="会议主题" type="varchar" length="512"/>
+	<field name="personNum" label="人数" type="varchar" length="12"/>
+	<field name="meetingType" label="会议类型" type="varchar" length="12"/>
+	<field name="meetingRequire" label="涉会需求" type="varchar" length="1000"/>
+	<field name="meetingRoom" label="会议室" type="varchar" length="512"/>
+</fields>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="bankPayApplyOther" xmlns="http://jbpm.org/4.0/jpdl">
+	<start g="69,5,48,48" name="开始">
+		<transition g="-14,-21" name="提交" to="决策"/>
+	</start>
+
+	<task g="55,84,92,52" name="部门领导">
+		<assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+			<field name="roleName">
+				<string value="流程-部门经理"/>
+			</field>
+		</assignment-handler>
+		<transition g="-7,-21" name="提交" to="分管领导"/>
+		<transition g="-9,-149" name="取消" to="取消">
+			<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+				<field name="roleName">
+					<string value="部门领导"/>
+				</field>
+			</event-listener>
+		</transition>
+	</task>
+	<task g="180,148,92,52" name="分管领导">
+		<assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+			<field name="roleName">
+				<string value="流程-分管领导"/>
+			</field>
+		</assignment-handler>
+		<transition g="-26,-13" name="提交" to="财务部"/>
+		<transition g="101,175:35,-18" name="取消" to="取消">
+			<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+				<field name="roleName">
+					<string value="分管领导"/>
+				</field>
+			</event-listener>
+		</transition>
+	</task>
+	<task g="180,228,92,52" name="财务部">
+	    <transition g="-31,-13" name="提交" to="决策4"/>
+		<transition g="100,253:29,-19" name="取消" to="取消">
+			<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+				<field name="roleName">
+					<string value="财务部"/>
+				</field>
+			</event-listener>
+		</transition>
+	</task>
+	<task g="262,295,92,52" name="常务副总">
+		<transition g="-29,-16" name="提交" to="决策2"/>
+		<transition g="-37,-22" name="取消" to="取消">
+			<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+				<field name="roleName">
+					<string value="常务副总"/>
+				</field>
+			</event-listener>
+		</transition>
+	</task>
+	<task g="512,342,92,52" name="总经理">
+		<transition g="-29,-11" name="提交" to="决策3"/>
+		<transition g="6,-27" name="取消" to="取消2">
+			<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+				<field name="roleName">
+					<string value="总经理"/>
+				</field>
+			</event-listener>
+		</transition>
+	</task>
+	<task g="508,589,92,52" name="董事长">
+		<transition g="-14,-18" name="审批通过" to="出纳"/>
+		<transition g="-17,-21" name="取消" to="取消2">
+			<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+				<field name="roleName">
+					<string value="董事长"/>
+				</field>
+			</event-listener>
+		</transition>
+	</task>
+	<task g="173,590,92,52" name="出纳">
+		<transition g="-20,-22" name="办理" to="审批通过">
+			<event-listener class="com.xpsoft.oa.workflow.event.BankPayApplyOtherFinishListener"/>
+		</transition>
+	</task>
+	
+	<end g="48,593,48,48" name="审批通过"/>
+	<end-cancel g="75,445,48,48" name="取消"/>
+	<end-cancel g="670,380,48,48" name="取消2"/>
+	
+	<decision g="203,7,48,48" name="决策">
+		<handler class="com.xpsoft.oa.workflow.event.BankPayOtherApplyFirstHandler" />
+		<transition g="-37,-9" name="普通员工" to="部门领导"/>
+		<transition g="-26,-8" name="部门领导" to="分管领导"/>
+		<transition g="355,118:5,-30" name="分管领导或类型为税金" to="财务部"/>
+	</decision>
+	<decision g="300,394,48,48" name="决策2">
+		<handler class="com.xpsoft.oa.workflow.event.BankPayOtherApplySecondHandler" />
+		<transition g="-62,-30" name="金额大于等于10万" to="总经理"/>
+		<transition g="-32,-69" name="金额小于10万" to="出纳"/>
+	</decision>
+	<decision g="394,437,48,48" name="决策3">
+		<handler class="com.xpsoft.oa.workflow.event.BankPayOtherApplyThirdHandler" />
+		<transition g="-42,-2" name="金额大于等于500万" to="董事长"/>
+		<transition g="-48,-20" name="金额小于500万或类型为税金" to="出纳"/>
+	</decision>
+	<decision g="499,232,48,48" name="决策4">
+		<handler class="com.xpsoft.oa.workflow.event.BankPayOtherApplyFourHandler" />
+		<transition g="-12,0" name="类型非税金" to="常务副总"/>
+		<transition g="-3,-8" name="类型为税金" to="总经理"/>
+	</decision>
+</process>

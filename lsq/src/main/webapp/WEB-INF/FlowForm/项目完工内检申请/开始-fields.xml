@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="projectEndCheck.project.proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.project.id" label="项目名称" type="varchar" length="128" isShowed="false"/>
+	<field name="projectEndCheck.project.buildUnit" label="建设单位" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.project.proAddr" label="项目地点" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.project.area" label="施工区域" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.project.areaId" label="施工区域" type="varchar" length="128" isShowed="false"/>
+	<field name="projectEndCheck.project.proChargerUserName" label="项目经理" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.qualityUser.fullname" label="质量员" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.qualityUser.userId" label="质量员" type="varchar" length="128" isShowed="false"/>
+	<field name="projectEndCheck.workUser.fullname" label="施工员" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.workUser.userId" label="施工员" type="varchar" length="128" isShowed="false"/>
+	<field name="projectEndCheck.safeUser.fullname" label="安全员" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.safeUser.userId" label="安全员" type="varchar" length="128" isShowed="false"/>
+	<field name="projectEndCheck.preCalUser.fullname" label="预决算员" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.preCalUser.userId" label="预决算员" type="varchar" length="128" isShowed="false"/>
+	<field name="projectEndCheck.engineeUser.fullname" label="工程督导" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.engineeUser.userId" label="工程督导" type="varchar" length="128" isShowed="false"/>
+	<field name="projectEndCheck.conclusion" label="项目部自检结果" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.actualWorkDate" label="实际开工时间" type="datetime" isShowed="true"/>
+	<field name="projectEndCheck.actualFinishDate" label="实际完工时间" type="datetime" isShowed="true"/>
+	<field name="projectEndCheck.applyUser.fullname" label="经办人" type="varchar" length="128" isShowed="true"/>
+	<field name="projectEndCheck.applyUser.userId" label="经办人" type="varchar" length="128" isShowed="false"/>
+</fields>

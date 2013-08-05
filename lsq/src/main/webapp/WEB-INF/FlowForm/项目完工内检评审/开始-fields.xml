@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="endInnerCheck.project.proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.project.id" label="项目名称" type="varchar" length="128" isShowed="false"/>
+	<field name="endInnerCheck.project.buildUnit" label="建设单位" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.project.proAddr" label="项目地点" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.project.area" label="施工区域" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.project.areaId" label="施工区域" type="varchar" length="128" isShowed="false"/>
+	<field name="endInnerCheck.project.proChargerUserName" label="项目经理" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.contract.contractAmount" label="合同造价" type="decimal" isShowed="true"/>
+	<field name="endInnerCheck.checkTime" label="内检时间" type="datetime" isShowed="true"/>
+	<field name="endInnerCheck.checkUser.fullname" label="检查人" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.checkUser.userId" label="检查人" type="varchar" length="128" isShowed="false"/>
+	<field name="endInnerCheck.score" label="内检评份" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.customerSatisfy" label="客户满意度" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.conclusion" label="内检结论" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.rewardOrPunish" label="奖罚建议" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.applyUser.fullname" label="经办人" type="varchar" length="128" isShowed="true"/>
+	<field name="endInnerCheck.applyUser.userId" label="经办人" type="varchar" length="128" isShowed="false"/>
+	<field name="endInnerCheck.attachFiles" label="附件" type="file" isShowed="true"/>
+	<field name="endInnerCheck.attachIds" label="附件" type="text" isShowed="false"/>
+</fields>

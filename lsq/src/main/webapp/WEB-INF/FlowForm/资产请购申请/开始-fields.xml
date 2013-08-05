@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="name" label="姓名" type="varchar" length="512"/>
+	<field name="dept" label="申请部门" type="varchar" length="512"/>
+	<field name="useProjectId" label="项目ID" type="varchar" length="128" isShowed="false"/>
+	<field name="useProjectName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="useProjectManagerId" label="项目经理" type="varchar" length="128" isShowed="false"/>
+	<field name="useProjectManagerName" label="项目经理" type="varchar" length="128" isShowed="true"/>
+	<field name="prePrice" label="预估价格" type="varchar" length="512"/>
+	<field name="applyType" label="请购类型" type="varchar" length="512"/>
+	<field name="applyDate" label="申请日期" type="varchar" length="512"/>
+	<field name="applyDescription" label="请购说明" type="varchar" length="512"/>
+	<field name="resultGridData" label="资产列表" type="varchar" length="512"/>	
+	<field name="isSubsidyOrNot" label="是否补贴" type="varchar" length="4"/>
+	
+</fields>

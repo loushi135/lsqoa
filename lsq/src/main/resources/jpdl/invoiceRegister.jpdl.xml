@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="invoiceRegister" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="379,12,48,48" name="开始">
+      <transition g="-17,-20" name="提交" to="决策"/>
+   </start>
+   
+    <decision name="决策" g="379,90,48,48">
+      <handler class="com.xpsoft.oa.workflow.event.InvoiceRegisterHandler" />
+      <transition name="发票类型为 普通发票、增值税发票" to="财务" g="-167,-18"/>
+      <transition name="发票类型为 工程发票" to="工程财务" g="-21,-26"/>
+   </decision>
+   
+   <task g="191,149,92,52" name="财务">
+      <transition g="-41,13" name="提交" to="审批通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.InvoiceRegisterFinishListener"/>
+      </transition>
+      <transition g="-13,-22" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+				<field name="roleName">
+					<string value="财务部"/>
+				</field>
+			</event-listener>
+      </transition>
+   </task>
+   
+   <task name="工程财务" g="548,150,92,52">
+      <transition name="提交" to="审批通过" g="-27,20">
+      	      <event-listener class="com.xpsoft.oa.workflow.event.InvoiceRegisterFinishListener"/>
+      </transition>
+      <transition name="取消" to="审批不通过" g="-9,-23">
+      		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+				<field name="roleName">
+					<string value="财务部"/>
+				</field>
+			</event-listener>
+      </transition>
+   </task>
+   <end g="385,266,48,48" name="审批通过"/>
+   <end-cancel g="385,192,48,48" name="审批不通过"/>
+
+</process>

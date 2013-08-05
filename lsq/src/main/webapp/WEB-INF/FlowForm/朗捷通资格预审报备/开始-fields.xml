@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+<!--	<field name="flowPreQ.proId" label="项目ID" type="varchar" length="128" isShowed="false"/> -->
+	<field name="flowPreQ.proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	
+	<field name="flowPreQ.designUnit" label="设计单位" type="varchar" length="128" isShowed="true"/>
+	<field name="flowPreQ.buildUnit" label="建设单位" type="varchar" length="128" isShowed="true"/>
+	<field name="flowPreQ.bidType" label="招标类型" type="varchar" length="128" isShowed="true"/>
+	<field name="flowPreQ.bidProxy" label="招标代理" type="varchar" length="128" isShowed="true"/>
+	<field name="flowPreQ.ProEstimatPrice" label="项目估算价（万元）" type="decimal" length="0" isShowed="true"/>
+	<field name="flowPreQ.timeNotice" label="公告发布时间" type="datetime" isShowed="true"/>
+	<field name="flowPreQ.timePreQualifica" label="资格预审时间" type="datetime" isShowed="true"/>
+	<field name="flowPreQ.timePerBidOpen" label="预计开标时间" type="datetime" isShowed="true"/>
+	<field name="flowPreQ.requireConstrLevel" label="建造师资质要求" type="varchar" length="128" isShowed="true"/>
+	<field name="flowPreQ.sureArrivalPreQ" label="资格预审是否到场" type="varchar" length="128" isShowed="true"/>
+	<field name="flowPreQ.sureArrivalBid" label="开标是否到场" type="varchar" length="128" isShowed="true"/>
+	<field name="flowPreQ.suggestConstructor" label="市场部推荐建造师" type="varchar" length="128" isShowed="true"/>
+	
+	<field name="flowPreQ.materialFitDeptId" label="施工配合区域ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowPreQ.materialFitDeptName" label="施工配合区域" type="varchar" length="128" isShowed="true"/>
+	
+	<field name="flowPreQ.reqEnterpriseQua" label="企业资质要求" type="varchar" length="5000" isShowed="true"/>
+	<field name="flowPreQ.reqPerformance" label="业绩要求（企业、项目经理）" type="varchar" length="5000" isShowed="true"/>
+	<field name="flowPreQ.reqOther" label="其他要求" type="varchar" length="5000" isShowed="true"/>
+	
+	<field name="flowPreQ.applyUserId" label="报备人ID" type="varchar" length="128" isShowed="false"/>
+<!--	<field name="flowPreQ.applyUserName" label="报备人" type="varchar" length="128" isShowed="true"/>-->
+</fields>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.ProjectSealRecycle"
+        table="project_seal_recycle"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+        <property
+            name="innerCheckTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="innerCheckTime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="lastReturnTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="lastReturnTime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="processRunId"
+            type="java.lang.Long"
+            update="false"
+            insert="true"
+            access="property"
+            column="processRunId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        
+        <many-to-one
+			name="projectSeal"
+			class="com.xpsoft.oa.model.statistics.ProjectSeal"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="proSealId" />
+		</many-to-one>
+		
+		<many-to-one
+			name="applyUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="applyUserId" />
+		</many-to-one>
+     </class>
+</hibernate-mapping>

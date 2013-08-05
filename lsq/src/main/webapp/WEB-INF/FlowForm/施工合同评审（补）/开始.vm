@@ -1,0 +1,903 @@
+Ext.MyForm=Ext.extend(Ext.form.FormPanel ,{
+xtype:"formpanel",
+	title:"施工合同评审（补）",
+	labelWidth:"",
+	labelAlign:"left",
+	layout:"form",
+	width:692,
+	autoHeight : true,
+	padding:"10px",
+	labelPad:10,
+	listeners:{
+		'afterrender':function(){
+			if(__currentUserDept.indexOf('团队')!=-1||__currentUserDept.indexOf('市场管理部')!=-1){
+				Ext.getCmp('startFlowBtn').enable();
+			}else{
+				Ext.getCmp('startFlowBtn').disable();
+			}
+			Ext.getCmp('flow_constructionContract.errorLabel').setText('(*必须上传 合同评审会议记录表 扫描件)');
+			Ext.getCmp('flow_constructionContract.contractor').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.projectName').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.projectAbbreviation').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.linkmanAndTel').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.businessCharger').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.numOrArea').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.sumPrice').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.projectRegional').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.projectCharger').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.contractRemark').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.payWay').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.projectTime').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.quality').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.isFullContract').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.isDesignCost').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.isModelCommunity').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.rewardOrPunish').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.guarantee').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.constructionBackUp').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.constructionLicense').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.isoverBudget').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.quote').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.remark').allowBlank = false;
+			Ext.getCmp('flow_constructionContract.meno').allowBlank = false;
+		}
+	},
+	initComponent: function(){
+		var _url = __ctxPath + '/system/listWorkDepartment.do?opt=appUser';
+		var depSelector = new TreeSelector('flow_constructionContract.projectRegional', _url, '',
+				'constructionContract.projectRegional', false, 147,'constructionContract.projectRegional');
+						
+		Ext.getCmp("flow_constructionContract.projectRegionalTree").on("click", function(g) {
+			Ext.getCmp("flow_constructionContract.deptId").setValue(Ext.getCmp("flow_constructionContract.projectRegional").id);
+		});
+		this.items=[
+			{
+				xtype:"container",
+				name:"MyContainer",
+				autoEl:"div",
+				layout:"hbox",
+				style:"text-align:center;margin:0px auto;",
+				items:[
+					{
+						xtype:"label",
+						name:"MyLabel",
+						text:"施工合同评审变更",
+						style:"font-size:14px;font-weight:bold",
+						region:"west"
+					}
+				]
+			},
+			{
+				xtype:"container",
+				name:"MyContainer8",
+				autoEl:"div",
+				layout:"column",
+				items:[
+					{
+						xtype:"container",
+						name:"MyContainer9",
+						autoEl:"div",
+						layout:"vbox",
+						width:400,
+						height:70,
+						hideBorders:true,
+						items:[
+							{
+								xtype:"label",
+								text:"a：本表是为了补充在施工合同评审流程中版本选择有中标通知书或有开工指令单而漏填的信息；"
+							},
+							{
+								xtype:"label",
+								text:"b：本表由业务人员在合同签定前，对合同进行评审时用；"
+							},
+							{
+								xtype:"label",
+								text:"c：本表由法务部、核算部归档；"
+							}
+						]
+					},
+					{
+						xtype:"label",
+						text:"合同编号：",
+						style:"margin:3px 0 0 10px",
+						width:110
+					},
+					{
+						xtype:"textfield",
+						name:"constructionContract.contractNo",
+						readOnly:true,
+						style:"background:#F0F0F0;",
+						id:'flow_constructionContract.contractNo',
+						emptyText:'流程审批通过后自动生成',
+//						listeners:{
+//							afterrender : function(){
+//								Ext.Ajax.request({
+//									url : __ctxPath+'/statistics/getNoConstructioncontract.do',
+//									params:{contractType:'02'},
+//									method : "POST",
+//									success : function(response, f) {
+//										var data = Ext.util.JSON
+//												.decode(response.responseText).data;
+//										var contractNo = data.contractNo;
+//										Ext.getCmp("flow_contractNo").setValue(contractNo);
+//									},
+//									failure : function(d, e) {
+//									},
+//									scope : this
+//								});
+//							}
+//						},
+						width:155
+					}
+				]
+			},
+			{
+				xtype:'container',
+				layout:'column',
+				style:'margin-bottom:3px',
+				anchor:'100%',
+				items:[
+					{
+						xtype:'label',
+						text:'版本:',
+						width:110
+					},
+					{
+						xtype:"combo",
+						hiddenName:"constructionContract.contractVersion",
+						id:'flow_constructionContract.contractVersion',
+						fieldLabel:"版本",
+						triggerAction:'all',
+						anchor:"100%",
+						store:['有施工合同'],
+						value:'有施工合同',
+						editable:false,
+						columnWidth:1
+					}
+				]
+			},{
+				xtype:"textfield",
+				name:"preConstructionContract",
+				id:'flow_preConstructionContract',
+				fieldLabel:"预定义版本",
+				allowBlank:false,
+				anchor:"100%",
+				emptyText:'请选择预定义版本的施工合同',
+				listeners:{
+					focus:function(field){
+						new ContractSelector(function(id,contractNo,contractAmount,projectName){
+											Ext.getCmp("flow_preConstructionContract").setValue(projectName);
+											Ext.getCmp("flow_constructionContract.contractId").setValue(id);
+											if(!Ext.isEmpty(id)){
+												var url = __ctxPath + '/statistics/getConstructioncontract.do';
+												var params = "contractId="+id;
+												var data = ajaxSyncCall(url,params).data;
+												if(!Ext.isEmpty(data)){
+													Ext.getCmp('flow_constructionContract.contractNo').setValue(data.contractNo);
+													Ext.getCmp('flow_constructionContract.contractor').setValue(data.contractor);
+													Ext.getCmp('flow_constructionContract.projectName').setValue(data.projectName);
+													Ext.getCmp('flow_constructionContract.projectAbbreviation').setValue(data.projectAbbreviation);
+													Ext.getCmp('flow_constructionContract.linkmanAndTel').setValue(data.linkmanAndTel);
+													Ext.getCmp('flow_constructionContract.businessCharger').setValue(data.businessCharger);
+													Ext.getCmp('flow_constructionContract.numOrArea').setValue(data.numOrArea);
+													Ext.getCmp('flow_constructionContract.sumPrice').setValue(data.sumPrice);
+													if(!Ext.isEmpty(data.sumPrice)){
+														var sumPriceBig = AmountInWords(data.sumPrice);
+														Ext.getCmp('flow_constructionContract.sumPriceBig').setValue(sumPriceBig);
+														Ext.getCmp('flow_constructionContract.sumPriceLabel').setText(sumPriceBig);
+													}
+													if(!Ext.isEmpty(data.deptRegional)){
+														Ext.getCmp('flow_constructionContract.deptId').setValue(data.deptRegional.depId);
+														Ext.getCmp('flow_constructionContract.projectRegional').setValue(data.deptRegional.depName);
+													}
+													if(!Ext.isEmpty(data.projectChargerUser)){
+														Ext.getCmp('flow_constructionContract.projectChargerUserId').setValue(data.projectChargerUser.userId);
+														Ext.getCmp('flow_constructionContract.projectCharger').setValue(data.projectChargerUser.fullname);
+													}
+													Ext.getCmp('flow_constructionContract.contractRemark').setValue(data.contractRemark);
+													Ext.getCmp('flow_constructionContract.payWay').setValue(data.payWay);
+													Ext.getCmp('flow_constructionContract.projectTime').setValue(data.projectTime);
+													Ext.getCmp('flow_constructionContract.quality').setValue(data.quality);
+													Ext.getCmp('flow_constructionContract.isFullContract').setValue(data.isFullContract);
+													Ext.getCmp('flow_constructionContract.isDesignCost').setValue(data.isDesignCost);
+													if(data.isDesignCost=='是'){
+														Ext.getCmp('flow_constructionContract.designCost').enable();
+													}
+													Ext.getCmp('flow_constructionContract.designCost').setValue(data.designCost);
+													Ext.getCmp('flow_constructionContract.isModelCommunity').setValue(data.isModelCommunity);
+													if(data.isModelCommunity=='是'){
+														Ext.getCmp('flow_constructionContract.rewardOrPunish').enable();
+													}
+													Ext.getCmp('flow_constructionContract.rewardOrPunish').setValue(data.rewardOrPunish);
+													Ext.getCmp('flow_constructionContract.guarantee').setValue(data.guarantee);
+													Ext.getCmp('flow_constructionContract.constructionBackUp').setValue(data.constructionBackUp);
+													if(!Ext.isEmpty(data.constructionBackUpUser)){
+														Ext.getCmp('flow_constructionContract.backUpPersonId').setValue(data.constructionBackUpUser.userId);
+														Ext.getCmp('flow_constructionContract.backUpPerson').setValue(data.constructionBackUpUser.fullname);
+													}
+													if(data.constructionBackUp=='是'){
+														Ext.getCmp('flow_constructionContract.backUpPersonId').enable();
+														Ext.getCmp('flow_constructionContract.backUpPerson').enable();
+														Ext.getCmp('flow_constructionContract.backUpFinishTime').enable();
+													}
+													Ext.getCmp('flow_constructionContract.backUpFinishTime').setValue(data.constructionBackUpFinishTime);
+													Ext.getCmp('flow_constructionContract.constructionLicense').setValue(data.constructionLicense);
+													if(!Ext.isEmpty(data.constructionLicenseUser)){
+														Ext.getCmp('flow_constructionContract.licensePersonId').setValue(data.constructionLicenseUser.userId);
+														Ext.getCmp('flow_constructionContract.licensePerson').setValue(data.constructionLicenseUser.fullname);
+													}
+													if(data.constructionLicense=='是'){
+														Ext.getCmp('flow_constructionContract.licensePersonId').enable();
+														Ext.getCmp('flow_constructionContract.licensePerson').enable();
+														Ext.getCmp('flow_constructionContract.licenseFinishTime').enable();
+													}
+													Ext.getCmp('flow_constructionContract.licenseFinishTime').setValue(data.constructionLicenseFinishTime);
+													Ext.getCmp('flow_constructionContract.isoverBudget').setValue(data.isoverBudget);
+													Ext.getCmp('flow_constructionContract.quote').setValue(data.quote);
+													if(data.quote=='含管理费亏损'||data.quote=='不含管理费亏损'||data.quote=='免管理费'){
+														Ext.getCmp('flow_constructionContract.quoteloss').enable();
+													}
+													Ext.getCmp('flow_constructionContract.quoteloss').setValue(data.quoteloss);
+													Ext.getCmp('flow_constructionContract.remark').setValue(data.remark);
+													Ext.getCmp('flow_constructionContract.meno').setValue(data.meno);
+													var attachId = data.attachIds;
+													var attachFile = data.attachFiles;
+													if(attachId!= null && attachId != 'undefined' && attachFile!= null && attachFile != 'undefined'){
+															Ext.getCmp("flow_constructionContract.attachIDs").setValue(data.attachIds);
+															Ext.getCmp("flow_constructionContract.attachFile").setValue(data.attachFiles);
+															var ids = attachId.split(',');
+															var files= attachFile.split(',');
+															for(var i=0;i<ids.length;i++){
+																if(files[i].lastIndexOf(':')!=-1){
+																	  var fg = files[i].split(':');
+																	  Ext.DomHelper.append(Ext.getCmp('flow_constructionContract.displayAttach').body,'<span><a href="#" onclick="FileAttachDetail.show('+ids[i]+')">'+fg[1].replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																}
+															}
+													}
+												}
+											}
+										},true,true).show();
+					}
+				}
+			},
+			{
+				xtype:'hidden',
+				name:'constructionContract.contractId',
+				id:'flow_constructionContract.contractId'
+			},
+			{
+				xtype:"container",
+				name:"MyContainer1",
+				autoEl:"div",
+				layout:"column",
+				anchor:"100%",
+				items:[
+					{
+						xtype:"container",
+						name:"MyContainer2",
+						autoEl:"div",
+						layout:"form",
+						labelPad:10,
+						labelWidth:"",
+						columnWidth:"",
+						width:400,
+						items:[
+							{
+								xtype:"textfield",
+								name:"constructionContract.contractor",
+								id:"flow_constructionContract.contractor",
+								fieldLabel:"发包人",
+								anchor:"100%",
+								maxLength:20
+							},
+							{
+								xtype:"textfield",
+								name:"constructionContract.projectName",
+								id:"flow_constructionContract.projectName",
+								fieldLabel:"项目名称",
+								anchor:"100%",
+								maxLength:20
+							},
+							{
+								xtype:"textfield",
+								name:"constructionContract.projectAbbreviation",
+								id:"flow_constructionContract.projectAbbreviation",
+								fieldLabel:"项目简称",
+								anchor:"100%",
+								maxLength:20
+							},
+							{
+								xtype:"textfield",
+								name:"constructionContract.linkmanAndTel",
+								id:"flow_constructionContract.linkmanAndTel",
+								fieldLabel:"发包联系人及电话",
+								anchor:"100%",
+								maxLength:20
+							}
+						]
+					},
+					{
+						xtype:"container",
+						name:"MyContainer3",
+						autoEl:"div",
+						layout:"form",
+						labelPad:10,
+						width:258,
+						style:"margin-left:10px",
+						items:[
+							{
+								xtype:'container',
+								layout:'column',
+								style:'margin-bottom:3px;',
+								items:[
+									{
+										xtype : "label",
+										text : "施工区域:",
+										width : 110
+									}, {
+										xtype : 'hidden',
+										name : 'constructionContract.deptId',
+										id : 'flow_constructionContract.deptId'
+									}, depSelector
+								]
+							},
+							{
+								xtype:'hidden',
+								name:'constructionContract.projectChargerUserId',
+								id:'flow_constructionContract.projectChargerUserId'
+							},
+							{
+								xtype:"textfield",
+								name:"constructionContract.projectCharger",
+								id:'flow_constructionContract.projectCharger',
+								fieldLabel:"项目实际负责人",
+								anchor:"100%",
+								emptyText:'请选择项目实际负责人',
+								allowBlank:false,
+								listeners : {
+									'focus' : function() {
+										UserSelector.getView(function(n,l,mobile) {
+															var projectChargerUserId = Ext.getCmp("flow_constructionContract.projectChargerUserId");
+															var projectCharger = Ext.getCmp("flow_constructionContract.projectCharger");
+															projectChargerUserId.setValue(n);
+															projectCharger.setValue(l);
+//															if(n==__currentUserId){
+//																Ext.getCmp("flow_preCalcUserContainer").show();
+//																Ext.getCmp("flow_constructionPreCalcUserId").allowBlank=false;
+//															}else{
+//																Ext.getCmp("flow_preCalcUserContainer").hide();
+//																Ext.getCmp("flow_constructionPreCalcUserId").allowBlank=true;
+//															}
+														},true)
+												.show()
+									}
+								}
+							},
+							{
+								xtype:"textfield",
+								name:"constructionContract.businessCharger",
+								id:'flow_constructionContract.businessCharger',
+								fieldLabel:"业务主办",
+								anchor:"100%",
+								maxLength:20
+							},
+							{
+								xtype:"textfield",
+								name:"constructionContract.numOrArea",
+								id:'flow_constructionContract.numOrArea',
+								fieldLabel:"数量/面积",
+								regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+								anchor:"100%"
+							}
+						]
+					}
+				]
+			},
+			{
+				xtype:'container',
+				layout:'column',
+				style:'margin-bottom:3px',
+				items:[
+					{
+						xtype:'label',
+						text:'合同总价:',
+						style:'margin-right:56px'
+					},{
+						xtype:"numberfield",
+						//maxLength:11,
+						name:"constructionContract.sumPrice",
+						id:'flow_constructionContract.sumPrice',
+						regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+						enableKeyEvents :true,
+						listeners:{
+							keyup : function(field){
+								  		var value = Ext.getCmp("flow_constructionContract.sumPrice").getValue();
+								  	    var sumPriceLabel = AmountInWords(value);
+								  	    Ext.getCmp("flow_constructionContract.sumPriceLabel").setText(sumPriceLabel);
+								  	    Ext.getCmp("flow_constructionContract.sumPriceBig").setValue(sumPriceLabel);
+									}
+						}
+					},{
+						xtype:'label',
+						id:'flow_constructionContract.sumPriceLabel',
+						style:'color:red'
+					},{
+						xtype:'hidden',
+						id:'flow_constructionContract.sumPriceBig',
+						name:'constructionContract.sumPriceBig'
+					}
+				]
+			},{
+				xtype:"textarea",
+				name:"constructionContract.contractRemark",
+				id:'flow_constructionContract.contractRemark',
+				fieldLabel:"合同说明",
+				anchor:"100%"
+			},
+			{
+				xtype:"textarea",
+				name:"constructionContract.payWay",
+				id:'flow_constructionContract.payWay',
+				fieldLabel:"付款方式",
+				anchor:"100%"
+			},
+			{
+				xtype:"textfield",
+				name:"constructionContract.projectTime",
+				id:'flow_constructionContract.projectTime',
+				fieldLabel:"工期要求/能否满足/奖罚",
+				maxLength:25,
+				anchor:"100%"
+			},
+			{
+				xtype:"textfield",
+				name:"constructionContract.quality",
+				id:'flow_constructionContract.quality',
+				maxLength:25,
+				fieldLabel:"质量/奖罚",
+				anchor:"100%"
+			},
+			{
+				xtype:"combo",
+				hiddenName :"constructionContract.isFullContract",
+				id:'flow_constructionContract.isFullContract',
+				fieldLabel:"是否双包",
+				triggerAction :'all',
+				editable :false,
+				store :[['拟整体双包单位/班组','拟整体双包单位/班组'],['否','否']],
+				anchor:"100%"
+			},
+			{
+				xtype:"container",
+				name:"MyContainer4",
+				autoEl:"div",
+				layout:"column",
+				style:"margin:0 0 5px 0;",
+				items:[
+					{
+						xtype:"label",
+						name:"MyLabel1",
+						style:"margin-right:8px;",
+						text:"是否承担设计费用:"
+					},
+					{
+						xtype:"combo",
+						hiddenName:"constructionContract.isDesignCost",
+						id:'flow_constructionContract.isDesignCost',
+						fieldLabel:"是否承担设计费",
+						store :[['是','是'],['否','否']],
+						triggerAction :'all',
+						editable :false,
+						width:200,
+						listeners:{
+							select:function(combo,record,index){
+								if(combo.getValue()=='是'){
+									Ext.getCmp("flow_constructionContract.designCost").enable();
+								}else{
+									Ext.getCmp("flow_constructionContract.designCost").disable();
+								}
+							}
+						}
+					},
+					{
+						xtype:"label",
+						name:"MyLabel2",
+						text:"金额:",
+						style:"margin: 3px 10px 0 50px;"
+					},
+					{
+						xtype:"numberfield",
+						disabled:true,
+						maxLength:10,
+//						regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+						name:"constructionContract.designCost",
+						id:'flow_constructionContract.designCost',
+						fieldLabel:"Label"
+					},
+					{
+						xtype:"label",
+						name:"MyLabel3",
+						text:"元",
+						style:"margin: 3px 10px 0 2px"
+					}
+				]
+			},
+			{
+				xtype:'container',
+				layout:'column',
+				style:'margin-bottom:3px',
+				items:[
+					{
+						xtype:'label',
+						text:'是否评文明工地:',
+						style:'margin-right:20px'
+					},
+					{
+						xtype:"combo",
+						hiddenName:"constructionContract.isModelCommunity",
+						id:'flow_constructionContract.isModelCommunity',
+						fieldLabel:"是否评文明工地",
+						store :[['是','是'],['否','否']],
+						triggerAction :'all',
+						width:200,
+						editable :false,
+						listeners:{
+							select:function(combo,record,index){
+								if(combo.getValue()=='是'){
+									Ext.getCmp("flow_constructionContract.rewardOrPunish").enable();
+								}else{
+									Ext.getCmp("flow_constructionContract.rewardOrPunish").disable();
+								}
+							}
+						}
+					},
+					{
+						xtype:'label',
+						text:'奖罚:',
+						style:"margin: 3px 10px 0 50px;"
+					},
+					{
+						xtype:'textfield',
+						name:'constructionContract.rewardOrPunish',
+						id:'flow_constructionContract.rewardOrPunish',
+						maxLength:20,
+						disabled:true,
+						width:270
+					}
+				]
+			},
+			{
+				xtype:"textfield",
+				name:'constructionContract.guarantee',
+				id:'flow_constructionContract.guarantee',
+//				hiddenName:"guarantee",
+				fieldLabel:"保修期/金额",
+//				store :[['1年/5%','1年/5%'],['2年/5%','2年/5%'],['其他','其他']],
+//				triggerAction :'all',
+//				editable :false,
+				anchor:"100%",
+				maxLength:20
+			},
+			{
+				xtype:"container",
+				name:"MyContainer5",
+				autoEl:"div",
+				layout:"column",
+				style:"margin:0 0 5px 0;",
+				items:[
+					{
+						xtype:"label",
+						name:"MyLabel4",
+						text:"是否办理施工备案：",
+						style:"margin: 3px 2px 0 0"
+					},
+					{
+						xtype:"combo",
+						hiddenName:"constructionContract.constructionBackUp",
+						id:'flow_constructionContract.constructionBackUp',
+						fieldLabel:"Label",
+						store :[['是','是'],['否','否']],
+						columnWidth:"",
+						triggerAction :'all',
+						editable :false,
+						width:166,
+						listeners:{
+							select:function(combo,record,index){
+								if(combo.getValue()=='是'){
+									Ext.getCmp("flow_constructionContract.backUpPerson").enable();
+									Ext.getCmp("flow_constructionContract.backUpFinishTime").enable();
+								}else{
+									Ext.getCmp("flow_constructionContract.backUpPerson").disable();
+									Ext.getCmp("flow_constructionContract.backUpFinishTime").disable();
+								}
+							}
+						}
+					},
+					{
+						xtype:"label",
+						name:"MyLabel5",
+						text:"办理责任人：",
+						style:"margin: 3px 0 0 9px"
+					},{
+						xtype:'hidden',
+						name:'constructionContract.backUpPersonId',
+						id:'flow_constructionContract.backUpPersonId'
+					},
+					{
+						xtype:"textfield",
+						disabled:true,
+						maxLength:20,
+						name:"constructionContract.backUpPerson",
+						id:'flow_constructionContract.backUpPerson',
+						listeners : {
+									'focus' : function() {
+										UserSelector.getView(function(n,l,mobile) {
+															var flow_constructionBackUpPersonId = Ext.getCmp("flow_constructionContract.backUpPersonId");
+															var flow_constructionBackUpPerson = Ext.getCmp("flow_constructionContract.backUpPerson");
+															flow_constructionBackUpPersonId.setValue(n);
+															flow_constructionBackUpPerson.setValue(l);
+														},true)
+												.show()
+									}
+						}
+					},
+					{
+						xtype:"label",
+						name:"MyLabel6",
+						text:"具体完成时间：",
+						style:"margin: 3px 0 0 6px"
+					},
+					{
+						xtype:"datefield",
+						disabled:true,
+						name:"constructionContract.backUpFinishTime",
+						id:"flow_constructionContract.backUpFinishTime",
+						format:"Y-m-d",
+						fieldLabel:"Label"
+					}
+				]
+			},
+			{
+				xtype:"container",
+				name:"MyContainer6",
+				autoEl:"div",
+				layout:"column",
+				style:"margin:0 0 5px 0;",
+				items:[
+					{
+						xtype:"label",
+						name:"MyLabel7",
+						text:"是否办理施工许可证：",
+						width:110
+					},
+					{
+						xtype:"combo",
+						hiddenName:"constructionContract.constructionLicense",
+						id:"flow_constructionContract.constructionLicense",
+						store :[['是','是'],['否','否']],
+						triggerAction :'all',
+						editable :false,
+						listeners:{
+							select:function(combo,record,index){
+								if(combo.getValue()=='是'){
+									Ext.getCmp("flow_constructionContract.licensePerson").enable();
+									Ext.getCmp("flow_constructionContract.licenseFinishTime").enable();
+								}else{
+									Ext.getCmp("flow_constructionContract.licensePerson").disable();
+									Ext.getCmp("flow_constructionContract.licenseFinishTime").disable();
+								}
+							}
+						}
+					},
+					{
+						xtype:"label",
+						name:"MyLabel8",
+						text:"办理责任人：",
+						style:"margin: 3px 0 0 9px"
+					},{
+						xtype:'hidden',
+						name:'constructionContract.licensePersonId',
+						id:'flow_constructionContract.licensePersonId'
+					},
+					{
+						xtype:"textfield",
+						disabled:true,
+						maxLength:20,
+						name:"constructionContract.licensePerson",
+						id:"flow_constructionContract.licensePerson",
+						listeners : {
+									'focus' : function() {
+										UserSelector.getView(function(n,l,mobile) {
+															var flow_constructionLicensePersonId = Ext.getCmp("flow_constructionContract.licensePersonId");
+															var flow_constructionLicensePerson = Ext.getCmp("flow_constructionContract.licensePerson");
+															flow_constructionLicensePersonId.setValue(n);
+															flow_constructionLicensePerson.setValue(l);
+														},true)
+												.show()
+									}
+						}
+					},
+					{
+						xtype:"label",
+						name:"MyLabel9",
+						text:"具体完成时间：",
+						style:"margin: 3px 0 0 6px"
+					},
+					{
+						xtype:"datefield",
+						disabled:true,
+						name:"constructionContract.licenseFinishTime",
+						id:"flow_constructionContract.licenseFinishTime",
+						format:"Y-m-d",
+						fieldLabel:"Label"
+					}
+				]
+			},
+			{
+				xtype:"combo",
+				hiddenName:"constructionContract.isoverBudget",
+				id:"flow_constructionContract.isoverBudget",
+				fieldLabel:"是否存在（无）超资质施工的情况",
+				store :[['是','是'],['否','否']],
+				triggerAction :'all',
+				editable :false,
+				anchor:"100%"
+			},
+			{
+				xtype:"container",
+				name:"MyContainer7",
+				autoEl:"div",
+				style:"margin:0 0 5px 0;",
+				layout:"column",
+				items:[
+					{
+						xtype:"label",
+						name:"MyLabel10",
+						text:"报价:",
+						width:110,
+						style:"margin: 3px 0 0 0"
+					},
+					{
+						xtype:"combo",
+						hiddenName:"constructionContract.quote",
+						id:"flow_constructionContract.quote",
+						store :[['有利润','有利润'],['连管理费持平','连管理费持平'],['不含管理费亏损','不含管理费亏损'],['含管理费亏损','含管理费亏损'],['免管理费','免管理费']],
+						fieldLabel:"Label",
+						triggerAction :'all',
+						editable :false,
+						listeners:{
+							select:function(combo,record,index){
+								if(combo.getValue()=='含管理费亏损'||combo.getValue()=='不含管理费亏损'||combo.getValue()=='免管理费'){
+									Ext.getCmp("flow_constructionContract.quoteloss").enable();
+								}else{
+									Ext.getCmp("flow_constructionContract.quoteloss").disable();
+								}
+							}
+						}
+					},
+					{
+						xtype:"label",
+						name:"MyLabel11",
+						text:"预估亏损额：",
+						style:"margin: 3px 0 0 9px"
+					},
+					{
+						xtype:"numberfield",
+						disabled:true,
+						maxLength:10,
+//					    regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+						name:"constructionContract.quoteloss",
+						id:"flow_constructionContract.quoteloss",
+						fieldLabel:"Label"
+					},{
+						xtype:'hidden',
+						name:'constructionContract.applyDate',
+						id:'flow_constructionContract.applyDate',
+						value:new Date().format('Y-m-d')
+					}
+				]
+			},
+			{
+				xtype:"textfield",
+				name:"constructionContract.remark",
+				id:"flow_constructionContract.remark",
+				maxLength:25, 
+				fieldLabel:"其他应在签定前商谈的事项",
+				anchor:"100%"
+			},
+			{
+				xtype:"textfield",
+				name:"constructionContract.meno",
+				id:"flow_constructionContract.meno",
+				maxLength:25,  
+				fieldLabel:"应在合同履行过程中注意的事项",
+				anchor:"100%"
+			}, {
+				xtype : 'container',
+				layout : 'column',
+				height : 15,
+				defaults : {
+					xtype : 'label',
+					style : {
+						margin : '0px 0px 3px 0px'
+					}
+				},
+				items : [{
+							style : 'color:red;margin-left:110px;',
+							id : 'flow_constructionContract.errorLabel',
+							text : '(*必须上传 合同评审会议记录表 扫描件)'
+						}]
+			},{
+				xtype : 'container',
+				autoHeight : true,
+				layout : 'column',
+				autoWidth : true,
+				defaultType : 'label',
+				style : 'padding-left:0px;padding-bottom:5px;',
+				items : [{
+							text : '合同附件:',
+							width : 100,
+							style : "margin-top:15px;"
+						},{
+							xtype : 'hidden',
+							name : 'constructionContract.attachIDs',
+							id : 'flow_constructionContract.attachIDs'
+						},{
+							xtype : 'hidden',
+							name : 'constructionContract.attachFile',
+							id : 'flow_constructionContract.attachFile'
+						},{
+							xtype : 'panel',
+							id:'flow_constructionContract.displayAttach',
+							width : 500,
+							height: 65,
+							frame:false,
+							autoScroll:true,
+							style : 'padding-left:10px;padding-top:0px;',
+							html : ''
+						},{
+							xtype : 'button',
+							iconCls : 'btn-upload',
+							text : '上传',
+							handler : function() {
+								var dialog = App.createUploadDialog({
+														file_cat : 'flow/Constructioncontract',
+														callback : function(data) {
+															Ext.getCmp('flow_constructionContract.displayAttach').body.update('');
+															Ext.getCmp("flow_constructionContract.attachFile").setValue('');
+															Ext.getCmp('flow_constructionContract.attachIDs').setValue('');
+															var contractFile = Ext.getCmp("flow_constructionContract.attachFile");
+															var fileIds = Ext.getCmp('flow_constructionContract.attachIDs');
+															var display = Ext.getCmp('flow_constructionContract.displayAttach');
+															for (var i = 0; i < data.length; i++) {
+																if (fileIds.getValue() != '') {
+																	fileIds.setValue(fileIds.getValue()+ ',');
+																	contractFile.setValue(contractFile.getValue()+ ',');
+																}
+																contractFile.setValue(contractFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+																fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+															}
+														},
+														permitted_max_size :1024*1024*20,
+														permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+													});
+									dialog.show(this);
+							}
+						}]
+			}, {
+					xtype : 'textfield',
+					hidden : true,
+					validator : function() {
+						var attachIDs = Ext.getCmp('flow_constructionContract.attachIDs').getValue();
+						var errorLabel = Ext.getCmp("flow_constructionContract.errorLabel");
+						if (Ext.isEmpty(attachIDs)) {//为空显示提示
+							return false;
+						}
+						return true
+					}
+			}
+		]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

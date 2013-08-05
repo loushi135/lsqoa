@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.system.Province"
+        table="province"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="provinceId"
+            column="provinceId"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="provinceName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="provinceName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="sort"
+            type="java.lang.Integer"
+            update="true"
+            insert="true"
+            access="property"
+            column="sort"
+            length="10"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="remark"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="remark"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <set name="citySet" table="city" inverse="true" cascade="delete" lazy="true" >
+        	<key column="provinceId"></key>
+        	<one-to-many class="com.xpsoft.oa.model.system.City" not-found="ignore" ></one-to-many>
+        </set>
+     </class>
+</hibernate-mapping>

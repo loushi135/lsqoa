@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.ProjectSeal"
+        table="project_seal"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="content"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="content"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="applyDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="applyDate"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="returnDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="returnDate"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="processRunId"
+            type="java.lang.Long"
+            update="false"
+            insert="true"
+            access="property"
+            column="processRunId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        
+        <many-to-one
+			name="keeper"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="keeper" />
+		</many-to-one>
+		
+		<many-to-one
+			name="applyUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="applyUserId" />
+		</many-to-one>
+		<property
+            name="proId"
+            type="java.lang.Long"
+            update="false"
+            insert="true"
+            access="property"
+            column="proId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="proName"
+            type="java.lang.String"
+            update="false"
+            insert="true"
+            access="property"
+            column="proName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

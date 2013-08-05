@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="flowHO.areaId" label="施工区域ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowHO.areaName" label="施工区域" type="varchar" length="128" isShowed="true"/>
+	<field name="flowHO.proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="flowHO.proID" label="项目ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowHO.address" label="工程详细地址" type="varchar" length="128" isShowed="true"/>
+	<field name="flowHO.designChargerId" label="项目负责人" type="varchar" length="128" isShowed="false"/>
+	<field name="flowHO.designChargerName" label="项目负责人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowHO.designChargerTel" label="项目负责人联系电话" type="varchar" length="128" isShowed="true"/>
+	<field name="flowHO.takeUserName" label="收货人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowHO.takeUserId" label="收货人ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowHO.takeUserTel" label="收货人联系电话" type="varchar" length="128" isShowed="true"/>
+	<field name="flowHO.remark" label="备注" type="varchar" length="5000" isShowed="true"/>
+	<field name="flowHO.redNum" label="红色" type="int" isShowed="true"/>
+	<field name="flowHO.yellowNum" label="黄色" type="int" isShowed="true"/>
+	<field name="flowHO.whiteNum" label="白色" type="int" isShowed="true"/>
+	<field name="flowHO.blueNum" label="蓝色" type="int" isShowed="true"/>
+	<field name="flowHO.longSleeveXL" label="长袖：XL" type="int" isShowed="true"/>
+	<field name="flowHO.longSleeveXXL" label="长袖：XXL" type="int" isShowed="true"/>
+	<field name="flowHO.longSleeveXXXL" label="长袖：XXXL" type="int" isShowed="true"/>
+	<field name="flowHO.shortSleeveXL" label="短袖：XL" type="int" isShowed="true"/>
+	<field name="flowHO.shortSleeveXXL" label="短袖：XXL" type="int" isShowed="true"/>
+	<field name="flowHO.shortSleeveXXXL" label="短袖：XXXL" type="int" isShowed="true"/>
+</fields>

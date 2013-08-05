@@ -1,0 +1,441 @@
+[
+	{
+		fieldLabel:'快速回复',
+		xtype:'combo',
+		mode : 'local',
+		editable : false,
+		anchor:'90%,90%',
+		triggerAction : 'all',
+		store :['同意','不同意'],
+		listeners:
+			{
+				select:{
+					fn:function(field,record,index){//select : ( Ext.form.ComboBox combo, Ext.data.Record record, Number index ) 
+						var options=Ext.getCmp('superOption');
+						if(options!=null){
+							options.setValue(field.getValue());
+							if(field.getValue()=='不同意'){
+								Ext.getCmp('pass').setDisabled(true);
+								Ext.getCmp('unPass').setDisabled(false);
+								Ext.getCmp('backReturnBtn').setDisabled(false);
+								Ext.getCmp('freeTransCombo').setDisabled(false);
+							}else{
+								Ext.getCmp('pass').setDisabled(false);
+								Ext.getCmp('unPass').setDisabled(true);
+								Ext.getCmp('backReturnBtn').setDisabled(true);
+								Ext.getCmp('freeTransCombo').setDisabled(true);
+							}
+						}
+					}
+				}
+			}
+	},{
+		xtype:'panel',
+//		border:true,
+		height:190,
+	    layout:'column',
+	    items:[
+	    		{
+	    			xtype:'panel',
+	    			border:true,
+	    			columnWidth:.6,
+	    			items:[{
+							xtype : 'panel',
+							layout : 'column',
+							defaultType : 'label',
+							style:'padding-top:5px;margin-buttom:5px;padding-left:5px;',
+							height: 30,
+							border:false,
+							items : [{
+										text:'专业知识:',
+										width : 105
+									},{
+										xtype:'radiogroup',
+										name:'staffEmployapply@professional',
+										width:300,
+										items:[
+												{
+												  name:'staffEmployapply@professional',
+												  boxLabel:'优秀',
+												  inputValue:'优秀'
+												},{
+												  name:'staffEmployapply@professional',
+												  boxLabel:'良好',
+												  inputValue:'良好',
+												  checked:true
+												},{
+												  name:'staffEmployapply@professional',
+												  boxLabel:'一般',
+												  inputValue:'一般'
+												},{
+												  name:'staffEmployapply@professional',
+												  boxLabel:'不能接受',
+												  inputValue:'不能接受'
+												}
+											]
+									}
+									]
+							},{
+							xtype : 'panel',
+							layout : 'column',
+							defaultType : 'label',
+							style:'padding-top:5px;margin-buttom:5px;padding-left:5px;',
+							height: 30,
+							border:false,
+							items : [{
+										text:'工作经历:',
+										width : 105
+									},{
+										xtype:'radiogroup',
+										name:'staffEmployapply@experience',
+										width:300,
+										items:[
+												{
+												  name:'staffEmployapply@experience',
+												  boxLabel:'优秀',
+												  inputValue:'优秀'
+												},{
+												  name:'staffEmployapply@experience',
+												  boxLabel:'良好',
+												  inputValue:'良好',
+												  checked:true
+												},{
+												  name:'staffEmployapply@experience',
+												  boxLabel:'一般',
+												  inputValue:'一般'
+												},{
+												  name:'staffEmployapply@experience',
+												  boxLabel:'不能接受',
+												  inputValue:'不能接受'
+												}
+											]
+									}
+									]
+							},{
+							xtype : 'panel',
+							layout : 'column',
+							defaultType : 'label',
+							style:'padding-top:5px;margin-buttom:5px;padding-left:5px;',
+							height: 30,
+							border:false,
+							items : [{
+										text:'自信度:',
+										width : 105
+									},{
+										xtype:'radiogroup',
+										name:'staffEmployapply@confident',
+										width:300,
+										items:[
+												{
+												  name:'staffEmployapply@confident',
+												  boxLabel:'优秀',
+												  inputValue:'优秀'
+												},{
+												  name:'staffEmployapply@confident',
+												  boxLabel:'良好',
+												  inputValue:'良好',
+												  checked:true
+												},{
+												  name:'staffEmployapply@confident',
+												  boxLabel:'一般',
+												  inputValue:'一般'
+												},{
+												  name:'staffEmployapply@confident',
+												  boxLabel:'不能接受',
+												  inputValue:'不能接受'
+												}
+											]
+									}
+									]
+							},{
+							xtype : 'panel',
+							layout : 'column',
+							defaultType : 'label',
+							style:'padding-top:5px;margin-buttom:5px;padding-left:5px;',
+							height: 30,
+							border:false,
+							items : [{
+										text:'思维能力:',
+										width : 105
+									},{
+										xtype:'radiogroup',
+										name:'staffEmployapply@thinkability',
+										width:300,
+										items:[
+												{
+												  name:'staffEmployapply@thinkability',
+												  boxLabel:'优秀',
+												  inputValue:'优秀'
+												},{
+												  name:'staffEmployapply@thinkability',
+												  boxLabel:'良好',
+												  inputValue:'良好',
+												  checked:true
+												},{
+												  name:'staffEmployapply@thinkability',
+												  boxLabel:'一般',
+												  inputValue:'一般'
+												},{
+												  name:'staffEmployapply@thinkability',
+												  boxLabel:'不能接受',
+												  inputValue:'不能接受'
+												}
+											]
+									}
+								]
+							},{
+							xtype : 'panel',
+							layout : 'column',
+							defaultType : 'label',
+							style:'padding-top:5px;margin-buttom:5px;padding-left:5px;',
+							height: 30,
+							border:false,
+							items : [{
+										text:'表达能力:',
+										width : 105
+									},{
+										xtype:'radiogroup',
+										name:'staffEmployapply@expressability',
+										width:300,
+										items:[
+												{
+												  name:'staffEmployapply@expressability',
+												  boxLabel:'优秀',
+												  inputValue:'优秀'
+												},{
+												  name:'staffEmployapply@expressability',
+												  boxLabel:'良好',
+												  inputValue:'良好',
+												  checked:true
+												},{
+												  name:'staffEmployapply@expressability',
+												  boxLabel:'一般',
+												  inputValue:'一般'
+												},{
+												  name:'staffEmployapply@expressability',
+												  boxLabel:'不能接受',
+												  inputValue:'不能接受'
+												}
+											]
+									}
+									]
+							},{
+							xtype : 'panel',
+							layout : 'column',
+							defaultType : 'label',
+							style:'padding-top:5px;margin-buttom:5px;padding-left:5px;',
+							height: 30,
+							border:false,
+							items : [{
+										text:'仪表:',
+										width : 105
+									},{
+										xtype:'radiogroup',
+										name:'staffEmployapply@looks',
+										width:300,
+										items:[
+												{
+												  name:'staffEmployapply@looks',
+												  boxLabel:'优秀',
+												  inputValue:'优秀'
+												},{
+												  name:'staffEmployapply@looks',
+												  boxLabel:'良好',
+												  inputValue:'良好',
+												  checked:true
+												},{
+												  name:'staffEmployapply@looks',
+												  boxLabel:'一般',
+												  inputValue:'一般'
+												},{
+												  name:'staffEmployapply@looks',
+												  boxLabel:'不能接受',
+												  inputValue:'不能接受'
+												}
+											]
+									}
+									]
+							}]
+	    		},
+	    		{
+	    			xtype:'panel',
+	    			border:true,
+	    			columnWidth:.3,
+	    			height:182,
+	    			style:'margin-buttom:5px;',
+	    			defaults:{
+	    				style:'padding-top:5px;margin-buttom:5px;padding-left:5px;'
+	    			},
+	    			items:[
+	    				{
+	    					xtype:'label',
+	    					text:'同意新进：'
+	    				},
+	    				{
+							xtype:'container',
+							width:'90%',
+							layout:'hbox',
+							height: 150,
+							items:[
+								{
+									xtype:"radiogroup",
+									name:'staffEmployapply@agreeEnterType',
+	    							id:'flow_staffEmployapply@agreeEnterType',
+									defaults:{
+										style:"margin-top:3px;"
+									},
+									width:'20%',
+									columns: 1,
+									height: 100,
+									items:[
+										{
+											name:'staffEmployapply@agreeEnterType',
+	    							  		boxLabel:'A:',
+	    							  		inputValue:'A',
+	    							  		height: 60,
+	    							  		style:'margin-top:20px;',
+											checked:true
+										},{
+											name:'staffEmployapply@agreeEnterType',
+											height: 60,
+	    							  		boxLabel:'B:',
+	    							  		inputValue:'B',
+	    							  		style:'margin-top:20px;'
+										}
+									],
+									listeners:{
+					    				change:function(field,newValue,oldValue){
+					    				       var employType = newValue.getRawValue();
+					    				       if(employType=='A'){
+					    				       		Ext.getCmp("flow_staffEmployapply@inspect").enable();
+					    				       		Ext.getCmp("flow_staffEmployapply@inspectSalary").enable();
+					    				       		Ext.getCmp("flow_staffEmployapply@probation").disable();
+					    				       		Ext.getCmp("flow_staffEmployapply@probationSalary").disable();
+					    				       		Ext.getCmp("flow_staffEmployapply@probation").allowBlank=false;
+					    				       		Ext.getCmp("flow_staffEmployapply@probationSalary").allowBlank=false;
+					    				       		Ext.getCmp("flow_staffEmployapply@probation").reset();
+					    				       		Ext.getCmp("flow_staffEmployapply@probationSalary").reset();
+					    				       }else if(employType=='B'){
+					    				       		Ext.getCmp("flow_staffEmployapply@probation").enable();
+					    				       		Ext.getCmp("flow_staffEmployapply@probationSalary").enable();
+					    				       		Ext.getCmp("flow_staffEmployapply@inspect").disable();
+					    				       		Ext.getCmp("flow_staffEmployapply@inspectSalary").disable();
+					    				       		Ext.getCmp("flow_staffEmployapply@inspect").allowBlank=false;
+					    				       		Ext.getCmp("flow_staffEmployapply@inspectSalary").allowBlank=false;
+					    				       		Ext.getCmp("flow_staffEmployapply@inspect").reset();
+					    				       		Ext.getCmp("flow_staffEmployapply@inspectSalary").reset();
+					    				       }
+					    				}
+					    			}
+								},{
+									xtype:"container",
+									width:'88%',
+									layout:"vbox",
+									height: 150,
+									defaults:{
+										style:"margin-top:3px;"
+									},
+									items:[
+										{
+											xtype:'container',
+											width:'100%',
+											height: 30,
+											layout:'column',
+											items:[
+												{
+			    							  		xtype:'label',
+			    							  		text:'似定考察期:'
+			    							  	},{
+			    							  		xtype:'numberfield',
+			    							  		maxLength:3,
+			    							  		name:'staffEmployapply@inspect',
+			    							  		id:'flow_staffEmployapply@inspect',
+			    							  		allowBlank:false,
+			    							  		width:40
+			    							  	},{
+			    							  		xtype:'label',
+			    							  		text:'月'
+			    							  	}
+											]
+										},{
+	    							  		xtype:'container',
+	    							  		layout:'column',
+	    							  		width:'100%',
+	    							  		height: 30,
+	    							  		items:[
+	    							  			{
+			    							  		xtype:'label',
+			    							  		text:'考察期月薪:'
+			    							  	},{
+			    							  		xtype:'numberfield',
+			    							  		maxLength:10,
+			    							  		columnWidth:.7,
+			    							  		allowBlank:false,
+			    							  		name:'staffEmployapply@inspectSalary',
+			    							  		id:'flow_staffEmployapply@inspectSalary'
+			    							  	},{
+			    							  		xtype:'label',
+			    							  		text:'元/月'
+			    							  	}
+	    							  		]
+	    							  	},{
+	    							  		xtype:'container',
+	    							  		layout:'column',
+	    							  		width:'100%',
+	    							  		items:[
+	    							  			{
+			    							  		xtype:'label',
+			    							  		text:'似定试用期:'
+			    							  	},{
+			    							  		xtype:'numberfield',
+			    							  		maxLength:3,
+			    							  		name:'staffEmployapply@probation',
+			    							  		id:'flow_staffEmployapply@probation',
+			    							  		disabled:true,
+			    							  		width:40
+			    							  	},{
+			    							  		xtype:'label',
+			    							  		text:'月'
+			    							  	}
+	    							  		]
+	    							  	},
+	    							  	{
+	    							  		xtype:'container',
+	    							  		layout:'column',
+	    							  		width:'100%',
+	    							  		style:'margin-top:10px;',
+	    							  		items:[
+	    							  			{
+			    							  		xtype:'label',
+			    							  		text:'试用期月薪:'
+			    							  	},{
+			    							  		xtype:'numberfield',
+			    							  		maxLength:10,
+			    							  		columnWidth:.7,
+			    							  		disabled:true,
+			    							  		name:'staffEmployapply@probationSalary',
+			    							  		id:'flow_staffEmployapply@probationSalary'
+			    							  	},{
+			    							  		xtype:'label',
+			    							  		text:'元/月'
+			    							  	}
+	    							  		]
+	    							  	}
+									]
+								}
+							]
+	    				}
+			    			
+	    			]
+	    		}
+	    	]
+	},
+	{
+		fieldLabel:'审批意见',
+		xtype:'textarea',
+		id:'superOption',
+		name:'superOption',
+		allowBlank:false,
+		anchor:'90%'
+	}
+]

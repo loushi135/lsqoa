@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="reporter" label="报告人" type="varchar" length="512" isShowed="true"/>
+	<field name="deptName" label="所属部门" type="varchar" length="512" isShowed="true"/>
+	<field name="state" label="类型" type="varchar" length="512" isShowed="true"/>
+	<field name="company" label="所属公司" type="varchar" length="512" isShowed="true"/>
+	<field name="sendDept" label="抄送部门" type="varchar" length="512" isShowed="true"/>
+	<field name="content" label="报告内容" type="varchar" length="512" isShowed="true"/>
+</fields>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="trainApply.applyUser.fullname" label="申请人" type="varchar" length="512"/>
+	<field name="trainApply.applyUser.userId" label="申请人ID" type="varchar" length="512" isShowed="false"/>
+	<field name="trainApply.createTime" label="申请时间" type="varchar" length="512"/>
+	<field name="trainApply.department.depName" label="申请部门" type="varchar" length="512"/>
+	<field name="trainApply.department.depId" label="申请部门ID" type="varchar" length="512" isShowed="false"/>
+	<field name="trainApply.trainTarget" label="培训对象类型" type="varchar" length="512"/>
+	<field name="trainApply.trainType" label="培训类型" type="varchar" length="512"/>
+	<field name="trainApply.trainCourse.courseName" label="培训课程" type="varchar" length="512"/>
+	<field name="trainApply.trainCourse.courseId" label="培训课程" type="varchar" length="512" isShowed="false"/>
+</fields>

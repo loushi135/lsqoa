@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="applyTime" label="申请日期" type="varchar" length="512"/>
+	<field name="userId" label="用户编号" type="varchar" length="512"  isShowed="false"/>
+	<field name="userName" label="用户名称" type="varchar" length="512"/>
+	<field name="deptId" label="部门编号" type="varchar" length="512"  isShowed="false"/>
+	<field name="deptName" label="部门名称" type="varchar" length="512"/>
+	<field name="type" label="假期类型" type="varchar" length="512"/>
+	<field name="startTime" label="开始日期" type="datetime" length="512"/>
+	<field name="startAmOrPm" label="开始日期上下午" type="varchar" length="512"/>	
+	<field name="endTime" label="结束日期" type="datetime" length="512"/>
+	<field name="endAmOrPm" label="结束日期上下午" type="varchar" length="512"/>
+	<field name="totalDays" label="请假天数" type="varchar" length="512"/>
+	
+	<field name="other" label="申请理由" type="varchar" length="512"/>
+</fields>

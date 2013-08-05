@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="staffRecruitApply" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="53,25,48,48" name="开始">
+      <transition g="-31,-19" name="提交" to="分管领导"/>
+   </start>
+   <task g="32,141,92,52" name="分管领导">
+   	  <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-分管领导"/>  
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-32,-22" name="至人事经理" to="人事经理"/>
+      <transition g="-10,-20" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="分管领导"/>  
+			     	  </field>  
+		 </event-listener>
+      </transition>
+   </task>
+   <task g="262,140,92,52" name="人事经理">
+      <transition g="-54,-18" name="至HR总监" to="HR总监"/>
+      <transition g="-25,-16" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="人事经理"/>  
+			     	  </field>  
+		      </event-listener>
+      </transition>
+   </task>
+   <task g="475,140,92,52" name="HR总监">
+      <transition g="-31,-22" name="至总经理" to="总经理"/>
+      <transition g="-5,-17" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="HR总监"/>  
+			     	  </field>  
+		      </event-listener>
+      </transition>
+   </task>
+   <task g="657,139,92,52" name="总经理">
+    <transition g="-51,-19" name="提交" to="集团人力资源中心总经理">
+      </transition>
+      <transition g="-24,-20" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="总经理"/>  
+			     	  </field>  
+		      </event-listener>
+      </transition>
+   </task>
+     <task name="集团人力资源中心总经理" g="619,226,169,52">
+      <transition name="提交" to="集团备案" g="-34,-10"/>
+      <transition name="取消" to="取消" g="54,-9">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task name="集团备案" g="657,309,92,52">
+      <transition name="审批通过" to="审批通过" g="-69,-20">
+      	<event-listener class="com.xpsoft.oa.workflow.event.StaffRecruitapplyFinishListener"/>
+      </transition>
+      <transition name="取消" to="取消" g="42,-6">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <end g="547,377,48,48" name="审批通过"/>
+   <end-cancel g="280,244,48,48" name="取消"/>
+</process>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="staffEmployapply@inviteReason" label="推荐理由" type="text" />
+	<field name="staffEmployapply@attachFile" label="推荐表" type="file" length="5000" isShowed="true" />
+	<field name="staffEmployapply@attachIDs" label="推荐表" type="varchar" length="200" isShowed="false" />
+	<field name="superOption" label="审批意见"/>
+</fields>

@@ -1,0 +1,325 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "其他银行付款申请",
+	labelWidth : 100,
+	labelAlign : "left",
+	layout : "form",
+	width : 650,
+	height : 450,
+	padding : "10px",	
+	initComponent : function() {
+		this.items = [{
+					xtype : "label",
+					name : "MyLabel",
+					text : "其他银行付款申请",
+					style : "padding-left:250px;font-weight:bold;font-size:20px;"
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'margin-top:20px;',
+					items : [{
+								xtype : "label",
+								name : "MyLabel1",
+								text : "项目名称:",
+								width : 90
+							}, {
+								xtype : "textfield",
+								name : "bpaProjectNameOT",
+								id:'flow_bpaProjectNameOT',
+								width:140,
+								allowBlank:true
+							}, {
+								xtype : "label",
+								name : "MyLabel2",
+								text : "项目编号:",
+								style : "padding-left:5px;"
+							}, {
+								xtype : "textfield",
+								name : "bpaProjectNoOT",
+								id:'flow_bpaProjectNoOT',
+								width:160,
+								allowBlank:true
+							}, {
+								xtype : "label",
+								name : "MyLabel3",
+								text : "付款类别:",
+								style : "padding-left:5px;"
+							}, {
+								xtype : "combo",
+								id:"flow_bpaPayTypeOT",
+								hiddenName:"bpaPayTypeOT",
+								allowBlank:false,
+								triggerAction :'all',
+								width:120,
+								editable :false,
+								store:[['投标保证金','投标保证金'],['施工保证金','施工保证金'],['保函保证金','保函保证金'],['税金','税金'],['其他','其他']]
+							}]
+				}
+				, {
+					xtype : "panel",
+					layout : "column",
+					style:'padding-top:5px;',
+					border : false,
+					unstyled : false,
+					anchor:"100%",
+					items : [{
+								xtype : "label",
+								text : "收款单位:",
+								width : 90
+							}, {
+								xtype : "textfield",
+								name : "bpaReceiptDeptOT",
+								id:"flow_bpaReceiptDeptOT",
+								width: 530,
+								allowBlank:false
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					items : [{
+								xtype : "label",
+								name : "MyLabel1",
+								text : "付款事由:",
+								height : 50,
+								width : 90
+							}, {
+								xtype : "textarea",
+								maxLength:190,
+								name : "bpaReceiptReasonOT",
+								id:"flow_bpaReceiptReasonOT",
+								allowBlank:false,
+								width: 526,
+								height:50
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					items : [{
+								xtype : "label",
+								text : "合同金额:",
+								width : 90
+							}, {
+								xtype : "numberfield",
+								regex:/(^$)|^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,  //加上（^$）表示可为空
+								name : "bpaContractOT",
+								id:'flow_bpaContractOT',
+//								allowBlank:false,
+								width:80,
+								enableKeyEvents:true,
+								listeners : { 
+									keyup: function(field) { 
+										var bpaSumMoneyOT=Ext.getCmp('flow_bpaSumMoneyOT').getValue();
+										var bpaContractOT=Ext.getCmp('flow_bpaContractOT').getValue();
+										Ext.getCmp('flow_bpaSumMoneyRatioOT').setValue(Math.round(bpaSumMoneyOT/bpaContractOT*1000)/10);
+									}
+								}
+							}, {
+								xtype : "label",
+								text : "累计已付款:",
+								width :80,
+								style : "padding-left:5px;"
+							}, {
+								xtype : "numberfield",
+								id:'flow_bpaSumMoneyOT',
+								regex:/(^$)|^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,  //加上（^$）表示可为空
+								name : "bpaSumMoneyOT",
+//								allowBlank:false,
+								width:80,
+								enableKeyEvents:true,
+								listeners : { 
+									keyup: function(field) { 
+										var bpaSumMoneyOT=Ext.getCmp('flow_bpaSumMoneyOT').getValue();
+										var bpaContractOT=Ext.getCmp('flow_bpaContractOT').getValue();
+										Ext.getCmp('flow_bpaSumMoneyRatioOT').setValue(Math.round(bpaSumMoneyOT/bpaContractOT*1000)/10);
+									}
+								}
+							}, {
+								xtype : "label",
+								text : "已付款比例(%):",
+								width : 90,
+								style : "padding-left:5px;"
+							}, {
+								xtype : "numberfield",
+								id:'flow_bpaSumMoneyRatioOT',
+								name : "bpaSumMoneyRatioOT",
+								style:"background:#F0F0F0;",
+//								allowBlank:false,
+								editable:false,
+								readOnly:true,
+								width:70,
+								listeners : { 
+									focus: function(field) { 
+										var bpaSumMoneyOT=Ext.getCmp('flow_bpaSumMoneyOT').getValue();
+										var bpaContractOT=Ext.getCmp('flow_bpaContractOT').getValue();
+										Ext.getCmp('flow_bpaSumMoneyRatioOT').setValue(Math.round(bpaSumMoneyOT/bpaContractOT*1000)/10);
+									}
+								}
+							},{
+								xtype : "label",
+								text : "发票结余:",
+								width : 70,
+								style : "padding-left:5px;"
+							},{
+								xtype : "numberfield",
+								regex:/(^$)|^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,  //加上（^$）表示可为空
+								name : "bpaInvoiceBalanceOT",
+								id:"flow_bpaInvoiceBalanceOT",
+//								allowBlank:false,
+								width:80
+							}]
+				},  {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					items : [{
+								xtype : "label",
+								text : "本次申请用款:",
+								width : 90
+							}, {
+								xtype : 'container',
+								id : 'thisApplyOTContainer',
+								style : 'padding-left:0px;padding-bottom:5px;',
+								items : [{
+									xtype : 'container',
+									layout : 'column',
+									style : 'padding-left:0px;padding-bottom:5px;',
+									items : [{
+										xtype : "label",
+										text : "小写:",
+										width : 40
+									}, {
+										xtype : "numberfield",
+										cls:'textfieldBG',
+										id:'flow_bpaApplyMoneyOTXX',
+										name : "bpaApplyMoneyOTXX",
+										allowBlank:false,
+										width:490,
+										enableKeyEvents:true,
+										regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+										regexText:'请输入正确格式的金额',
+										listeners : { 
+											keyup: function(field) { 	
+												var paymentSumBig = AmountInWords(field.getValue());
+												Ext.getCmp('flow_bpaApplyMoneyOTDX').setValue(paymentSumBig); 
+												
+												
+											} 
+										} 
+									}]
+								},{
+									xtype : 'container',
+									layout : 'column',
+									style : 'padding-left:0px;padding-bottom:5px;',
+									items : [{
+										xtype : "label",
+										text : "大写:",
+										width : 40
+									}, {
+										xtype : "textfield",
+										id:'flow_bpaApplyMoneyOTDX',
+										name : "bpaApplyMoneyOTDX",
+										width: 490,
+										allowBlank:false,
+										readOnly:true,
+										editable:false,
+										style:"background:#F0F0F0;"
+									}]
+								}]
+							}]
+				},{
+						xtype : 'container',
+						autoHeight : true,
+						layout : 'column',
+						autoWidth : true,
+						defaultType : 'label',
+						style : 'padding-left:0px;padding-bottom:5px;',
+						items : [{
+									text : '附件:',
+									width : 80,
+									style : "margin-top:15px;"
+								},{
+									xtype : 'hidden',
+									name : 'bpaAttachIDsOT',
+									id : 'flow_bpaAttachIDsOT'
+								},{
+									xtype : 'hidden',
+									name : 'bpaAttachFileOT',
+									id : 'flow_bpaAttachFileOT'
+								},{
+									xtype : 'panel',
+									id:'flow_OTdisplayAttach',
+									width : 480,
+									height: 65,
+									frame:false,
+									autoScroll:true,
+									style : 'padding-left:10px;padding-top:0px;',
+									html : ''
+								},{
+									xtype : 'button',
+									iconCls : 'btn-upload',
+									text : '上传',
+									handler : function() {
+										var dialog = App.createUploadDialog({
+																file_cat : 'flow/bankPayApplyOther',
+																callback : function(data) {
+																	Ext.getCmp('flow_OTdisplayAttach').body.update('');
+																	Ext.getCmp("flow_bpaAttachFileOT").setValue('');
+																	Ext.getCmp('flow_bpaAttachIDsOT').setValue('');
+																	var contractFile = Ext.getCmp("flow_bpaAttachFileOT");
+																	var fileIds = Ext.getCmp('flow_bpaAttachIDsOT');
+																	var display = Ext.getCmp('flow_OTdisplayAttach');
+																	for (var i = 0; i < data.length; i++) {
+																		if (fileIds.getValue() != '') {
+																			fileIds.setValue(fileIds.getValue()+ ',');
+																			contractFile.setValue(contractFile.getValue()+ ',');
+																		}
+																		contractFile.setValue(contractFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+//																		contractFile.setValue(contractFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+																		fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																		Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																	}
+																},
+																permitted_max_size :1024*1024*20,
+																permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+															});
+											dialog.show(this);
+									}
+								}]
+				},
+				{
+							xtype : 'panel',
+							layout : 'column',
+							defaultType : 'label',
+							border:false,
+							items:[
+								{
+									text : '经办人员:',
+									width : 90
+								},
+								{
+									xtype:'textfield',
+									name:'bpaRemarkOT',
+									id:'flow_bpaRemarkOT',
+									allowBlank:false,
+									readOnly:true,
+									value:__currentUser,
+									width: 530,
+									style:"background:#F0F0F0;"
+								}
+							]
+							
+				}
+				]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

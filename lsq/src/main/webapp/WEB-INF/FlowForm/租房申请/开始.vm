@@ -1,0 +1,358 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "租房申请",
+	labelWidth : 30,
+	labelAlign : "left",
+	layout : "form",
+	width : 600,
+	height : 400,
+	padding : "10px",
+	initComponent : function() {
+		var WORK_DEPTS = "工程一区工程二区工程三区工程五区工程六区工程七区直属一部直属二部";
+		this.items = [{
+					xtype : 'container',
+					style : 'padding-left:0px;margin-bottom:4px',
+					layout : 'column',
+					items : [{
+								xtype : 'label',
+								text : '报告人:'
+							}, {
+								xtype : 'textfield',
+								width : '45%',
+								id : 'flow_reporter',
+								name : 'reporter',
+								allowBlank : false,
+								readOnly : true,
+								style:"background:#F0F0F0;margin-left:12px;",
+								value : __currentUser
+							}, {
+								xtype : 'label',
+								text : '所属部门:',
+								style : 'padding-left:3px'
+							}, {
+								xtype : 'textfield',
+								readOnly : true,
+								style:"background:#F0F0F0;",
+								width : '25%',
+								allowBlank : false,
+								id : 'flow_reporterDepatment',
+								name : 'reporterDepatment',
+								value : __currentUserDept
+							}]
+				}, {
+					xtype : 'container',
+					style : 'padding-left:0px;margin-bottom:4px',
+					layout : 'column',
+					items : [{
+								xtype : 'label',
+								text : '所在公司:'
+							}, {
+								xtype : 'textfield',
+								readOnly : true,
+								style:"background:#F0F0F0;",
+								width : '45%',
+								id : 'flow_reporterCompanyName',
+								name : 'reporterCompanyName',
+								allowBlank : false,
+								value : __companyName
+							}, {
+								xtype : 'label',
+								text : '类别:',
+								style : 'padding-left:3px;margin-right:5px;'
+							}, {
+								xtype : "combo",
+								width : '26%',
+								id : 'flow_sort',
+								selectOnFocus : true,
+								emptyText : '---请选择---',
+								forceSelection : true,
+								hiddenName : "sort",
+								allowBlank : false,
+								triggerAction : 'all',
+								editable : false,
+								store : ['项目','其他'],
+								listeners : {
+									select : function() {
+										if (Ext.getCmp("flow_sort").getValue() == '项目') {
+												Ext.getCmp("flow_itemName").enable();
+												Ext.getCmp("flow_projectItem").show();
+												if(WORK_DEPTS.indexOf(__currentUserDept)!=-1){
+													Ext.getCmp("flow_projectManagerContainer").show();
+													Ext.getCmp("flow_projectManagerName").allowBlank=false;
+												}
+										} else {
+											if(WORK_DEPTS.indexOf(__currentUserDept)!=-1){
+												Ext.ux.Toast.msg('操作信息', '您属于施工部门只能选择类别为项目！');
+												Ext.getCmp("flow_sort").setValue("项目");
+												Ext.getCmp("flow_itemName").enable();
+												Ext.getCmp("flow_projectManagerContainer").show();
+												Ext.getCmp("flow_projectManagerName").allowBlank=false;
+											}else{
+												Ext.getCmp("flow_projectId").setValue("");
+												Ext.getCmp("flow_itemName").reset();
+												Ext.getCmp("flow_itemName").disable();
+												Ext.getCmp("flow_projectItem").hide();
+											}
+										}
+									}
+								}
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					id:'flow_projectItem',
+					style:'margin-bottom:4px;',
+					items : [{
+								xtype : 'hidden',
+								id : 'flow_projectId',
+								name : 'projectId'
+							}, {
+								xtype : 'label',
+								text : '项目名称:'
+							}, {
+								xtype : 'textfield',
+								width : '80%',
+								readOnly:true,
+							    disabled:true,
+								maxLength : 20,
+								allowBlank:false,
+								id : 'flow_itemName',
+								name : 'itemName',
+								listeners : {
+									'focus' : function() {
+										ProjectNewSelector.getView(
+												function(proId, proName, proNo,contractId, contractNo,contractAmount,proAreaId,proArea,proChargerUserId,proChargerUserName) {
+													Ext.getCmp("flow_itemName").setValue(proName);
+													Ext.getCmp("flow_projectId").setValue(proId);
+													if(!Ext.isEmpty(proChargerUserName)){
+														Ext.getCmp("flow_projectManagerName").setValue(proChargerUserName);
+														Ext.getCmp("flow_projectManagerId").setValue(proChargerUserId);
+													}
+												}, true).show();
+									}
+								}
+							}]
+
+				},{
+					xtype : 'container',
+					layout : 'column',
+					id:'flow_projectManagerContainer',
+					style:'margin-bottom:4px;',
+					items : [{
+								xtype : 'hidden',
+								id : 'flow_projectManagerId',
+								name : 'projectManagerId'
+							}, {
+								xtype : 'label',
+								text : '项目经理:'
+							}, {
+								xtype : 'textfield',
+								width : '80%',
+								readOnly:true,
+								maxLength : 20,
+								id : 'flow_projectManagerName',
+								name : 'projectManagerName',
+								listeners : {
+									'focus' : function() {
+										UserSelector.getView(function(ids, names) {
+												Ext.getCmp("flow_projectManagerName").setValue(names);
+												Ext.getCmp("flow_projectManagerId").setValue(ids);
+											}, true).show();
+									},
+									afterrender:function(){
+										if(WORK_DEPTS.indexOf(__currentUserDept)==-1){
+											Ext.getCmp("flow_projectManagerContainer").hide();
+										}
+									}
+								}
+							}]
+				}
+				,{
+					xtype : 'container',
+					layout : 'column',
+					style : 'padding-left:0px;margin-bottom:4px',
+					items : [{
+								xtype : 'label',
+								text : '租期:',
+								width : 54
+							}, {
+								xtype : 'datefield',
+								name : 'leaseStart',
+								id : 'flow_leaseStart',
+								allowBlank : false,
+								format : 'Y-m',
+								editable : false,
+								columnWidth:.3,
+								listeners:{
+									select:function(field,date){
+										var startDate = field.getValue();
+										var endDate = Ext.getCmp("flow_leaseEnd").getValue();
+										if(endDate!=''){
+											var months = months_between(endDate,startDate);
+											Ext.getCmp("flow_leaseLen").setValue(months+"个月");
+											var monthlyRent = Ext.getCmp("flow_monthlyRent").getValue();
+											if(monthlyRent!=''){
+												Ext.getCmp("flow_yearRent").setValue(monthlyRent*months);;
+											}
+										}
+									}
+								}
+							}, {
+								xtype : 'label',
+								style : 'padding-top:4px;',
+								text : '--'
+							}, {
+								xtype : 'datefield',
+								name : 'leaseEnd',
+								allowBlank : false,
+								format : 'Y-m',
+								id : 'flow_leaseEnd',
+								editable : false,
+								columnWidth:.3,
+								listeners:{
+									select:function(field,date){
+										var endDate = field.getValue();
+										var startDate = Ext.getCmp("flow_leaseStart").getValue();
+										if(startDate!=''){
+											var months = months_between(endDate,startDate);
+											Ext.getCmp("flow_leaseLen").setValue(months+"个月");
+											var monthlyRent = Ext.getCmp("flow_monthlyRent").getValue();
+											if(monthlyRent!=''){
+												Ext.getCmp("flow_yearRent").setValue(monthlyRent*months);;
+											}
+										}
+									}
+								}
+							}, {
+								xtype : 'label',
+								text : '租期时长:',
+								style : 'padding-left:3px;'
+							}, {
+								xtype : 'textfield',
+								readOnly:true,
+								name : 'leaseLen',
+								id : 'flow_leaseLen',
+								columnWidth:.273
+							}]
+
+				},{
+					xtype : 'container',
+					layout : 'column',
+					style : 'padding-left:0px;margin-bottom:4px',
+					items : [ {
+								xtype : 'label',
+								text : '月租金:',
+								width : 54
+							}, {
+								xtype : 'numberfield',
+								columnWidth:.4,
+								allowBlank : false,
+								name : 'monthlyRent',
+								id : 'flow_monthlyRent',
+								regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+								enableKeyEvents : true,
+								listeners : {
+									keyup : function() {
+										var startDate = Ext.getCmp("flow_leaseStart").getValue();
+										var endDate = Ext.getCmp("flow_leaseEnd").getValue();
+										if(startDate!=''&&endDate!=''){
+											var months = months_between(endDate,startDate);
+											var monthlyRent = Ext.getCmp("flow_monthlyRent").getValue();
+											if(monthlyRent!=''){
+												Ext.getCmp("flow_yearRent").setValue(monthlyRent*months);
+											}
+										}
+									}
+								}
+							}, {
+								xtype : 'label',
+								text : '租金总额:',
+								columnWidth:.12,
+								style : 'margin-left:3px'
+							}, {
+								xtype : 'numberfield',
+								width : 93,
+								columnWidth:.37,
+								emptyText:'请填写月租金和租期',
+								name : 'yearRent',
+								id : 'flow_yearRent',
+								readOnly : true
+							}]
+
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					style : 'padding-left:0px;margin-bottom:4px',
+					border : false,
+					items : [{
+								xtype : 'label',
+								text : '申请原因:'
+							}, {
+								xtype : 'textarea',
+								name : 'cause',
+								allowBlank : false,
+								maxLength : 200,
+								id : 'flow_cause',
+								height : 135,
+								width : '79%'
+							}]
+				},{
+					xtype : 'container',
+					layout : 'column',
+					defaultType : 'label',
+					style : 'padding-left:0px;margin-bottom:4px',
+					items : [{
+								text : '附件:',
+								width : 54
+							},{
+								xtype : 'hidden',
+								name : 'leaseHouse.attachIds',
+								id : 'flow_leaseHouse.attachIds'
+							},{
+								xtype : 'hidden',
+								name : 'leaseHouse.attachFiles',
+								id : 'flow_leaseHouse.attachFiles'
+							},{
+								xtype : 'panel',
+								id:'flow_leaseHouse.displayAttach',
+								width : '72%',
+								height: 65,
+								frame:false,
+								autoScroll:true,
+								html : ''
+							},{
+								xtype : 'button',
+								iconCls : 'btn-upload',
+								text : '上传',
+								handler : function() {
+									var dialog = App.createUploadDialog({
+															file_cat : 'flow/leaseHouse',
+															callback : function(data) {
+																Ext.getCmp('flow_leaseHouse.displayAttach').body.update('');
+																Ext.getCmp("flow_leaseHouse.attachFiles").setValue('');
+																Ext.getCmp('flow_leaseHouse.attachIds').setValue('');
+																var contractFile = Ext.getCmp("flow_leaseHouse.attachFiles");
+																var fileIds = Ext.getCmp('flow_leaseHouse.attachIds');
+																var display = Ext.getCmp('flow_leaseHouse.displayAttach');
+																for (var i = 0; i < data.length; i++) {
+																	if (fileIds.getValue() != '') {
+																		fileIds.setValue(fileIds.getValue()+ ',');
+																		contractFile.setValue(contractFile.getValue()+ ',');
+																	}
+																	contractFile.setValue(contractFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+//																	contractFile.setValue(contractFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+																	fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																	Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																}
+															},
+															permitted_max_size :1024*1024*20,
+															permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+														});
+										dialog.show(this);
+								}
+							}]
+				}
+				]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

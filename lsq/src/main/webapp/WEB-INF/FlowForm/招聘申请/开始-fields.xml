@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="staffRecruitapply@companyName" label="申请公司" type="varchar" length="128" isShowed="true"/>
+	<field name="staffRecruitapply@depTreeSelector" label="部门" type="varchar" length="128" isShowed="true"/>
+	<field name="staffRecruitapply@dept@depId" label="部门" type="varchar" length="128" isShowed="false"/>
+	<field name="staffRecruitapply@jobName" label="空缺职位名称" type="varchar" length="128" isShowed="true"/>
+	<field name="staffRecruitapply@job@jobId" label="空缺职位名称" type="varchar" length="128" isShowed="false"/>
+	<field name="staffRecruitapply@currentNum" label="该职位目前人数" type="int" isShowed="true"/>
+	<field name="staffRecruitapply@applyNum" label="此次申请人数" type="int"  isShowed="true"/>
+	<field name="staffRecruitapply@applyReason" label="申请理由" type="text" isShowed="true"/>
+	<field name="staffRecruitapply@age" label="年龄" type="varchar" length="128" isShowed="true"/>
+	<field name="staffRecruitapply@sex" label="性别" type="varchar" length="128" isShowed="true"/>
+	<field name="staffRecruitapply@majorDic@itemValue" label="专业" type="varchar" length="128" isShowed="true"/>
+	<field name="staffRecruitapply@majorDic@dicId" label="专业" type="varchar" length="128" isShowed="false"/>
+	<field name="staffRecruitapply@educationDic@itemValue" label="学历" type="varchar"  length="128" isShowed="true"/>
+	<field name="staffRecruitapply@educationDic@dicId" label="学历" type="varchar"  length="128" isShowed="false"/>
+	<field name="staffRecruitapply@workYear" label="工作年限" type="varchar"  length="128" isShowed="true"/>
+	<field name="staffRecruitapply@positionDuty" label="该职位的主要职责" type="text"  isShowed="true"/>
+	<field name="staffRecruitapply@skillRequirement" label="技能要求" type="text"  isShowed="true"/>
+	<field name="staffRecruitapply@workExperience" label="工作经历" type="text"  isShowed="true"/>
+	<field name="staffRecruitapply@personality" label="个性" type="text"  isShowed="true"/>
+	<field name="staffRecruitapply@mainPositionNames" label="主要工作地点" type="text" isShowed="true"/>
+	<field name="staffRecruitapply@mainPositionIDs" label="主要工作地点" type="text" isShowed="false"/>
+	<field name="staffRecruitapply@otherRequirement" label="其他要求" type="varchar" length="128" isShowed="true"/>
+	<field name="staffRecruitapply@deadline" label="到岗期限" type="datetime" isShowed="true"/>
+	<field name="staffRecruitapply@personalCharacter" label="人员性质" type="varchar" length="128" isShowed="true"/>
+</fields>

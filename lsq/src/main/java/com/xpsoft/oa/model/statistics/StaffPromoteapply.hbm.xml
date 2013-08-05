@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.StaffPromoteapply"
+        table="staff_promoteapply"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+        
+        <many-to-one name="promoteUser" 
+        	class="com.xpsoft.oa.model.system.AppUser"
+			not-null="false" fetch="join">
+			<column name="promoteUserId"></column>
+		</many-to-one>
+		
+		<many-to-one name="oldDept" 
+        	class="com.xpsoft.oa.model.system.Department"
+			not-null="false" fetch="join">
+			<column name="oldDeptId"></column>
+		</many-to-one>
+		
+		<many-to-one name="oldJob" 
+        	class="com.xpsoft.oa.model.hrm.Job"
+			not-null="false" fetch="join">
+			<column name="oldJobId"></column>
+		</many-to-one>
+		
+		<many-to-one name="newDept" 
+        	class="com.xpsoft.oa.model.system.Department"
+			not-null="false" fetch="join">
+			<column name="newDeptId"></column>
+		</many-to-one>
+		
+		<many-to-one name="newJob" 
+        	class="com.xpsoft.oa.model.hrm.Job"
+			not-null="false" fetch="join">
+			<column name="newJobId"></column>
+		</many-to-one>
+
+        <property
+            name="activeDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="activeDate"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="promoteReason"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="promoteReason"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="advantageOrChange"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="advantageOrChange"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="professional"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="professional"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="professionalAbout"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="professionalAbout"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="mixedAbility"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="mixedAbility"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="mixedAbilityAbout"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="mixedAbilityAbout"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="processRunId"
+            type="java.lang.Long"
+            update="false"
+            insert="true" 
+            access="property"
+            column="processRunId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

@@ -1,0 +1,219 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "转岗申请",
+			labelWidth : 3,
+			labelAlign : "left",
+			layout : "form",
+			width : 730,
+			height : 200,
+			padding : "10px",
+			initComponent : function() {
+				var url = __ctxPath + "/system/listDepartment.do?opt=appUser";
+//				var oldDepTreeSelector = new TreeSelector("flow_staffChangejobapply@oldDepTreeSelector", url, "所属部门", "flow_staffChangejobapply@oldDept@depId",null,150,"staffChangejobapply@oldDepTreeSelector");
+//				Ext.getCmp("flow_staffChangejobapply@oldDepTreeSelectorTree").on("click", function(g) {
+//					Ext.getCmp("flow_staffChangejobapply@oldJobName").setValue("");
+//					Ext.getCmp("flow_staffChangejobapply@oldJobName").getStore().removeAll();
+//					var depId = Ext.getCmp("flow_staffChangejobapply@oldDept@depId").getValue();
+//					if (!Ext.isEmpty(depId)) {
+//						Ext.getCmp("flow_staffChangejobapply@oldJobName").
+//							getStore().reload({
+//										params : {
+//											depId : depId
+//										}
+//									});
+//					}
+//				});
+				var newDepTreeSelector = new TreeSelector("flow_staffChangejobapply@newDepTreeSelector", url, "所属部门", "flow_staffChangejobapply@newDept@depId",false,165,"staffChangejobapply@newDepTreeSelector");
+				Ext.getCmp("flow_staffChangejobapply@newDepTreeSelectorTree").on("click", function(g) {
+					Ext.getCmp("flow_staffChangejobapply@newJobName").setValue("");
+					Ext.getCmp("flow_staffChangejobapply@newJobName").getStore().removeAll();
+					var depId = Ext.getCmp("flow_staffChangejobapply@newDept@depId").getValue();
+					if (!Ext.isEmpty(depId)) {
+						Ext.getCmp("flow_staffChangejobapply@newJobName").
+							getStore().reload({
+										params : {
+											depId : depId
+										}
+									});
+					}
+				});
+				
+				this.items = [
+							{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'公司：',
+										width:60
+									},
+									{
+										xtype:'textfield',
+										name:'staffChangejobapply@companyName',
+										id:'flow_staffChangejobapply@companyName',
+										readOnly:true,
+										style:"background:#F0F0F0;",
+										value:__companyName,
+										width:170
+									},
+									{
+										text:'员工姓名：',
+										style:'margin-left:10px;',
+										width:70
+									},
+									{
+										xtype:'textfield',
+										name:'staffChangejobapply@changeJobUserName',
+										id:'flow_staffChangejobapply@changeJobUserName',
+										readOnly:true,
+										style:"background:#F0F0F0;",
+										value:__currentUser,
+										width:70
+									},
+									{
+										xtype:'hidden',
+										name:'staffChangejobapply@changeJobUser@userId',
+										id:'flow_staffChangejobapply@changeJobUser@userId',
+										value:__currentUserId
+									},
+									{
+										text:'原部门：',
+										style:'margin-left:10px;',
+										width:50
+									},
+									{
+										xtype : "hidden",
+										name : "staffChangejobapply@oldDept@depId",
+										id : "flow_staffChangejobapply@oldDept@depId",
+										value:__currentUserDeptId
+									},
+									{
+										xtype:'textfield',
+										name:'staffChangejobapply@oldDepTreeSelector',
+										id:'flow_staffChangejobapply@oldDepTreeSelector',
+										readOnly:true,
+										style:"background:#F0F0F0;",
+										value:__currentUserDept,
+										width:100
+									},
+									{
+										text:'原任职位：',
+										style:'margin-left:10px;',
+										width:60
+									},{
+										xtype:'textfield',
+										name:'staffChangejobapply@oldJobName',
+										id:'flow_staffChangejobapply@oldJobName',
+										readOnly:true,
+										style:"background:#F0F0F0;",
+										value:__currentUserPosition,
+										width:110
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								style:'margin-top:10px;',
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'新部门：',
+										width:60
+									},
+									{
+										xtype : "hidden",
+										name : "staffChangejobapply@newDept@depId",
+										id : "flow_staffChangejobapply@newDept@depId"
+									},
+									newDepTreeSelector,
+									{
+										text:'新任职位：',
+										style:'margin-left:10px;',
+										width:70
+									},
+									{
+										hiddenName:'staffChangejobapply@newJobName',
+										id:'flow_staffChangejobapply@newJobName',
+										xtype : "combo",
+										mode : "local",
+										width:150,
+										editable : false,
+										allowBlank:false,
+										valueField : "jobName",
+										displayField : "jobName",
+										triggerAction : "all",
+										store : new Ext.data.SimpleStore( {
+											url : __ctxPath
+													+ "/hrm/comboJob.do",
+											fields : [ "jobId", "jobName" ]
+										}),
+										listeners : {
+											focus : function(h) {
+												var depId = Ext.getCmp("flow_staffChangejobapply@newDept@depId").getValue();
+												if (Ext.isEmpty(depId)) {
+													Ext.ux.Toast.msg("操作信息","请先选择新部门！");
+												}
+											},
+											select : function(combo,record,index){
+												var jobId = record.data.jobId;
+												var jobName = record.data.jobName;
+												Ext.getCmp("flow_staffChangejobapply@newJob@jobId").setValue(jobId);
+											}
+										}
+									},
+									{
+										xtype:'hidden',
+										id:'flow_staffChangejobapply@newJob@jobId',
+										name:'staffChangejobapply@newJob@jobId'
+									},{
+										text:'转岗日期：',
+										style:'margin-left:10px;',
+										width:70
+									},{
+										xtype:'datefield',
+										name:'staffChangejobapply@changeJobDate',
+										id:'flow_staffChangejobapply@changeJobDate',
+										format:'Y-m-d',
+										editable:false,
+										allowBlank:false
+									}
+								]
+							}, {
+								xtype : "panel",
+								layout : "column",
+								style:'padding-top:5px;',
+								border : false,
+								unstyled : false,
+								height : 80,
+								items : [{
+											xtype : "label",
+											text : "转岗原因:",
+											height : 50,
+											width : 60
+										}, {
+											xtype : "textarea",
+											name:'staffChangejobapply@changeJobReason',
+											id:'flow_staffChangejobapply@changeJobReason',
+											width: 640,
+											height:70,
+											allowBlank:false
+										}]
+							}
+							]
+				
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.ProjectRepay"
+        table="project_repay"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="amountBig"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="amountBig"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="amount"
+            type="java.math.BigDecimal"
+            update="true"
+            insert="true"
+            access="property"
+            column="amount"
+            precision="10"
+            scale="2"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="repayType"
+            type="java.lang.Integer"
+            update="true"
+            insert="true"
+            access="property"
+            column="repayType"
+            length="8"
+            not-null="false"
+            unique="false"
+        />
+        <!-- <property
+            generated="insert"
+            name="proName"
+            formula="(
+            			case when repayType = 2 
+            					then (select d.proName from design_project d where d.id = proId) 
+            				when repayType = 1 
+            					then (select p.proName from project_new p where p.id = proId)
+            				end
+            		)"
+        /> -->
+        <property
+            name="proId"
+            type="java.lang.Long"
+            update="true"
+            insert="true"
+            access="property"
+            column="proId"
+            not-null="false"
+            unique="false"
+        />
+        <many-to-one
+			name="project"
+			class="com.xpsoft.oa.model.statistics.ProjectNew"
+            not-null="false"
+			lazy="false"
+			update="false"
+			insert="false"
+			formula="(case 
+						  when repayType = 1 
+							 then (select p.id from project_new p where p.id = proId)
+							 end
+					  )"
+		>
+			<column name="proId" />
+		</many-to-one>
+		
+		<many-to-one
+			name="designProject"
+			class="com.xpsoft.oa.model.statistics.DesignProject"
+            not-null="false"
+			lazy="false"
+			update="false"
+			insert="false"
+			formula="(case 
+						  when repayType = 2 
+							 then (select dp.id from design_project dp where dp.id = proId)
+							 end
+					  )"
+		>
+			<column name="proId"  />
+		</many-to-one>
+		
+		<many-to-one
+			name="salesProject"
+			class="com.xpsoft.oa.model.statistics.SalesProject"
+            not-null="false"
+			lazy="false"
+			update="false"
+			insert="false"
+			formula="(case 
+						  when repayType = 3 
+							 then (select sp.id from sales_project sp where sp.id = proId)
+							 end
+					  )"
+		>
+			<column name="proId"  />
+		</many-to-one>
+		
+		<many-to-one
+			name="otherProject"
+			class="com.xpsoft.oa.model.statistics.OtherProject"
+            not-null="false"
+			lazy="false"
+			update="false"
+			insert="false"
+			formula="(case 
+						  when repayType = 4 
+							 then (select op.id from other_project op where op.id = proId)
+							 end
+					  )"
+		>
+			<column name="proId"  />
+		</many-to-one>
+		
+        <property
+            name="repayTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="repayTime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+		 <property
+            name="createtime"
+            type="java.util.Date"
+            update="false"
+            insert="true"
+            access="property"
+            column="createtime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+		<many-to-one
+			name="createUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="select"
+			insert="true"
+			update="false"
+		>
+			<column name="createUser" />
+		</many-to-one>
+        <many-to-one
+			name="repayUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="repayUserId" />
+		</many-to-one>
+     </class>
+</hibernate-mapping>

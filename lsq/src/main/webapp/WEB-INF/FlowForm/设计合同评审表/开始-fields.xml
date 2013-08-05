@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="contractNo" label="合同编号" type="varchar" length="128" isShowed="true"/>
+	<field name="companyName" label="甲方单位名称" type="varchar" length="128" isShowed="true"/>
+	<field name="designDept" label="设计部门" type="varchar" length="128" isShowed="true"/>
+	<field name="companyProperty" label="甲方单位性质" type="varchar" length="128" isShowed="true"/>
+	<field name="cooperation" label="有无合作" type="varchar" length="128" isShowed="true"/>
+	<field name="cooperationNum" label="合作次数" type="int" length="0" isShowed="true"/>
+	<field name="companyCredit" label="甲方资信评价" type="varchar" length="128" isShowed="true"/>
+	<field name="projectName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="projectAddr" label="项目地点" type="varchar" length="128" isShowed="true"/>
+	<field name="contractAmount" label="合同总价" type="decimal" length="0" isShowed="true"/>
+	<field name="designArea" label="设计面积" type="decimal" length="0" isShowed="true"/>
+	<field name="singlePrice" label="单价（元/㎡）" type="decimal" length="0" isShowed="true"/>
+	<field name="projectPrice" label="工程造价" type="decimal" length="0" isShowed="true"/>
+	<field name="chargeRate" label="取费率" type="decimal" length="0" isShowed="true"/>
+	<field name="isEndWork" label="是否承接后期施工" type="varchar" length="128" isShowed="true"/>
+	<field name="workArea" label="施工跟进区域" type="varchar" length="128" isShowed="true"/>
+	<field name="isLetDesignFee" label="有无因承接后期施工而让利设计费情况" type="varchar" length="128" isShowed="true"/>
+</fields>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="signApply.proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="signApply.signNo" label="签证编号" type="varchar" length="128" isShowed="true"/>
+	<field name="signApply.workUnit" label="施工单位" type="varchar" length="128" isShowed="true"/>
+	<field name="signApply.contract.contractNo" label="合同编号" type="varchar" length="128" isShowed="true"/>
+	<field name="signApply.contract.id" label="合同编号" type="varchar" length="128" isShowed="false"/>
+	<field name="signApply.feeSupplierName" label="承担费用单位" type="varchar" length="128" isShowed="true"/>
+	<field name="signApply.feeSupplier.suppliersId" label="承担费用单位" type="varchar" length="128" isShowed="false"/>
+	<field name="signApply.signReason" label="签证原因" type="text" isShowed="true"/>
+	<field name="signApply.signContent" label="签证内容" type="text" isShowed="true"/>
+	<field name="signApply.remark" label="备注说明" type="text" isShowed="true"/>
+	<field name="signApply.attachFiles" label="附件" type="file" length="5000" isShowed="true" />
+	<field name="signApply.attachIDs" label="附件" type="varchar" length="200" isShowed="false" />
+	<field name="projectChargerUserId" label="项目经理" type="varchar" length="200" isShowed="false" />
+	<field name="signApplyDepartmentId" label="区域" type="varchar" length="200" isShowed="false" />
+</fields>

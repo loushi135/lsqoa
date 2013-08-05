@@ -1,0 +1,102 @@
+[
+	{
+		fieldLabel:'快速回复',
+		xtype:'combo',
+		mode : 'local',
+		editable : false,
+		anchor:'90%,90%',
+		triggerAction : 'all',
+		store :['同意','不同意'],
+		listeners:
+			{
+				select:{
+					fn:function(field,record,index){//select : ( Ext.form.ComboBox combo, Ext.data.Record record, Number index ) 
+						var options=Ext.getCmp('superOption');
+						if(options!=null){
+							options.setValue(field.getValue());
+							if(field.getValue()=='不同意'){
+								Ext.getCmp('pass').setDisabled(true);
+								Ext.getCmp('unPass').setDisabled(false);
+								Ext.getCmp('backReturnBtn').setDisabled(false);
+								Ext.getCmp('freeTransCombo').setDisabled(false);
+							}else{
+								Ext.getCmp('pass').setDisabled(false);
+								Ext.getCmp('unPass').setDisabled(true);
+								Ext.getCmp('backReturnBtn').setDisabled(true);
+								Ext.getCmp('freeTransCombo').setDisabled(true);
+							}
+						}
+					}
+				}
+			}
+	},
+	{
+		xtype : 'container',
+		autoHeight : true,
+		layout : 'column',
+		autoWidth : true,
+		defaultType : 'label',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+					text : '附件:',
+					width : 95,
+					style : 'padding-left:0px;padding-top:3px;'
+				},{
+					xtype : 'hidden',
+					name : 'commonAttachIDs',
+					id : 'flow_commonAttachIDs'
+				},{
+					xtype : 'hidden',
+					name : 'commonAttachFile',
+					id : 'flow_commonAttachFile'
+				},{
+					xtype : 'panel',
+					id:'flow_commonDisplayAttach',
+					width : 510,
+					height: 65,
+					frame:false,
+					autoScroll:true,
+					style : 'padding-left:10px;padding-top:0px;',
+					html : ''
+				},{
+					xtype : 'button',
+					iconCls : 'btn-upload',
+					text : '上传',
+					handler : function() {
+						
+						var dialog = App.createUploadDialog({
+												file_cat : 'flow/common',
+												callback : function(data) {
+													Ext.getCmp('flow_commonDisplayAttach').body.update('');
+													Ext.getCmp("flow_commonAttachFile").setValue('');
+													Ext.getCmp('flow_commonAttachIDs').setValue('');
+													var contractFile = Ext.getCmp("flow_commonAttachFile");
+													var fileIds = Ext.getCmp('flow_commonAttachIDs');
+													var display = Ext.getCmp('flow_commonDisplayAttach');
+													for (var i = 0; i < data.length; i++) {
+														if (fileIds.getValue() != '') {
+															fileIds.setValue(fileIds.getValue()+ ',');
+															contractFile.setValue(contractFile.getValue()+ ',');
+														}
+														contractFile.setValue(contractFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+//														contractFile.setValue(contractFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+														fileIds.setValue(fileIds.getValue()+data[i].fileId);
+														Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+													}
+												},
+												permitted_max_size :1024*1024*20,
+												permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+											});
+							dialog.show(this);
+					}
+				}]
+	},
+	{
+		fieldLabel:'审批意见',
+		xtype:'textarea',
+		id:'superOption',
+		name:'superOption',
+		allowBlank:false,
+		anchor:'90%'
+	}
+]

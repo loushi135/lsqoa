@@ -1,0 +1,532 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "开工备案书",
+	labelWidth : 100,
+	labelAlign : "left",
+	layout : "form",
+	width : 680,
+	height : 520,
+	padding : "10px",
+//	listeners : {
+//		'afterrender' : function() {
+//			if (__currentUserRoleNames.indexOf('流程-项目经理') < 0) {
+//				Ext.getCmp('startFlowBtn').disable();
+//			} else {
+//				Ext.getCmp('startFlowBtn').enable();
+//			}
+//		}
+//	},
+	initComponent : function() {
+//		var _url = __ctxPath + '/system/listWorkDepartment.do?opt=appUser';
+//		var depSelector = new TreeSelector('depWorkTreeSelector', _url, '',
+//				'area', false, 130);
+//		Ext.getCmp("depWorkTreeSelectorTree").on("click", function(g) {
+//			// alert(Ext.getCmp("depWorkTreeSelector").id);
+//			// alert(Ext.getCmp("depWorkTreeSelector").getValue());
+//			Ext.getCmp("areaHidden").setValue(Ext.getCmp("depWorkTreeSelector")
+//					.getValue());
+//			Ext.getCmp("deptIdFlow")
+//					.setValue(Ext.getCmp("depWorkTreeSelector").id);
+//				// var url=__ctxPath+'/statistics/getProNoProjectNew.do';
+//				// var params='deptId='+Ext.getCmp("depWorkTreeSelector").id;
+//				// var data = ajaxSyncCall(url,params).data;
+//				// var proNo = data.proNo;
+//				// Ext.getCmp("proNo").setValue(proNo);
+//		});
+		this.items = [{
+					xtype : "label",
+					text : "开工备案书",
+					width : "",
+					style : "padding-left:290px;font-weight:bold;font-size:20px;"
+				}, {
+					xtype : 'panel',
+					layout : 'column',
+					border : false,
+					defaultType : 'label',
+					style : "padding-top:3px;",
+					items : [{
+								text : '合同编号:',
+								width : 90
+							}, {
+								xtype : 'textfield',
+								name : 'contractNo',
+								id:'flow_contractNo',
+								allowBlank : false,
+								emptyText : '请选择合同',
+								width : 570,
+								style:"background:#F0F0F0;",
+								listeners : {
+									focus : function() {
+										new ContractSelector(function(id,contractNo,contractAmount,
+														projectName,proAreaId,proArea,proChargerName,proChargerTel,businessCharger,proChargerId) {
+													Ext.getCmp("flow_contractAmount").setValue(contractAmount);
+													Ext.getCmp("flow_contractId").setValue(id);
+													Ext.getCmp("flow_contractNo").setValue(contractNo);
+													Ext.getCmp("flow_proName").setValue(projectName);
+													Ext.getCmp("flow_proCharger").setValue(proChargerName);
+													Ext.getCmp("flow_proChargerTel").setValue(proChargerTel);
+													Ext.getCmp("flow_proChargerId").setValue(proChargerId);
+													Ext.getCmp("flow_area").setValue(proArea);
+													Ext.getCmp("flow_deptId").setValue(proAreaId);
+													Ext.getCmp("flow_businessMain").setValue(businessCharger);
+												}, true).show();
+									}
+								}
+							}]
+				}, {
+					xtype : 'panel',
+					layout : 'column',
+					border : false,
+					defaultType : 'label',
+					style : "padding-top:3px;",
+					items : [{
+								text : '项目名称:',
+								width : 90
+							}, {
+								xtype : 'textfield',
+								name : 'proName',
+								id:'flow_proName',
+								readOnly:true,
+								allowBlank : false,
+								style:"background:#F0F0F0;",
+								width : 300
+							}, {
+								text : '项目编号:',
+								style : "padding-left:5px;",
+								width : 90
+							}, {
+								xtype : 'textfield',
+								name : 'proNo',
+								id : 'flow_proNo',
+								style:"background:#F0F0F0;",
+								emptyText : '流程审批通过后自动生成',
+								readOnly : true,
+								// allowBlank:false,
+								width : 185
+							}]
+				}, {
+					xtype : 'panel',
+					layout : 'column',
+					border : false,
+					defaultType : 'label',
+					style : "padding-top:3px;",
+					items : [{
+								text : '工程地点:',
+								width : 90
+							}, {
+								xtype : 'textfield',
+								maxLength:20,
+								name : 'proAddr',
+								id : 'flow_proAddr',
+								allowBlank : false,
+								width : 570
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style : 'padding-top:5px;',
+					height : 60,
+					items : [{
+								xtype : "label",
+								text : "所属区域:",
+								width : 90
+							}, {
+								xtype : 'hidden',
+								name : 'deptId',
+								id : 'flow_deptId'
+							}, {
+								xtype:'textfield',
+								id:'flow_area',
+								name:'area',
+								allowBlank:false,
+								width:135,
+								style:"background:#F0F0F0;",
+								readOnly:true
+							}, {
+								xtype : 'container',
+								layout : 'form',
+								style : 'padding-left:5px;',
+								items : [{
+									xtype : 'container',
+									layout : 'column',
+									defaults : {
+										xtype : 'label'
+									},
+									items : [{
+												text : '项目负责人:',
+												width : 90
+											},{
+												xtype:'hidden',
+												id:'flow_proChargerId',
+												name:'proChargerId'
+											}, {
+												xtype : 'textfield',
+												id : 'flow_proCharger',
+												name : 'proCharger',
+												allowBlank : false,
+												width : 130,
+												style:"background:#F0F0F0;",
+												readOnly:true
+//												listeners : {
+//													'focus' : function() {
+//														UserSelector.getView(function(n,l,mobile) {
+//																			var projectProChargerName = Ext.getCmp("flow_proCharger");
+//																			var projectProChargerTel = Ext.getCmp("flow_projectProChargerTel");
+//																			projectProChargerName.setValue(l);
+//																			projectProChargerTel.setValue(mobile);
+//																		},true)
+//																.show()
+//													}
+//												}
+											}, {
+												text : '联系电话:',
+												style : 'padding-left:5px',
+												width : 90
+											}, {
+												xtype : 'textfield',
+												id : 'flow_proChargerTel',
+												name : 'proChargerTel',
+//												allowBlank : false,
+												readOnly : true,
+												style:"background:#F0F0F0;",
+												width : 130
+											}]
+								}, {
+									xtype : 'container',
+									layout : 'column',
+									style : "padding-top:5px;",
+									defaults : {
+										xtype : 'label'
+									},
+									items : [{
+												text : '跟踪预算员:',
+												width : 90
+											}, {
+												xtype : 'textfield',
+												id : 'flow_proFollower',
+												name : 'proFollower',
+												allowBlank : false,
+												width : 130,
+												listeners : {
+													'focus' : function() {
+														UserSelector.getView(function(n,l,mobile) {
+																			var proFollowerId = Ext.getCmp("flow_proFollower");
+																			var proFollowerTelId = Ext.getCmp("flow_proFollowerTel");
+																			proFollowerId.setValue(l);
+																			proFollowerTelId.setValue(mobile);
+																		},false)
+																.show()
+													}
+												}
+											}, {
+												text : '联系电话:',
+												style : 'padding-left:5px',
+												width : 90
+											}, {
+												xtype : 'textfield',
+												id : 'flow_proFollowerTel',
+												name : 'proFollowerTel',
+												readOnly : true,
+												allowBlank : false,
+												width : 130
+											}]
+								}]
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style : 'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "设计单位:",
+								width : 90
+							}, {
+								xtype : "textfield",
+								name : "designUnit",
+								id : 'flow_designUnit',
+								maxLength:20,
+								width : 135,
+								allowBlank : false
+							}, {
+								xtype : "label",
+								text : "项目负责人:",
+								style : "margin-left:5px;",
+								width : 90
+							}, {
+								xtype : "textfield",
+								maxLength:20,
+								name : "designCharger",
+								id : 'flow_designCharger',
+								width : 130,
+								allowBlank : false
+							}, {
+								xtype : "label",
+								text : "联系电话:",
+								width : 90,
+								style : "padding-left:5px;"
+							}, {
+								xtype : "textfield",
+								regex:/^(\d{1,12})?$/,
+								width : 130,
+								name:'designChargerTel',
+								id : 'flow_designChargerTel',
+								allowBlank : false
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style : 'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "建设单位:",
+								width : 90
+							}, {
+								xtype : "textfield",
+								name : "buildUnit",
+								id : 'flow_buildUnit',
+								maxLength:20,
+								width : 135,
+								allowBlank : false
+							}, {
+								xtype : "label",
+								text : "现场负责人:",
+								style : "margin-left:5px;",
+								width : 90
+							}, {
+								xtype : "textfield",
+								maxLength:20,
+								name : "buildCharger",
+								id : 'flow_buildCharger',
+								width : 130,
+								allowBlank : false
+							}, {
+								xtype : "label",
+								text : "联系电话:",
+								width : 90,
+								style : "padding-left:5px;"
+							}, {
+								xtype : "textfield",
+							    regex:/^(\d{1,12})?$/,
+								name : "buildChargerTel",
+								id : 'flow_buildChargerTel',
+								width : 130,
+								allowBlank : false
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style : 'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "监理单位:",
+								width : 90
+							}, {
+								xtype : "textfield",
+								maxLength:20,
+								name : "watchUnit",
+								id : 'flow_watchUnit',
+								width : 135
+							}, {
+								xtype : "label",
+								text : "现场负责人:",
+								style : "margin-left:5px;",
+								width : 90
+							}, {
+								xtype : "textfield",
+								id : 'flow_watchCharger',
+								maxLength:20,
+								name : "watchCharger",
+								width : 130
+							}, {
+								xtype : "label",
+								text : "联系电话:",
+								width : 90,
+								style : "padding-left:5px;"
+							}, {
+								xtype : "textfield",
+								id : 'flow_watchChargerTel',
+								regex:/^(\d{1,12})?$/,
+								name : "watchChargerTel",
+								width : 130
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style : 'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "总包单位:",
+								width : 90
+							}, {
+								xtype : "textfield",
+								maxLength:20,
+								name : "totalUnit",
+								id : 'flow_totalUnit',
+								width : 135
+							}, {
+								xtype : "label",
+								text : "现场负责人:",
+								style : "margin-left:5px;",
+								width : 90
+							}, {
+								xtype : "textfield",
+								maxLength:20,
+								name : "totalCharger",
+								id : 'flow_totalCharger',
+								width : 130
+							}, {
+								xtype : "label",
+								text : "联系电话:",
+								width : 90,
+								style : "padding-left:5px;"
+							}, {
+								xtype : "textfield",
+								regex:/^(\d{1,12})?$/,
+								name : "totalChargerTel",
+								id : 'flow_totalChargerTel',
+								width : 130
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style : 'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "合同价:",
+								width : 90
+							}, {
+								xtype : "textfield",
+								id : 'flow_contractAmount',
+								name:'contractAmount',
+								width : 120,
+//								emptyText : '请选择合同',
+								allowBlank : false,
+								style:"background:#F0F0F0;",
+								readOnly : true
+//								listeners : {
+//									focus : function() {
+//										new ContractSelector(function(id,
+//														contractNo,
+//														contractAmount,
+//														projectName) {
+//													Ext
+//															.getCmp("flow_contractAmount")
+//															.setValue(contractAmount);
+//													Ext.getCmp("flow_contractId")
+//															.setValue(id);
+//												}, true).show();
+//									}
+//								}
+							}, {
+								xtype : "hidden",
+								name : "contractId",
+								id : "flow_contractId"
+							}, {
+								xtype : "label",
+								text : "元",
+								width : 15
+							}, {
+								xtype : "label",
+								text : "开工日期:",
+								style : "margin-left:5px;",
+								width : 90
+							}, {
+								xtype : "datefield",
+								name : "startDate",
+								id : "flow_startDate",
+								editable:false,
+								format : 'Y-m-d',
+								width : 125,
+								allowBlank : false
+							}, {
+								xtype : "label",
+								text : "竣工日期:",
+								width : 90,
+								style : "padding-left:5px;"
+							}, {
+								xtype : "datefield",
+								editable:false,
+								name : "endDate",
+								id : "flow_endDate",
+								format : 'Y-m-d',
+								width : 125,
+								allowBlank : false
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style : 'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "业务主办:",
+								width : 90
+							}, {
+								xtype : "textfield",
+								name : "businessMain",
+								id:'flow_businessMain',
+								maxLength:20,
+								width : 135,
+								readOnly:true,
+								style:"background:#F0F0F0;",
+								allowBlank : false
+							}, {
+								xtype : "label",
+								text : "进场日期:",
+								style : "margin-left:5px;",
+								width : 90
+							}, {
+								xtype : "datefield",
+								editable:false,
+								name : "enterDate",
+								id:'flow_enterDate',
+								format : 'Y-m-d',
+								width : 125,
+								allowBlank : false
+							}]
+				}, {
+					xtype : 'panel',
+					layout : 'column',
+					border : false,
+					defaultType : 'label',
+					style : "padding-top:3px;",
+					items : [{
+								text : '经办人:',
+								width : 90
+							}, {
+								xtype : 'textfield',
+								id : 'managerId',
+								name : 'manager',
+								allowBlank : false,
+								width : 570,
+								readOnly : true,
+								style:"background:#F0F0F0;",
+								value : __currentUser
+							},{
+								xtype:'hidden',
+								name:'applyDate',
+								value:new Date().format('Y-m-d')
+							}]
+				}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

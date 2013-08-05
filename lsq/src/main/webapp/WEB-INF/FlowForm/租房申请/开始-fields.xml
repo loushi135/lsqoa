@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="reporter" label="报告人" type="varchar" length="128" isShowed="true"/>
+	<field name="reporterDepatment" label="所属部门" type="varchar" length="128" isShowed="true"/>
+	<field name="sort" label="类别" type="varchar" length="128" isShowed="true"/>
+	<field name="reporterCompanyName" label="所在公司" type="varchar" length="128" isShowed="true"/>
+	<field name="projectId" label="项目ID" type="varchar" length="128" isShowed="false"/>
+	<field name="itemName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="projectManagerId" label="项目经理" type="varchar" length="128" isShowed="false"/>
+	<field name="projectManagerName" label="项目经理" type="varchar" length="128" isShowed="true"/>
+	<field name="leaseStart" label="租期开始日期" type="datetime" isShowed="true"/>
+	<field name="leaseEnd" label="租期结束日期" type="datetime" isShowed="true"/>
+	<field name="leaseLen" label="租期时长" type="varchar" length="255" isShowed="true"/>
+	<field name="monthlyRent" label="月租金" type="varchar" length="13" isShowed="true"/>
+	<field name="yearRent" label="租金总额" type="varchar" length="13" isShowed="true"/>
+	<field name="cause" label="申请原因" type="varchar"  length="255" isShowed="true"/>
+	<field name="leaseHouse.attachIds" label="附件ID" type="varchar" length="512"  isShowed="false"/>
+	<field name="leaseHouse.attachFiles" label="附件" type="file" length="512"/>
+</fields>

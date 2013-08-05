@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.Paybase"
+        table="paybase"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="paymentBaseId"
+            column="paymentBaseId"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="paymentBase"
+            type="java.math.BigDecimal"
+            update="true"
+            insert="true"
+            access="property"
+            column="paymentBase"
+            length="10"
+            scale="2"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="paymentTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="paymentTime"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="createtime"
+            type="java.util.Date"
+            update="false"
+            insert="true"
+            access="property"
+            column="createtime"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="paymentBaseBig"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="paymentBaseBig"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <many-to-one 
+        	name="createUser" 
+        	class="com.xpsoft.oa.model.system.AppUser"
+        	fetch="join"
+        	insert="true"
+        	update="false"
+        >
+        	<column name="createUser"></column>
+        </many-to-one>
+<!--        <many-to-one-->
+<!--			name="materialContract"-->
+<!--			class="com.xpsoft.oa.model.statistics.MaterialContract"-->
+<!--            not-null="false"-->
+<!--			fetch="join"-->
+<!--		>-->
+<!--			<column name="materialId" />-->
+<!--		</many-to-one>-->
+	    <many-to-one
+			name="projectNew"
+			class="com.xpsoft.oa.model.statistics.ProjectNew"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="proId" />
+		</many-to-one>
+		<many-to-one
+			name="suppliersAssess"
+			class="com.xpsoft.oa.model.customer.SuppliersAssess"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="SuppId" />
+		</many-to-one>
+     </class>
+</hibernate-mapping>

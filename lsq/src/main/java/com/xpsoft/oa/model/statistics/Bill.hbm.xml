@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.Bill"
+        table="bill"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="amountBig"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="amountBig"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="amount"
+            type="java.math.BigDecimal"
+            update="true"
+            insert="true"
+            access="property"
+            column="amount"
+            precision="10"
+            scale="2"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="billTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="billTime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="createtime"
+            type="java.util.Date"
+            update="false"
+            insert="true"
+            access="property"
+            column="createtime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        
+		<many-to-one
+			name="createUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="select"
+			insert="true"
+			update="false"
+		>
+			<column name="createUser" />
+		</many-to-one>
+		<many-to-one
+			name="projectNew"
+			class="com.xpsoft.oa.model.statistics.ProjectNew"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="projectNew" />
+		</many-to-one>
+		<many-to-one
+			name="suppliersAssess"
+			class="com.xpsoft.oa.model.customer.SuppliersAssess"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="suppliersAssess" />
+		</many-to-one>
+		  <property
+            name="invoiceType"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="invoiceType"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+<!--		<many-to-one-->
+<!--			name="materialContract"-->
+<!--			class="com.xpsoft.oa.model.statistics.MaterialContract"-->
+<!--            not-null="false"-->
+<!--			fetch="join"-->
+<!--		>-->
+<!--			<column name="materialId" />-->
+<!--		</many-to-one>-->
+		  <property
+            name="processRunId"
+            type="java.lang.Long"
+            update="false"
+            insert="true" 
+            access="property"
+            column="processRunId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        
+        <set name="billAdjusts" table="bill_adjust" fetch="join" lazy="true" inverse="true"
+			cascade="save-update,delete-orphan" sort="unsorted" >
+			<key>
+				<column name="billId" />
+			</key>
+        	<one-to-many class="com.xpsoft.oa.model.statistics.BillAdjust"/>
+        </set>
+     </class>
+</hibernate-mapping>

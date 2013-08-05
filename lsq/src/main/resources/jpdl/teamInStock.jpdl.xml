@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="teamInStock" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="44,124,48,48" name="开始">
+      <transition g="-17,-16" name="提交" to="工管部经理"/>
+   </start>
+   <task g="231,119,92,52" name="工管部经理">
+      <transition g="-26,-11" name="提交" to="工程总监"/>
+      <transition g="-5,-17" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task g="234,295,92,52" name="工程总监">
+      <transition name="提交" to="核算部备案" g="-26,-21"/>
+      <transition g="-9,-18" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task g="237,454,92,52" name="核算部备案">
+      <transition g="-45,6" name="审批通过" to="审批通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.TeamInStockFinishListener"/>
+      </transition>
+      <transition g="-45,-22" name="取消" to="审批不通过">
+     	 <event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <end g="39,453,48,48" name="审批通过"/>
+   <end-cancel g="505,297,48,48" name="审批不通过"/>
+</process>

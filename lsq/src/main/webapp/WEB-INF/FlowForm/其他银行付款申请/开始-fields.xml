@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="bpaProjectNameOT" label="项目名称" type="varchar" length="50" isShowed="true"/>
+	<field name="bpaProjectNoOT" label="项目编号" type="varchar" length="50" isShowed="true"/>
+	<field name="bpaPayTypeOT" label="付款类别" type="varchar" length="50" isShowed="true"/>
+	<field name="bpaReceiptDeptOT" label="收款单位" type="varchar" length="50"  isShowed="true"/>
+	<field name="bpaReceiptReasonOT" label="收款事由" type="varchar" length="200"  isShowed="true"/>
+	<field name="bpaContractOT" label="合同/结算金额" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaSumMoneyOT" label="累计已付款" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaSumMoneyRatioOT" label="已付款比例(%)" type="decimal" length="0"  isShowed="true"/>	
+	<field name="bpaInvoiceBalanceOT" label="发票结余" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaApplyMoneyOTXX" label="本次申请用款(小写)" type="decimal" length="0"  isShowed="true"/>
+	<field name="bpaApplyMoneyOTDX" label="本次申请用款(大写)" type="varchar" length="50"  isShowed="true"/>
+	<field name="bpaAttachIDsOT" label="附件ID" type="varchar" length="512"  isShowed="false"/>
+	<field name="bpaAttachFileOT" label="附件" type="file" length="512"/>
+	<field name="bpaRemarkOT" label="经办人员" type="varchar" length="500"  isShowed="true"/>
+</fields>

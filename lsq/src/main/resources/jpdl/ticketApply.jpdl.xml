@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="ticketApply" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="238,17,48,48" name="开始">
+      <transition g="-31,-8" name="提交" to="决策"/>
+   </start>
+   <task g="148,184,92,52" name="部门领导">
+   	  <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-部门经理"/>
+     	  </field>
+   	  	</assignment-handler>
+      <transition g="-17,-19" name="提交" to="分管领导"/>
+      <transition g="-28,-10" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="部门领导"/>  
+			     	  </field>  
+		      </event-listener>
+      </transition>
+   </task>
+   <task g="296,182,92,52" name="分管领导">
+      <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-分管领导"/>  
+     	  </field>
+   	  </assignment-handler>
+      <transition name="提交" to="决策1" g="-34,-19"/>
+      <transition g="-18,-23" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">  
+			        		<string value="分管领导"/>  
+			     	  </field>  
+		      </event-listener>
+      </transition>
+   </task>
+   <task name="常务副总" g="676,179,92,52">
+      <transition name="提交" to="决策2" g="-21,-22"/>
+      <transition name="取消" to="取消" g="-32,0">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="常务副总"/>
+			     	  </field>
+		      </event-listener>
+      </transition>
+   </task>
+   <task name="总经理" g="690,374,92,52">
+      <transition name="提交" to="订票负责人" g="-43,-20"/>
+      <transition name="取消" to="取消" g="-33,-9">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="总经理"/>  
+			     	  </field>
+		      </event-listener>
+      </transition>
+   </task>
+   <task g="294,372,92,52" name="订票负责人">
+      <transition g="-20,-21" name="办理" to="审批通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.TicketApplyFinishListener">
+        </event-listener>
+      </transition>
+      <transition g="-5,-19" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="订票负责人"/>
+			     	  </field>
+		      </event-listener>
+      </transition>
+   </task>
+   <decision g="235,87,48,48" name="决策">
+      <handler class="com.xpsoft.oa.workflow.event.RoleDecisionHandler" />
+      <transition g="-46,-22" name="普通员工" to="部门领导"/>
+      <transition g="3,-8" name="部门领导" to="分管领导"/>
+      <transition g="-65,-43" name="分管领导" to="决策1"/>
+   </decision>
+   <decision name="决策1" g="524,86,48,48">
+   	  <handler class="com.xpsoft.oa.workflow.event.TicketApplyFirstHandler" />
+      <transition name="出发时间在申请时间的三天后" to="订票负责人" g="-103,-10"/>
+      <transition name="出发时间在申请时间三天内" to="常务副总" g="-13,-25"/>
+   </decision>
+   <decision name="决策2" g="549,240,48,48">
+      <handler class="com.xpsoft.oa.workflow.event.TicketApplySecondHandler" />
+      <transition name="出发时间在申请时间1-3天内" to="订票负责人" g="-49,-21"/>
+      <transition name="出发时间在申请时间的当天" to="总经理" g="-34,-39"/>
+   </decision>
+   <end-cancel g="191,284,48,48" name="审批不通过"/>
+   <end-cancel name="取消" g="834,254,48,48"/>
+   <end g="137,371,48,48" name="审批通过"/>
+</process>

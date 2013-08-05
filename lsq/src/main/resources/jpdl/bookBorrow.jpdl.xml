@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="gbk"?>
+
+<process name="bookBorrow" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="151,-2,48,48" name="开始">
+      <transition g="-27,-15" name="提交" to="分支"/>
+   </start>
+   <task g="-5,184,92,52" name="部门经理">
+   	   <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-部门经理"/>  
+     	  </field>  
+   	  </assignment-handler>
+      <transition g="-30,-28" name="至分管领导" to="分管领导"/>
+      <transition g="-2,-15" name="取消" to="取消">
+      		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">  
+		        	<string value="部门经理"/>  
+		     	</field>  
+	      </event-listener>
+      </transition>   	  
+   </task>
+   <task g="128,183,92,52" name="分管领导">
+   	   <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-分管领导"/>  
+     	  </field>  
+   	  </assignment-handler>
+      <transition g="4,-4" name="至行政企划部" to="行政企划部"/>
+      <transition g="-18,-16" name="取消" to="取消">
+      		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">  
+		        	<string value="分管领导"/>  
+		     	</field>  
+	      </event-listener>
+      </transition>
+   </task>
+   <task g="126,330,92,52" name="行政企划部">
+      <transition g="-63,-9" name="至审批结束" to="审批结束">
+      		<event-listener class="com.xpsoft.oa.workflow.event.BookBorrowFinishListener">
+	      	</event-listener>
+      </transition>
+      <transition g="0,-12" name="取消" to="取消">
+      		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+      			<field name="roleName">  
+		        	<string value="行政企划部"/>  
+		     	</field>  
+	      </event-listener>
+      </transition>
+   </task>
+   <decision g="150,81,48,48" name="分支">
+   	   <handler class="com.xpsoft.oa.workflow.event.BookBorrowFirstHandler" />   		
+      <transition g="40,105:17,-20" name="至部门经理" to="部门经理"/>
+      <transition g="-56,-14" name="至分管领导" to="分管领导"/>
+      <transition g="310,105;310,356:-95,-146" name="至行政企划部" to="行政企划部"/>
+   </decision>
+   <end g="150,432,48,48" name="审批结束"/>
+   <end-cancel g="85,254,48,48" name="取消"/>
+
+
+</process>

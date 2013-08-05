@@ -1,0 +1,432 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "项目完工内检申请",
+	labelWidth : 30,
+	labelAlign : "left",
+	layout : "form",
+	width : 670,
+	height : 320,
+	padding : "10px",
+	initComponent : function() {
+		var _url = __ctxPath + '/system/listWorkDepartment.do?opt=appUser';
+		var depSelector = new TreeSelector('flow_projectEndCheck.project.area', _url, '',
+				'projectEndCheck.project.area', false, 222,'projectEndCheck.project.area');
+		Ext.getCmp("flow_projectEndCheck.project.areaTree").on("click", function(g) {
+			//Ext.getCmp("projectRegional").setValue(Ext.getCmp("flow_projectRegional").getValue());
+			Ext.getCmp("flow_projectEndCheck.project.areaId").setValue(Ext.getCmp("flow_projectEndCheck.project.area").id);
+		});
+		this.items = [{
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								xtype:'label',
+								text:'项目名称：',
+								width : 97
+							},{
+								name:'projectEndCheck.project.proName',
+								id:'flow_projectEndCheck.project.proName',
+								xtype:'textfield',
+								emptyText:'请选择项目',
+								editable:true,
+								readOnly:false,
+								allowBlank:false,
+								columnWidth : 1,
+								listeners:{
+									'focus':function(){
+										ProjectNewSelector.getView(function(proId,proName,proNo,contractId,contractNo,contractAmount,proAreaId,proArea,proChargerUserId,proChargerUserName){
+											Ext.getCmp("flow_projectEndCheck.project.proName").setValue(proName);
+											Ext.getCmp("flow_projectEndCheck.project.id").setValue(proId);
+											Ext.getCmp('flow_projectEndCheck.project.proChargerUserName').setValue(proChargerUserName);
+											if(!Ext.isEmpty(proArea)&&Ext.isEmpty(proAreaId)){
+												var url = __ctxPath + '/system/getDeptByNameDepartment.do'
+												var params = "depName="+proArea;
+												var data = ajaxSyncCall(url,params).data;
+												if(!Ext.isEmpty(data)){
+													Ext.getCmp("flow_projectEndCheck.project.areaId").setValue(data.depId);
+													Ext.getCmp("flow_projectEndCheck.project.area").setValue(data.depName);
+												}
+											}else{
+												Ext.getCmp("flow_projectEndCheck.project.areaId").setValue(proAreaId);
+												Ext.getCmp("flow_projectEndCheck.project.area").setValue(proArea);
+											}
+											if(!Ext.isEmpty(proId)){
+												var url = __ctxPath + '/statistics/getProjectNew.do';
+												var params = "id="+proId;
+												var data = ajaxSyncCall(url,params).data;
+												Ext.getCmp('flow_projectEndCheck.project.buildUnit').setValue(data.buildUnit);
+												Ext.getCmp('flow_projectEndCheck.project.proAddr').setValue(data.proAddr);
+											}
+										},true,true).show();
+									}
+								}
+							},{
+								xtype:'hidden',
+								name:'projectEndCheck.project.id',
+								id:'flow_projectEndCheck.project.id'
+							}
+							]
+				},{
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								xtype:'label',
+								text:'建设单位：',
+								width : 97
+							},{
+								name:'projectEndCheck.project.buildUnit',
+								id:'flow_projectEndCheck.project.buildUnit',
+								xtype:'textfield',
+//								readOnly:true,
+//								style : "background:#F0F0F0;",
+								allowBlank:true,
+								columnWidth : 1
+							}
+							]
+				},{
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								xtype:'label',
+								text:'项目地点：',
+								width : 97
+							},{
+								name:'projectEndCheck.project.proAddr',
+								id:'flow_projectEndCheck.project.proAddr',
+								xtype:'textfield',
+//								readOnly:true,
+//								style : "background:#F0F0F0;",
+								allowBlank:true,
+								columnWidth : 1
+							}
+							]
+				},{
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								xtype:'label',
+								text:'施工区域：',
+								width : 97
+							},depSelector
+//							,{
+//								name:'projectEndCheck.project.area',
+//								id:'flow_projectEndCheck.project.area',
+//								xtype:'textfield',
+//								style : "background:#F0F0F0;",
+//								readOnly:true,
+//								allowBlank:true,
+//								columnWidth : .5
+//							}
+							,{
+								xtype:'hidden',
+								name:'projectEndCheck.project.areaId',
+								id:'flow_projectEndCheck.project.areaId'
+							}, {
+								text : '项目经理：',
+								style : 'margin-left:10px;',
+								width : 97
+							}, {
+								xtype:'textfield',
+								name : 'projectEndCheck.project.proChargerUserName',
+								id : 'flow_projectEndCheck.project.proChargerUserName',
+								readOnly : true,
+								allowBlank:false,
+								columnWidth : 1,
+								listeners : {
+									'focus' : function() {
+										UserSelector.getView(function(n,l,mobile) {
+													var projectCharger = Ext.getCmp("flow_projectEndCheck.project.proChargerUserName");
+													projectCharger.setValue(l);
+														},true)
+												.show()
+									}
+								}
+							}
+							]
+				},{
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								xtype:'label',
+								text:'质量员：',
+								width : 97
+							},{
+								name:'projectEndCheck.qualityUser.fullname',
+								id:'flow_projectEndCheck.qualityUser.fullname',
+								xtype:'textfield',
+								emptyText:'请选择质量员',
+								readOnly:true,
+								allowBlank:false,
+								columnWidth : .5,
+								listeners:{
+									'focus' : function() {
+										UserSelector.getView(function(n,l,mobile) {
+															var userId = Ext.getCmp("flow_projectEndCheck.qualityUser.userId");
+															var fullname = Ext.getCmp("flow_projectEndCheck.qualityUser.fullname");
+															userId.setValue(n);
+															fullname.setValue(l);
+														},true)
+												.show()
+									}
+								}
+							},{
+								xtype:'hidden',
+								name:'projectEndCheck.qualityUser.userId',
+								id:'flow_projectEndCheck.qualityUser.userId'
+							}, {
+								text : '施工员：',
+								style : 'margin-left:10px;',
+								width : 97
+							},{
+								name:'projectEndCheck.workUser.fullname',
+								id:'flow_projectEndCheck.workUser.fullname',
+								xtype:'textfield',
+								emptyText:'请选择施工员',
+								readOnly:true,
+								allowBlank:false,
+								columnWidth : .5,
+								listeners:{
+									'focus' : function() {
+										UserSelector.getView(function(n,l,mobile) {
+															var userId = Ext.getCmp("flow_projectEndCheck.workUser.userId");
+															var fullname = Ext.getCmp("flow_projectEndCheck.workUser.fullname");
+															userId.setValue(n);
+															fullname.setValue(l);
+														},true)
+												.show()
+									}
+								}
+							},{
+								xtype:'hidden',
+								name:'projectEndCheck.workUser.userId',
+								id:'flow_projectEndCheck.workUser.userId'
+							}
+							]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '安全员：',
+								width : 97
+							},{
+								name:'projectEndCheck.safeUser.fullname',
+								id:'flow_projectEndCheck.safeUser.fullname',
+								xtype:'textfield',
+								emptyText:'请选择安全员',
+								readOnly:true,
+								allowBlank:false,
+								columnWidth : .5,
+								listeners:{
+									'focus' : function() {
+										UserSelector.getView(function(n,l,mobile) {
+															var userId = Ext.getCmp("flow_projectEndCheck.safeUser.userId");
+															var fullname = Ext.getCmp("flow_projectEndCheck.safeUser.fullname");
+															userId.setValue(n);
+															fullname.setValue(l);
+														},true)
+												.show()
+									}
+								}
+							},{
+								xtype:'hidden',
+								name:'projectEndCheck.safeUser.userId',
+								id:'flow_projectEndCheck.safeUser.userId'
+							}, {
+								text : '预决算员：',
+								style : 'margin-left:10px;',
+								width : 97
+							},{
+								name:'projectEndCheck.preCalUser.fullname',
+								id:'flow_projectEndCheck.preCalUser.fullname',
+								xtype:'textfield',
+								emptyText:'请选择预决算员',
+								readOnly:true,
+								allowBlank:false,
+								columnWidth : .5,
+								listeners:{
+									'focus' : function() {
+										UserSelector.getView(function(n,l,mobile) {
+															var userId = Ext.getCmp("flow_projectEndCheck.preCalUser.userId");
+															var fullname = Ext.getCmp("flow_projectEndCheck.preCalUser.fullname");
+															userId.setValue(n);
+															fullname.setValue(l);
+														},true)
+												.show()
+									}
+								}
+							},{
+								xtype:'hidden',
+								name:'projectEndCheck.preCalUser.userId',
+								id:'flow_projectEndCheck.preCalUser.userId'
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '工程督导：',
+								width : 97
+							}, {
+								xtype : 'combo',
+								hiddenName : 'projectEndCheck.engineeUser.fullname',
+								id : 'flow_projectEndCheck.engineeUser.fullname',
+								mode : 'local',
+								valueField : "fullname",
+								displayField : "fullname",
+								triggerAction : "all",
+								store : new Ext.data.JsonStore({
+											baseParams : {
+												"Q_position_S_EQ" : "工程督导"
+											},
+											autoLoad : true,
+											root : "result",
+											totalProperty : "totalCounts",
+											url : __ctxPath + "/system/listAppUser.do",
+											fields : [{
+													name : "userId",
+													type : "int"
+												}, "username",'staffNo', "password", "fullname",
+												"address", "email", "department", "title",
+												"position", {
+													name : "accessionTime"
+												}, {
+													name : "status",
+													type : "int"
+												}]
+										}),
+								editable : false,
+								allowBlank : false,
+								columnWidth:.5,
+								listeners:{
+									select:function(field,record,index){
+										Ext.getCmp('flow_projectEndCheck.engineeUser.userId').setValue(record.data.userId);
+									}
+								}
+							},{
+								xtype:'hidden',
+								name:'projectEndCheck.engineeUser.userId',
+								id:'flow_projectEndCheck.engineeUser.userId'
+							}, {
+								text : '项目部自检结果：',
+								style : 'margin-left:10px;',
+								width : 97
+							}, {
+								xtype:'textfield',
+								name : 'projectEndCheck.conclusion',
+								id : 'flow_projectEndCheck.conclusion',
+								maxLength:64,
+								allowBlank : false,
+								columnWidth : .5
+							}]
+				},{
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								xtype:'label',
+								text:'实际开工时间：',
+								width : 97
+							},{
+								name:'projectEndCheck.actualWorkDate',
+								id:'flow_projectEndCheck.actualWorkDate',
+								xtype:'datefield',
+								format:'Y-m-d',
+								allowBlank:false,
+								columnWidth : .5
+							}, {
+								text : '实际完工时间：',
+								style : 'margin-left:10px;',
+								width : 97
+							}, {
+								xtype : 'datefield',
+								name : 'projectEndCheck.actualFinishDate',
+								id : 'flow_projectEndCheck.actualFinishDate',
+								format:'Y-m-d',
+								allowBlank:false,
+								columnWidth : .5
+							}
+							]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '经办人：',
+								width : 97
+							}, {
+								xtype : 'textfield',
+								name : 'projectEndCheck.applyUser.fullname',
+								id : 'flow_projectEndCheck.applyUser.fullname',
+								readOnly : true,
+								style : "background:#F0F0F0;",
+								columnWidth:1,
+								value:__currentUser
+							},{
+								xtype:'hidden',
+								name:'projectEndCheck.applyUser.userId',
+								id:'flow_projectEndCheck.applyUser.userId',
+								value:__currentUserId
+							}]
+				}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

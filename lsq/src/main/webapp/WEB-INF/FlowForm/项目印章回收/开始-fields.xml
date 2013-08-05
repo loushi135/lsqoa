@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="bpaDeptId" label="区域ID" type="varchar" length="128" isShowed="false"/>
+	<field name="projectManagerId" label="项目经理ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowSealRecycle.sealApplyId" label="项目印章申请ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowSealRecycle.proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="flowSealRecycle.content" label="项目章刻印内容" type="varchar" length="128" isShowed="true"/>
+	<field name="flowSealRecycle.applyUserName" label="项目印章申请人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowSealRecycle.keeperUserName" label="项目印章保管人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowSealRecycle.innerCheckTime" label="项目完工内检时间" type="datetime" isShowed="true"/>
+	<field name="flowSealRecycle.lastReturnTime" label="最晚归还时间" type="datetime" isShowed="true"/>
+	<field name="flowSealRecycle.thisApplyUserName" label="经办人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowSealRecycle.thisApplyUserId" label="经办人" type="varchar" length="128" isShowed="false"/>
+</fields>

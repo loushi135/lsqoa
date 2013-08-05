@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="bpaProjectName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="materialContractNo" label="合同编号" type="varchar" length="128"  isShowed="true"/>
+	<field name="bpaReceiptDept" label="收款单位" type="varchar" length="128"  isShowed="true"/>
+	<field name="materialContractSysItem" label="系统类别" type="varchar" length="128"  isShowed="true"/>
+	<field name="superOption" label="审批意见"/>
+</fields>

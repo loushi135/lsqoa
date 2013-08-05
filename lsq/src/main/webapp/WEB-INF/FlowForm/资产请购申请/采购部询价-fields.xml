@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="prePrice" label="预估价格" type="varchar" length="512"/>
+	<field name="resultGridData" label="资产列表" type="varchar" length="512"/>	
+</fields>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="staffEntryapply@companyName" label="入职公司" type="varchar" length="128" isShowed="true"/>
+	<field name="staffEntryapply@depTreeSelector" label="入职部门" type="varchar" length="128" isShowed="true"/>
+	<field name="staffEntryapply@dept@depId" label="入职部门" type="varchar" length="128" isShowed="false"/>
+	<field name="staffEntryapply@entryUserName" label="姓名" type="varchar" length="128" isShowed="true"/>
+	<field name="staffEntryapply@jobName" label="担任岗位" type="varchar" length="128" isShowed="true"/>
+	<field name="staffEntryapply@job@jobId" label="担任岗位" type="varchar" length="128" isShowed="false"/>
+	<field name="staffEntryapply@contact" label="联系方式" type="varchar" length="500" isShowed="true"/>
+	<field name="staffEntryapply@entryDate" label="拟报到日期" type="datetime" isShowed="true"/>
+</fields>

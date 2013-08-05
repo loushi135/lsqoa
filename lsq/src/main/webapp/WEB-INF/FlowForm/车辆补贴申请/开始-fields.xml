@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="carReporter" label="报告人" type="varchar" length="128" isShowed="true"/>
+	<field name="carDeptName" label="所属部门" type="varchar" length="128" isShowed="true"/>
+	<field name="carDeptId" label="所属部门" type="varchar" length="128" isShowed="false"/>
+	<field name="companyName" label="所在公司" type="varchar" length="128" isShowed="true"/>
+	<field name="carNo" label="车牌号" type="varchar" length="128" isShowed="true"/>
+	<field name="brand" label="品牌型号" type="varchar" length="128" isShowed="true"/>
+	<field name="displacement" label="排量" type="varchar" length="128" isShowed="true"/>
+	<field name="boughtYear" label="购置年份" type="varchar" length="128" isShowed="true"/>
+	<field name="subsidyReason" label="申请原因" type="varchar" length="1000" isShowed="false"/>
+	<field name="carSubsidy.attachFiles" label="附件" type="file" isShowed="true"/>
+	<field name="carSubsidy.attachIds" label="附件" type="text" isShowed="false"/>
+</fields>

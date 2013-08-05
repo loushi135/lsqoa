@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="proNo" label="项目编号" type="varchar" length="128" isShowed="true"/>
+	<field name="proId" label="项目主键" type="varchar" length="128" isShowed="false"/>
+	<field name="deptName" label="部门名称" type="varchar" length="128" isShowed="true"/>
+	<field name="payOption" label="类别" type="varchar" length="128" isShowed="true"/>
+	<field name="paymentType" label="暂支类别" type="varchar" length="128" isShowed="true"/>
+	<field name="owedSum" label="目前欠款金额" type="varchar" length="128" isShowed="true"/>
+	<field name="paymentSumBig" label="本次借款金额大写" type="varchar" length="128" isShowed="true"/>
+	<field name="paymentSumSmall" label="本次借款金额小写" type="decimal" length="10" isShowed="true"/>
+	<field name="preNowReturnTime" label="预计归还时间" type="datetime"  isShowed="true"/>
+	<field name="borrower" label="借款人" type="varchar" length="128" isShowed="true"/>
+	<field name="paymentCause" label="暂支原因" type="varchar" length="128" isShowed="true"/>
+	<field name="payment.attachIds" label="附件ID" type="varchar" length="512"  isShowed="false"/>
+	<field name="payment.attachFiles" label="附件" type="file" length="512"/>
+</fields>

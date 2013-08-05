@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="constructionContract.contractNo" label="合同编号" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.contractId" label="合同主键" type="varchar" length="255" isShowed="false"/>
+	<field name="constructionContract.contractVersion" label="版本" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.contractor" label="发包人" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.projectName" label="项目名称" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.projectAbbreviation" label="项目简称" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.linkmanAndTel" label="发包联系人及电话" type="varchar" length="255" isShowed="true"/>          
+	<field name="constructionContract.projectRegional" label="施工区域" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.deptId" label="施工区域" type="varchar" length="255" isShowed="false"/>
+	<field name="constructionContract.projectCharger" label="项目实际负责人" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.projectChargerUserId" label="项目实际负责人" type="varchar" length="255" isShowed="false"/>
+	<field name="constructionContract.businessCharger" label="业务主办" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.numOrArea" label="数量/面积" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.sumPrice" label="合同总价" type="decimal" length="0" isShowed="true"/>
+	<field name="constructionContract.sumPriceBig" label="合同总价大写" type="varchar" length="0" isShowed="true"/>
+	<field name="constructionContract.contractRemark" label="合同说明" type="text" isShowed="true"/>
+	<field name="constructionContract.payWay" label="付款方式" type="text" isShowed="true"/>
+	<field name="constructionContract.projectTime" label="工期要求/能否满足/奖罚" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.quality" label="质量/奖罚" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.isFullContract" label="是否双包" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.isDesignCost" label="是否承担设计费" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.designCost" label="设计费金额" type="decimal" length="0" isShowed="true"/>
+	<field name="constructionContract.isModelCommunity" label="是否评文明工地" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.rewardOrPunish" label="奖罚" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.guarantee" label="保修期/金额" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.constructionBackUp" label="是否办理施工备案" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.backUpPerson" label="备案办理责任人" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.backUpPersonId" label="办理责任人" type="varchar" length="255" isShowed="false"/>
+	<field name="constructionContract.backUpFinishTime" label="备案具体完成时间" type="datetime" length="0" isShowed="true"/>
+	<field name="constructionContract.constructionLicense" label="是否办理施工许可证" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.licensePersonId" label="办理责任人" type="varchar" length="255" isShowed="false"/>
+	<field name="constructionContract.licensePerson" label="许可办理责任人" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.licenseFinishTime" label="许可具体完成时间" type="datetime" length="0" isShowed="true"/>
+	<field name="constructionContract.isoverBudget" label="是否存在（无）超资质施工的情况" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.quote" label="报价" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.quoteloss" label="预估亏损额" type="decimal" length="0" isShowed="true"/>
+	<field name="constructionContract.remark" label="其他应在签定前商谈的事项" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.meno" label="应在合同履行过程中注意的事项" type="varchar" length="255" isShowed="true"/>
+	<field name="constructionContract.applyDate" label="申请日期" type="varchar" length="128" isShowed="false"/>
+	<field name="constructionContract.attachIDs" label="合同附件ID" type="varchar" length="512"  isShowed="false"/>
+	<field name="constructionContract.attachFile" label="合同附件" type="file" length="512"/>
+</fields>

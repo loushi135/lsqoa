@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.system.ResetPwd"
+        table="reset_pwd"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="userFullName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="userFullName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="userLoginName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="userLoginName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="resetPWD"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="resetPWD"
+            length="10"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="timeCreate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="timeCreate"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <many-to-one
+			name="opeaterUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>	
+			<column name="opeater" />
+		</many-to-one>
+     </class>
+</hibernate-mapping>

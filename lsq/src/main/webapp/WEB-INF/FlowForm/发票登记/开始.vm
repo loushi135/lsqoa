@@ -1,0 +1,227 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "form",
+	title : "发票登记表",
+	labelWidth : 100,
+	labelAlign : "left",
+	layout : "form",
+	width : 600,
+	height : 200,
+	padding : "3px",
+	initComponent : function() {
+		this.items = [{
+			xtype : 'container',
+			layout : 'column',
+			border : false,
+			height : 30,
+			items : [{
+						xtype : 'hidden',
+						name : 'bill.userId',
+						id : 'flow_bill.userId',
+						value : __currentUserId
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;margin-left:0px;',
+						text : '申请人:',
+						width : 60
+					}, {
+						id : 'flow_bill.userName',
+						xtype : 'textfield',
+						name : 'bill.userName',
+						editable : false,
+						style : 'margin-left:-10px;',
+						readOnly : true,
+						style : "background:#F0F0F0;",
+						allowBlank : false,
+						width : 200,
+						value : __currentUser
+					}, {
+						xtype : 'label',
+						width : 80,
+						style : 'padding-left:10px;',
+						text : '发票类型:'
+					}, {
+						xtype : 'combo',
+						id : 'flow_bill.invoiceType',
+						name : 'bill.invoiceType',
+						width : 244,
+						editable : false,
+						emptyText : '请选择发票类型',
+						allowBlank : false,
+						mode:'local',
+						valueField : "itemValue",
+						displayField : "itemValue",
+						triggerAction : "all",
+						store : new Ext.data.JsonStore({
+							baseParams:{"Q_itemName_S_EQ":'发票类型'},
+							autoLoad:true,
+							root : "result",
+							totalProperty : "totalCounts",
+							url : __ctxPath
+									+ "/system/listDictionary.do",
+							fields : ["dicId","itemName","itemValue" ]
+						}),
+//
+//						listeners : {
+//							focus : function(d) {
+//								var c = Ext.getCmp("flow_bill.invoiceType")
+//										.getStore();
+//								if (c.getCount() <= 0) {
+//									Ext.Ajax.request({
+//												url : __ctxPath
+//														+ "/system/loadDictionary.do",
+//												method : "post",
+//												params : {
+//													itemName : "发票类型"
+//												},
+//												success : function(f) {
+//													var e = Ext.util.JSON
+//															.decode(f.responseText);
+//													c.loadData(e);
+//												}
+//											});
+//								}
+//							}
+//						}
+					}]
+		}, {
+			layout : 'column',
+			border : false,
+			height : 30,
+			items : [{
+						xtype : 'hidden',
+						id : 'flow_bill.projectId',
+						name : 'bill.projectId'
+					}, {
+						xtype : 'label',
+						text : '项目名称:',
+						width : 60
+					}, {
+						xtype : 'textfield',
+						width : 200,
+						readOnly : false,
+						maxLength : 128,
+						allowBlank : false,
+						id : 'flow_bill.projectName',
+						name : 'bill.projectName',
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(
+										function(proId, proName) {
+											Ext.getCmp("flow_bill.projectId")
+													.setValue(proId);
+											Ext.getCmp("flow_bill.projectName")
+													.setValue(proName);
+										}, true, true).show();
+							},
+							afterrender : function(field) {
+								// Ext.getCmp("expressApplyProContainer").hide();
+							}
+						}
+					}, {
+						border : false,
+						layout : 'column',
+						items : [{
+									xtype : "label",
+									text : "供应商:",
+									width : 80,
+									style : 'padding-left:10px;'
+								}, {
+									xtype : "textfield",
+									name : "bill.providerName",
+									id : 'flow_bill.providerName',
+									width : 250,
+									allowBlank : false,
+									readOnly : true,
+									listeners : {
+										focus : function() {
+											new SuppliersAssessSelector(
+													function(suppliersId,
+															supplierName,
+															supplierNo) {
+														Ext
+																.getCmp("flow_bill.providerName")
+																.setValue(supplierName);
+														Ext
+																.getCmp("flow_bill.providerId")
+																.setValue(suppliersId);
+														// }
+													}, true).show();
+										}
+									}
+								}, {
+									xtype : 'hidden',
+									name : 'bill.providerId',
+									id : 'flow_bill.providerId'
+								}]
+					}]
+
+		}, {
+			xtype : 'container',
+			layout : 'column',
+			style : 'padding-left:0px;padding-top:5px;',
+			items : [{
+						xtype : 'label',
+						style : 'padding-left:0px;',
+						text : '发票时间:',
+						width : 60
+					}, {
+						allowBlank : false,
+						width : 194,
+						editable : false,
+						name : 'bill.billTime',
+						id : 'flow_bill.billTime',
+						xtype : 'datefield',
+						format : 'Y-m-d'
+					}, {
+						xtype : 'container',
+						layout : 'column',
+						style : 'padding-left:0px;padding-top:5px;',
+						items : [{
+									xtype : 'label',
+									// style :
+									// 'padding-left:0px;margin-top:5px;',
+									text : '发票金额:',
+									style : 'padding-left:10px;',
+									width : 80
+								}, {
+									width : 250,
+									id : 'flow_bill.invoiceCount',
+									name : 'bill.invoiceCount',
+									style : 'margin-left:0px;',
+									allowBlank : false,
+									enableKeyEvents : true,
+									xtype : 'numberfield',
+									regex : /^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+									regexText : '请输入正确格式的金额',
+									listeners : {
+										keyup : function(field) {
+											var paymentSumBig = AmountInWords(field
+													.getValue());
+											Ext.getCmp('flow_bill.invoiceCountBig')
+													.setValue(paymentSumBig);
+										}
+									}
+								}]
+					}]
+		}, {
+			xtype : 'container',
+			layout : 'column',
+			style : 'padding-left:0px;padding-top:5px;',
+			items : [{
+						xtype : 'label',
+						style : 'padding-left:0px;',
+						text : '金额大写:',
+						width : 60
+					}, {
+						allowBlank : false,
+						width : 524,
+						editable : false,
+						id : 'flow_bill.invoiceCountBig',
+						name:'bill.invoiceCountBig',
+						xtype : 'textfield',
+						style : "background:#F0F0F0;"
+					}]
+		}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

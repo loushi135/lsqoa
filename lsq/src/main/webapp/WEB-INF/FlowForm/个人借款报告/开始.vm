@@ -1,0 +1,188 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "个人借款报告",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 600,
+			height : 400,
+			padding : "10px",
+			initComponent : function() {
+				this.items = [{
+							xtype : 'container',
+							style : 'padding-left:0px;margin-bottom:4px',
+							layout : 'column',
+							items : [{
+										xtype : 'label',
+										text : '报告人:',
+										width:55
+									}, {
+										xtype : 'textfield',
+										style : 'margin-left:12px',
+										width : '45%',
+										id : 'flow_loanReport',
+										name : 'loanReport',
+										allowBlank:false,
+										readOnly : true,
+										style:"background:#F0F0F0;",
+										value : __currentUser
+									}, {
+										xtype : 'label',
+										text : '所属部门:',
+										style:'padding-left:3px'
+									}, {
+										xtype : 'textfield',
+										readOnly : true,
+										style:"background:#F0F0F0;",
+										width:'25%',
+										allowBlank:false,
+										id : 'flow_loanDepatment',
+										name : 'loanDepatment',
+										value : __currentUserDept
+									}]
+						}, {
+							xtype : 'container',
+							style : 'padding-left:0px;margin-bottom:4px',
+							layout : 'column',
+							items : [{
+										xtype : 'label',
+										text : '所在公司:'
+									}, {
+										xtype : 'textfield',
+										readOnly : true,
+										style:"background:#F0F0F0;",
+										width : '30%',
+										id : 'flow_personCompanyName',
+										name : 'personCompanyName',
+										allowBlank:false,
+										value : __companyName
+									}
+									]},{
+												xtype:'container',
+												width:350,
+												style:'padding-left:0px;margin-bottom:4px',
+												defaults:{xtype:'textfield'},
+												layout:'form',
+												items:[
+												{
+													xtype:'container',
+													width:300,
+													style:'padding-left:0px;margin-bottom:4px',
+													layout:'column',
+													items:[
+															{
+																xtype:'label',
+																width:55,
+																text:'金额小写:'
+																//style:'margin-right:5px;'
+															},
+															{
+															  xtype:'numberfield',
+															  regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+															  name:'loanMoney',
+															  id:'flow_loanMoney',
+															  maxLength:12,
+															  width:95,
+															  enableKeyEvents :true,
+															  listeners:{
+															  	keyup:function(field){
+															  		var value = Ext.getCmp("flow_loanMoney").getValue();
+															  	    var loanMoneyBig = AmountInWords(value);
+															  	    Ext.getCmp("flow_loanMoneyBig").setValue(loanMoneyBig);
+															  	}
+															  }
+															},
+															{
+																xtype:'label',
+																text:'元'
+															},
+															{
+																xtype:'label',
+																width:140,
+																text:'(填写此项,大写自动补全)',
+																style:'color:red'
+															}
+													]
+												},{
+												  xtype:'panel',
+												  layout:'column',
+												  style : 'padding-left:0px;margin-bottom:4px',
+												  border:false,
+												  items:[{
+													        xtype:'label',
+													        text:'大写:',
+													        style:'padding-left:23px;'
+												      },{
+												      	  xtype:'textfield',
+														  name:'loanMoneyBig',
+														  readOnly:true,
+														  id:'flow_loanMoneyBig',
+														  width:300
+												    }]
+												}
+										]
+									},{
+										xtype:'container',
+										layout:'column',
+										style:'padding-left:0px;margin-bottom:3px',
+										items:[{
+													xtype : 'label',
+													text : '借款时长:',
+													width:53
+												}, {
+													xtype : 'numberfield',
+													width:60,
+													name : 'loanMonth',
+													regex:/^\d{1,2}$/,
+													id : 'flow_loanMonth',
+													enableKeyEvents :true,
+													listeners:{
+													   keyup:function(){
+													   var loanMonth=Ext.getCmp('flow_loanMonth').getValue();
+													   var loanYear=Ext.getCmp('flow_loanYear')
+													   var residue=loanMonth%12;
+													   var array=["零","壹","贰","叁","肆","伍","陆","柒","捌","玖","拾","十一"];
+													   loanYear.setValue( array[parseInt(loanMonth/12)]+"年零"+array[residue]+"个月");
+													   } 
+													}
+												},{
+												   xtype:'label',
+												   text:'月'
+												},{
+													xtype : 'label',
+													style:'color:red',
+													text:'(输入1-36之间的整数)'
+												},{
+													xtype : 'textfield',
+													width:115,
+													name : 'loanYear',
+													readOnly:true,
+													id : 'flow_loanYear'
+												},{
+													xtype : 'label',
+													style:'color:red',
+													text:'(从此报告批准日期开始计算时长)'
+												}
+													]
+									 },{
+									    xtype:'panel',
+									    style : 'padding-left:0px;margin-bottom:4px',
+									    layout:'column',
+									    border:false,
+									    items:[{
+									    	xtype:'label',
+									    	text:'借款原因:'
+									    },{
+										xtype : 'textarea',
+										name : 'loanCase',
+										allowBlank:false,
+										maxLength:200,
+										id : 'flow_loanCase',
+										height:135,
+										width : '81%'
+									}]
+									}
+										]
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="staffEntryApply" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="150,25,48,48" name="开始">
+      <transition g="-28,-14" name="提交" to="相关部门"/>
+   </start>
+   
+   <task g="53,150,246,52" name="相关部门">      
+      <transition g="-52,-13" name="审批通过" to="审批通过">
+      		<event-listener class="com.xpsoft.oa.workflow.event.StaffEntryapplyFinishListener"/>
+      </transition>
+      <transition g="-4,-14" name="取消" to="审批不通过">
+      		<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			<field name="roleName">
+			        	<string value="相关部门"/>
+			     	</field>
+		</event-listener>
+      </transition>
+   </task>
+   
+    <end g="79,312,48,48" name="审批通过"/>
+   <end-cancel g="239,307,48,48" name="审批不通过"/>
+</process>

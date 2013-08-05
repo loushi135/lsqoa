@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="flowItem.suppliersName" label="单位名称" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.inviteUserName" label="推荐人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.legalRepresentative" label="法定代表人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.supplierContacter" label="联系人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.supplierAddress" label="通讯地址" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.supplierPhone" label="联系人电话" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.registeredCapital" label="注册资金" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.suppliersbank" label="开户银行" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.bankAccount" label="银行帐号" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.cooperateType" label="合作类型" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.provinceCity" label="所在省市" type="varchar" length="128" isShowed="true" />
+	<field name="flowItem.province.provinceId" label="省id" type="varchar" length="128" isShowed="false" />
+	<field name="flowItem.city.cityId" label="市id" type="varchar" length="128" isShowed="false" />
+	<field name="flowItem.project.proName" label="项目名称" type="varchar" length="128" isShowed="true" />
+	<field name="flowItem.project.id" label="项目名称" type="varchar" length="128" isShowed="false" />
+	<field name="flowItem.zip" label="邮      编" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.officeTel" label="办公电话" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.fax" label="传真" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.email" label="email" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.fixedStaffNum" label="固定员工人数" type="int" isShowed="true"/>
+	<field name="flowItem.techDebugNum" label="其中专业技术安装调试人员数" type="int" isShowed="true"/>
+	<field name="flowItem.leaderNum" label="其中班组长人数" type="int" isShowed="true"/>
+	<field name="flowItem.validElecNum" label="持有效电工证工人数" type="int" isShowed="true"/>
+	<field name="flowItem.validWelderNum" label="持有效焊工证工人数" type="int"  isShowed="true"/>
+	<field name="flowItem.validQualifyNum" label="持资格证书人数" type="int"  isShowed="true"/>
+	<field name="flowItem.peakNum" label="高峰可上人员" type="int"  isShowed="true"/>
+	<field name="flowItem.mainArea" label="工人主要来自地区" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.previousYearOutput" label="前年工程产值" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.lastYearOutput" label="去年工程产值" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.mainInfo" label="主要骨干姓名及联系电话擅长系统信息" type="text" isShowed="true"/>
+	<field name="flowItem.recommendReason" label="推荐原因" type="text"  isShowed="true"/>
+	<field name="flowItem.applyUserName" label="经办人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowItem.applyUserId" label="经办人ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowItem.attachFiles" label="附件" type="file" isShowed="true"/>
+	<field name="flowItem.attachIds" label="附件" type="text" isShowed="false"/>
+</fields>

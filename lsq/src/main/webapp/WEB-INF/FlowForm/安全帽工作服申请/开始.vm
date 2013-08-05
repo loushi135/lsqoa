@@ -1,0 +1,713 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "安全帽工作服申请表",
+	layout : "form",
+	bodyStyle : 'padding:10px 10px 10px 10px',
+	border : true,
+	autoScroll : true,
+	bodyStyle : 'padding:10px 10px 10px 10px;',
+	defaults : {
+		anchor : '98%,98%'
+	},
+	defaultType : 'textfield',
+	width : 600,
+	autoHeight : true,
+	padding : "10px",
+	initComponent : function() {
+
+		this.items = [{
+			xtype : "container",
+			layout : "column",
+			height : 25,
+			defaults : {
+				xtype : 'label',
+				style : {
+					margin : '0px 0px 3px 0px'
+				}
+			},
+			items : [
+					{
+						xtype : 'hidden',
+						name : 'flowHO.areaId',
+						id : "flow_flowHO.areaId"
+					},
+					{
+						text : '工程区域：',
+						width : 85
+					}, {
+						xtype : 'textfield',
+						name : 'flowHO.areaName',
+						id : "flow_flowHO.areaName",
+						emptyText : '请选择项目',
+						allowBlank : false,
+						editable : false,
+						width : 200,
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(
+										function(proId, proName, proNo,
+												contractId, contractNo,
+												contractAmount, proAreaId,
+												proArea, proChargerUserId,
+												proChargerUserName,
+												proChargerUserTel, proAdress) {
+											Ext.getCmp("flow_flowHO.proID")
+													.setValue(proId);
+											Ext.getCmp("flow_flowHO.proName")
+													.setValue(proName);
+											Ext
+													.getCmp("flow_flowHO.designChargerId")
+													.setValue(proChargerUserId);
+											Ext
+													.getCmp("flow_flowHO.designChargerName")
+													.setValue(proChargerUserName);
+//											Ext.getCmp("flow_flowHO.areaId")
+//													.setValue(proAreaId);
+											Ext.getCmp("flow_flowHO.areaName")
+													.setValue(proArea);
+											if (proAdress == null
+													|| proAdress == '') {
+												var a = Ext.getCmp("flow_flowHO.address");  
+													a.emptyText = "请填写工程详细地址";
+													a.setRawValue(a.emptyText);  
+	  
+	 												a.show(); 
+											} else {
+												Ext
+														.getCmp("flow_flowHO.address")
+														.setValue(proAdress);
+											}
+
+											if (proChargerUserTel == null
+													|| proChargerUserTel == '') {
+											
+												var t = Ext.getCmp("flow_flowHO.designChargerTel");  
+													t.emptyText = "请填写项目负责人联系电话";
+													t.setRawValue(t.emptyText);  
+	  
+	 												t.show();
+											
+											} else {
+												Ext
+														.getCmp("flow_flowHO.designChargerTel")
+														.setValue(proChargerUserTel);
+											}
+											
+											if(!Ext.isEmpty(proArea)&&Ext.isEmpty(proAreaId)){
+												var url = __ctxPath + '/system/getDeptByNameDepartment.do'
+												var params = "depName="+proArea;
+												var data = ajaxSyncCall(url,params).data;
+												if(!Ext.isEmpty(data)){
+													Ext.getCmp("flow_flowHO.areaId").setValue(data.depId);
+												}
+											}else{
+												Ext.getCmp("flow_flowHO.areaId").setValue(proAreaId);
+											}
+
+
+										}, true, true).show();
+							}
+						}
+					}, {
+						name : "flowHO.proID",
+						id : "flow_flowHO.proID",
+						xtype : 'hidden'
+					}, {
+						text : '项目名称：',
+						width : 80
+					}, {
+						xtype : 'textfield',
+						allowBlank : false,
+						width : 200,
+						emptyText : '请选择项目',
+						name : 'flowHO.proName',
+						id : "flow_flowHO.proName",
+						editable : false,
+						style : 'margin-left:3px;',
+						allowBlank : false,
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(
+										function(proId, proName, proNo,
+												contractId, contractNo,
+												contractAmount, proAreaId,
+												proArea, proChargerUserId,
+												proChargerUserName,
+												proChargerUserTel, proAdress) {
+											Ext.getCmp("flow_flowHO.proID")
+													.setValue(proId);
+											Ext.getCmp("flow_flowHO.proName")
+													.setValue(proName);
+											Ext
+													.getCmp("flow_flowHO.designChargerId")
+													.setValue(proChargerUserId);
+											Ext
+													.getCmp("flow_flowHO.designChargerName")
+													.setValue(proChargerUserName);
+//											Ext.getCmp("flow_flowHO.areaId")
+//													.setValue(proAreaId);
+											Ext.getCmp("flow_flowHO.areaName")
+													.setValue(proArea);
+
+											Ext.getCmp("flow_flowHO.areaName")
+													.setValue(proArea);
+											if (proAdress == null
+													|| proAdress == '') {
+												var a = Ext.getCmp("flow_flowHO.address");  
+													a.emptyText = "请填写工程详细地址";
+													a.setRawValue(a.emptyText);  
+	  
+	 												a.show(); 
+											} else {
+												Ext
+														.getCmp("flow_flowHO.address")
+														.setValue(proAdress);
+											}
+
+											if (proChargerUserTel == null
+													|| proChargerUserTel == '') {
+											
+												var t = Ext.getCmp("flow_flowHO.designChargerTel");  
+													t.emptyText = "请填写项目负责人联系电话";
+													t.setRawValue(t.emptyText);  
+	  
+	 												t.show();
+											} else {
+												Ext
+														.getCmp("flow_flowHO.designChargerTel")
+														.setValue(proChargerUserTel);
+											}
+											
+											if(!Ext.isEmpty(proArea)&&Ext.isEmpty(proAreaId)){
+												var url = __ctxPath + '/system/getDeptByNameDepartment.do'
+												var params = "depName="+proArea;
+												var data = ajaxSyncCall(url,params).data;
+												if(!Ext.isEmpty(data)){
+													Ext.getCmp("flow_flowHO.areaId").setValue(data.depId);
+												}
+											}else{
+												Ext.getCmp("flow_flowHO.areaId").setValue(proAreaId);
+											}
+
+										}, true, true).show();
+							}
+						}
+					}]
+		}, {
+			xtype : "container",
+			layout : "column",
+			height : 25,
+			defaults : {
+				xtype : 'label',
+				style : {
+					margin : '0px 0px 3px 0px'
+				}
+			},
+			items : [{
+						text : '工程详细地址：',
+						width : 85
+					}, {
+						xtype : 'textfield',
+						name : 'flowHO.address',
+						id : "flow_flowHO.address",
+						allowBlank : false,
+						emptyText : '请选择项目',
+						width : 475
+					}]
+		}, {
+			xtype : "panel",
+			layout : "column",
+			border : false,
+			unstyled : false,
+			defaults : {
+				xtype : 'label',
+				style : {
+					margin : '0px 0px 3px 0px'
+				}
+			},
+			items : [{
+						xtype : 'hidden',
+						name : 'flowHO.designChargerId',
+						id : "flow_flowHO.designChargerId"
+					}, {
+						text : '项目负责人：',
+						width : 85
+					}, {
+						xtype : 'textfield',
+						name : 'flowHO.designChargerName',
+						editable : false,
+						id : "flow_flowHO.designChargerName",
+						allowBlank : false,
+						emptyText : '请选择项目',
+						width : 200,
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(
+										function(proId, proName, proNo,
+												contractId, contractNo,
+												contractAmount, proAreaId,
+												proArea, proChargerUserId,
+												proChargerUserName,
+												proChargerUserTel, proAdress) {
+											Ext.getCmp("flow_flowHO.proID")
+													.setValue(proId);
+											Ext.getCmp("flow_flowHO.proName")
+													.setValue(proName);
+											Ext
+													.getCmp("flow_flowHO.designChargerId")
+													.setValue(proChargerUserId);
+											Ext
+													.getCmp("flow_flowHO.designChargerName")
+													.setValue(proChargerUserName);
+//											Ext.getCmp("flow_flowHO.areaId")
+//													.setValue(proAreaId);
+											Ext.getCmp("flow_flowHO.areaName")
+													.setValue(proArea);
+
+											Ext.getCmp("flow_flowHO.areaName")
+													.setValue(proArea);
+											if (proAdress == null
+													|| proAdress == '') {
+												var a = Ext.getCmp("flow_flowHO.address");  
+													a.emptyText = "请填写工程详细地址";
+													a.setRawValue(a.emptyText);  
+	  
+	 												a.show(); 
+											} else {
+												Ext
+														.getCmp("flow_flowHO.address")
+														.setValue(proAdress);
+											}
+
+											if (proChargerUserTel == null
+													|| proChargerUserTel == '') {
+											
+												var t = Ext.getCmp("flow_flowHO.designChargerTel");  
+													t.emptyText = "请填写项目负责人联系电话";
+													t.setRawValue(t.emptyText);  
+	  
+	 												t.show();
+											} else {
+												Ext
+														.getCmp("flow_flowHO.designChargerTel")
+														.setValue(proChargerUserTel);
+											}
+											if(!Ext.isEmpty(proArea)&&Ext.isEmpty(proAreaId)){
+												var url = __ctxPath + '/system/getDeptByNameDepartment.do'
+												var params = "depName="+proArea;
+												var data = ajaxSyncCall(url,params).data;
+												if(!Ext.isEmpty(data)){
+													Ext.getCmp("flow_flowHO.areaId").setValue(data.depId);
+												}
+											}else{
+												Ext.getCmp("flow_flowHO.areaId").setValue(proAreaId);
+											}
+
+										}, true, true).show();
+							}
+						}
+					}, {
+						text : '项目负责人联系电话：',
+						width : 120
+					}, {
+						xtype : 'textfield',
+						emptyText : '请选择项目',
+						name : 'flowHO.designChargerTel',
+						id : "flow_flowHO.designChargerTel",
+						allowBlank : false,
+						width : 160
+					}]
+		}, {
+			xtype : "panel",
+			layout : "column",
+			border : false,
+			unstyled : false,
+			defaults : {
+				xtype : 'label',
+				style : {
+					margin : '0px 0px 3px 0px'
+				}
+			},
+			items : [{
+						text : '收货人：',
+						width : 85
+					}, {
+						xtype : 'textfield',
+						name : 'flowHO.takeUserName',
+						id : "flow_flowHO.takeUserName",
+						allowBlank : false,
+						width : 200,
+						emptyText : '请选择一个收货人',
+						listeners : {
+							'focus' : function() {
+								UserSelector.getView(function(id, name, mo) {
+									if (id.indexOf(",") != -1) {
+										Ext.getCmp("flow_flowHO.takeUserName")
+												.setValue("");
+										return;
+									}
+									Ext.getCmp("flow_flowHO.takeUserId")
+											.setValue(id);
+									Ext.getCmp("flow_flowHO.takeUserName")
+											.setValue(name);
+									if (mo == null || mo == '') {
+										Ext.getCmp("flow_flowHO.takeUserTel").emptyText = "请填写收货人联系电话"
+									} else {
+										Ext.getCmp("flow_flowHO.takeUserTel")
+												.setValue(mo);
+									}
+
+								}, false).show();
+							}
+						}
+					}, {
+						xtype : 'hidden',
+						name : 'flowHO.takeUserId',
+						id : "flow_flowHO.takeUserId",
+						allowBlank : false
+					}, {
+						text : '收货人联系电话：',
+						width : 120
+					}, {
+						xtype : 'textfield',
+						name : 'flowHO.takeUserTel',
+						id : "flow_flowHO.takeUserTel",
+						emptyText : '请选择收货人',
+						allowBlank : false,
+						width : 160
+					}]
+		}, {
+			xtype : "panel",
+			layout : "column",
+			border : false,
+			unstyled : false,
+			defaults : {
+				xtype : 'label',
+				style : {
+					margin : '0px 0px 3px 0px'
+				}
+			},
+			items : [{
+				xtype : "panel",
+				layout : "form",
+				border : false,
+				unstyled : false,
+				defaults : {
+					xtype : 'label',
+					style : {
+						margin : '0px 0px 3px 0px'
+					}
+				},
+				items : [{
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '安全帽颜色:',
+								width : 100
+							}, {
+								width : 300,
+								xtype : "panel",
+								layout : "form",
+								border : false,
+								unstyled : false,
+								defaults : {
+									style : {
+										margin : '0px 0px 3px 0px'
+									}
+								},
+								defaultType : "textfield",
+								items : [{
+											xtype : "panel",
+											layout : "column",
+											border : false,
+											unstyled : false,
+											defaults : {
+												xtype : 'label',
+												style : {
+													margin : '0px 0px 3px 0px'
+												}
+											},
+											items : [{
+														style : "padding-left:35px",
+														width : 100,
+														text : "红色:"
+													}, {
+														xtype : 'numberfield',
+														name : 'flowHO.redNum',
+														id : "flow_flowHO.redNum",
+														allowBlank : false,
+														width : 160
+													}, {
+														text : "顶"
+													}]
+										}, {
+											xtype : "panel",
+											layout : "column",
+											border : false,
+											unstyled : false,
+											defaults : {
+												xtype : 'label',
+												style : {
+													margin : '0px 0px 3px 0px'
+												}
+											},
+											items : [{
+														style : "padding-left:35px",
+														width : 100,
+														text : "黄色:"
+													}, {
+														xtype : 'numberfield',
+														name : 'flowHO.yellowNum',
+														id : "flow_flowHO.yellowNum",
+														allowBlank : false,
+														width : 160
+													}, {
+														text : "顶"
+													}]
+										}, {
+											xtype : "panel",
+											layout : "column",
+											border : false,
+											unstyled : false,
+											defaults : {
+												xtype : 'label',
+												style : {
+													margin : '0px 0px 3px 0px'
+												}
+											},
+											items : [{
+														style : "padding-left:35px",
+														width : 100,
+														text : "白色:"
+													}, {
+														xtype : 'numberfield',
+														name : 'flowHO.whiteNum',
+														id : "flow_flowHO.whiteNum",
+														allowBlank : false,
+														width : 160
+													}, {
+														text : "顶"
+													}]
+										}, {
+
+											xtype : "panel",
+											layout : "column",
+											border : false,
+											unstyled : false,
+											defaults : {
+												xtype : 'label',
+												style : {
+													margin : '0px 0px 3px 0px'
+												}
+											},
+											items : [{
+														style : "padding-left:35px",
+														width : 100,
+														text : "蓝色:"
+													}, {
+														xtype : 'numberfield',
+														name : 'flowHO.blueNum',
+														id : "flow_flowHO.blueNum",
+														allowBlank : false,
+														width : 160
+													}, {
+														text : "顶"
+													}]
+										}]
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '工作服类别:',
+								width : 100
+							}, {
+								width : 300,
+								xtype : "panel",
+								layout : "form",
+								border : false,
+								unstyled : false,
+								defaults : {
+									// xtype : 'label',
+									style : {
+										margin : '0px 0px 3px 0px'
+									}
+								},
+								defaultType : "textfield",
+								items : [{
+									xtype : "panel",
+									layout : "column",
+									border : false,
+									unstyled : false,
+									defaults : {
+										xtype : 'label',
+										style : {
+											margin : '0px 0px 3px 0px'
+										}
+									},
+									items : [{
+												width : 100,
+												text : "长袖：XL:"
+											}, {
+												xtype : 'numberfield',
+												name : 'flowHO.longSleeveXL',
+												id : "flow_flowHO.longSleeveXL",
+												allowBlank : false,
+												width : 160
+											}, {
+												text : "件"
+											}]
+								}, {
+									xtype : "panel",
+									layout : "column",
+									border : false,
+									unstyled : false,
+									defaults : {
+										xtype : 'label',
+										style : {
+											margin : '0px 0px 3px 0px'
+										}
+									},
+									items : [{
+												style : "padding-left:35px",
+												width : 100,
+												text : "XXL :"
+											}, {
+												xtype : 'numberfield',
+												name : 'flowHO.longSleeveXXL',
+												id : "flow_flowHO.longSleeveXXL",
+												allowBlank : false,
+												width : 160
+											}, {
+												text : "件"
+											}]
+								}, {
+									xtype : "panel",
+									layout : "column",
+									border : false,
+									unstyled : false,
+									defaults : {
+										xtype : 'label',
+										style : {
+											margin : '0px 0px 3px 0px'
+										}
+									},
+									items : [{
+												style : "padding-left:35px",
+												width : 100,
+												text : "XXXL :"
+											}, {
+												xtype : 'numberfield',
+												name : 'flowHO.longSleeveXXXL',
+												id : "flow_flowHO.longSleeveXXXL",
+												allowBlank : false,
+												width : 160
+											}, {
+												text : "件"
+											}]
+								}, {
+									xtype : "panel",
+									layout : "column",
+									border : false,
+									unstyled : false,
+									defaults : {
+										xtype : 'label',
+										style : {
+											margin : '0px 0px 3px 0px'
+										}
+									},
+									items : [{
+												width : 100,
+												text : "短袖：XL:"
+											}, {
+												xtype : 'numberfield',
+												name : 'flowHO.shortSleeveXL',
+												id : "flow_flowHO.shortSleeveXL",
+												allowBlank : false,
+												width : 160
+											}, {
+												text : "件"
+											}]
+								}, {
+									xtype : "panel",
+									layout : "column",
+									border : false,
+									unstyled : false,
+									defaults : {
+										xtype : 'label',
+										style : {
+											margin : '0px 0px 3px 0px'
+										}
+									},
+									items : [{
+												style : "padding-left:35px",
+												width : 100,
+												text : "XXL :"
+											}, {
+												xtype : 'textfield',
+												name : 'flowHO.shortSleeveXXL',
+												id : "flow_flowHO.shortSleeveXXL",
+												allowBlank : false,
+												width : 160
+											}, {
+												text : "件"
+											}]
+								}, {
+									xtype : "panel",
+									layout : "column",
+									border : false,
+									unstyled : false,
+									defaults : {
+										xtype : 'label',
+										style : {
+											margin : '0px 0px 3px 0px'
+										}
+									},
+									items : [{
+												style : "padding-left:35px",
+												width : 100,
+												text : "XXXL :"
+											}, {
+												xtype : 'textfield',
+												name : 'flowHO.shortSleeveXXXL',
+												id : "flow_flowHO.shortSleeveXXXL",
+												allowBlank : false,
+												width : 160
+											}, {
+												text : "件"
+											}]
+								}]
+							}]
+				}]
+			}, {
+				text : '备注:',
+				width : 35
+			}, {
+				xtype : 'textarea',
+				name : 'flowHO.remark',
+				id : "flow_flowHO.remark",
+				width : 250,
+				height : 280,
+				allowBlank : false,
+				autoScroll : true
+			}]
+		}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

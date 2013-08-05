@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="courseTrainApply" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="212,15,48,48" name="培训申请">
+      <transition g="-44,-9" name="至决策" to="决策"/>
+   </start>
+   <task g="22,177,92,52" name="部门经理">
+   	  <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+  	  	<field name="roleName"> 
+			<string value="流程-部门经理"/>  
+		</field>  
+	  </assignment-handler>
+      <transition g="-36,-18" name="至分管领导" to="分管领导"/>
+      <transition g="-30,4" name="至驳回" to="驳回">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+			<field name="roleName">  
+        		<string value="部门经理"/>  
+     		</field>  
+        </event-listener>
+      </transition>
+   </task>
+   <task g="187,178,92,52" name="分管领导">
+   	  <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+  	  	<field name="roleName">  
+			<string value="流程-分管领导"/>  
+		</field>  
+	  </assignment-handler>
+      <transition g="-32,-20" name="至人力资源" to="人力资源"/>
+      <transition g="-39,-14" name="至驳回" to="驳回">
+        <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+			<field name="roleName">  
+        		<string value="分管领导"/>  
+     		</field>  
+        </event-listener>
+      </transition>
+   </task>
+   <task g="363,179,92,52" name="人力资源">
+      <transition g="7,-6" name="至常务副总" to="常务副总"/>
+      <transition g="-32,-16" name="至驳回" to="驳回">
+        <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+			<field name="roleName">  
+        		<string value="人力资源"/>  
+     		</field>  
+        </event-listener>
+      </transition>
+   </task>
+   <task g="361,275,92,52" name="常务副总">
+      <transition g="8,-10" name="至总经理" to="总经理"/>
+      <transition g="-7,-17" name="至驳回" to="驳回">
+        <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+			<field name="roleName">  
+        		<string value="常务副总"/>  
+     		</field>  
+        </event-listener>
+      </transition>
+   </task>
+   <task g="361,354,92,52" name="总经理">
+      <transition g="-15,-15" name="至结束" to="结束">
+        <event-listener class="com.xpsoft.oa.workflow.event.CourseTrainApplyFinishListener"/>
+      </transition>
+      <transition g="-11,-17" name="至驳回" to="驳回">
+        <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+			<field name="roleName">  
+        		<string value="总经理"/>  
+     		</field>  
+        </event-listener>
+      </transition>
+   </task>
+   <end-cancel g="211,281,48,48" name="驳回"/>
+   <end g="213,356,48,48" name="结束"/>
+   <decision g="211,83,48,48" name="决策">
+      <handler class="com.xpsoft.oa.workflow.event.CourseTrainApplyHandler" />
+      <transition g="67,107:23,-19" name="普通员工" to="部门经理"/>
+      <transition g="-57,-12" name="部门经理" to="分管领导"/>
+      <transition g="407,108:-125,-21" name="公司培训，或者分管领导申请" to="人力资源"/>
+   </decision>
+</process>

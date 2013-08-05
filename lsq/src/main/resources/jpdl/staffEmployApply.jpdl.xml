@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="staffEmployApply" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="145,30,48,48" name="开始">
+      <transition g="-28,-18" name="提交" to="决策1"/>
+   </start>
+   <task g="45,204,92,52" name="推荐人">
+   	  <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-推荐人"/>
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-28,-23" name="提交" to="人事经理"/>
+      <transition g="-29,-5" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="推荐人"/>
+			     	  </field>
+		</event-listener>
+      </transition>
+   </task>
+   <task g="243,198,92,52" name="人事经理">
+      <transition g="-19,-23" name="提交" to="HR总监"/>
+      <transition g="-27,-16" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="人事经理"/>
+			     	  </field>
+		</event-listener>
+      </transition>
+   </task>
+   <task g="492,197,92,52" name="HR总监">
+      <transition g="-32,-24" name="提交" to="部门经理"/>
+      <transition g="-31,-15" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="HR总监"/>
+			     	  </field>
+		</event-listener>
+      </transition>
+   </task>
+   <task g="498,360,92,52" name="部门经理">
+      <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-部门经理"/>
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-12,-22" name="提交" to="分管领导"/>
+      <transition g="-22,-29" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="部门经理"/>
+			     	  </field>
+		</event-listener>
+      </transition>
+   </task>
+   <task g="249,364,92,52" name="分管领导">
+   	  <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-分管领导"/>  
+     	  </field>
+   	  </assignment-handler>
+   	  <transition name="提交" to="总经理" g="-57,-20"/>
+      <transition g="-35,-8" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="分管领导"/>
+			     	  </field>
+		</event-listener>
+      </transition>
+      
+   </task>
+   <task g="38,368,92,52" name="总经理">
+   	<transition g="83,471:-24,-27" name="提交" to="集团人力资源中心总经理">
+      </transition>
+      <transition g="-32,-15" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	      			 <field name="roleName">
+			        		<string value="总经理"/>
+			     	  </field>
+		</event-listener>
+      </transition>
+   </task>
+   
+   <task name="集团人力资源中心总经理" g="148,445,152,52">
+      <transition name="提交" to="集团备案" g="-13,-15"/>
+      <transition name="取消" to="取消2" g="-28,-15">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task name="集团备案" g="358,442,92,52">
+      <transition name="审批通过" to="审批通过" g="-30,-20">
+      	<event-listener class="com.xpsoft.oa.workflow.event.StaffEmployapplyFinishListener"/>
+      </transition>
+      <transition name="取消" to="取消2" g="-13,-13">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <decision g="147,122,48,48" name="决策1">
+      <handler class="com.xpsoft.oa.workflow.event.StaffEmployApplyFirstHandler" />
+      <transition g="-28,-17" name="推荐" to="推荐人"/>
+      <transition g="-6,-28" name="公开招聘" to="人事经理"/>
+   </decision>
+   <end g="535,445,48,48" name="审批通过"/>
+   <end-cancel g="267,280,48,48" name="取消"/>
+   <end-cancel name="取消2" g="278,519,48,48"/>
+</process>

@@ -1,0 +1,248 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "车辆补贴申请",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 670,
+			height : 300,
+			padding : "10px",
+			initComponent : function() {
+				this.items = [
+							{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'报告人：',
+										columnWidth:0.15
+									},
+									{
+										xtype:'textfield',
+										readOnly:true,
+										id:'flow_carReporter',
+										name:'carReporter',
+										maxLength : 64,
+										value:__currentUser,
+										allowBlank :false,
+										style:"background:#F0F0F0;",
+										columnWidth:0.3
+									},
+									{
+										text:'所属部门：',
+										style:'margin-left:10px;',
+										columnWidth:0.15
+									},
+									{
+										xtype:'hidden',
+										id:'flow_carDeptId',
+										name:'carDeptId'
+									},
+									{
+										xtype:'textfield',
+										id:'flow_carDeptName',
+										name:'carDeptName',
+										emptyText:'请选择部门',
+										maxLength : 64,
+										columnWidth:0.4,
+										allowBlank :false,
+										listeners:{
+											focus:function(){
+												DepSelector.getView(function(deptIds, deptNames) {
+													var g = Ext.getCmp("flow_carDeptId");
+													var i = Ext.getCmp("flow_carDeptName");
+													Ext.getCmp("flow_carDeptId").setValue(deptIds);
+													Ext.getCmp("flow_carDeptName").setValue(deptNames);
+												},true).show();
+											}
+										}
+									}
+								]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '所在公司：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textfield',
+											id:'flow_companyName',
+											name:'companyName',
+											allowBlank : false,
+											value:__companyName,
+											style:"background:#F0F0F0;",
+//											readOnly:true,
+											columnWidth : 0.85
+										}]
+						   },{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'车牌号：',
+										columnWidth:0.15
+									},
+									{
+										xtype:'textfield',
+										id:'flow_carNo',
+										name:'carNo',
+										maxLength : 64,
+										allowBlank :false,
+										columnWidth:0.3
+									},
+									{
+										text:'品牌型号：',
+										style:'margin-left:10px;',
+										columnWidth:0.15
+									},
+									{
+										xtype:'textfield',
+										id:'flow_brand',
+										name:'brand',
+										maxLength : 64,
+										columnWidth:0.4,
+										allowBlank :false
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'排量：',
+										columnWidth:0.15
+									},
+									{
+										xtype:'textfield',
+										id:'flow_displacement',
+										name:'displacement',
+										maxLength : 64,
+										allowBlank :false,
+										columnWidth:0.3
+									},
+									{
+										text:'购置年份：',
+										style:'margin-left:10px;',
+										columnWidth:0.15
+									},
+									{
+										xtype:'textfield',
+										id:'flow_boughtYear',
+										name:'boughtYear',
+										maxLength : 64,
+										allowBlank :false,
+										columnWidth:0.4
+									}
+								]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:70,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '申请原因：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_subsidyReason',
+											name:'subsidyReason',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+						   }, {
+								xtype : 'container',
+								autoHeight : true,
+								layout : 'column',
+								autoWidth : true,
+								defaultType : 'label',
+								style : 'padding-left:0px;padding-bottom:5px;',
+								items : [{
+											text : '附件:',
+											width : 87,
+											style : "margin-top:15px;"
+										}, {
+											xtype : 'hidden',
+											name : 'carSubsidy.attachIds',
+											id : 'flow_carSubsidy.attachIds'
+										}, {
+											xtype : 'hidden',
+											name : 'carSubsidy.attachFiles',
+											id : 'flow_carSubsidy.attachFiles'
+										}, {
+											xtype : 'panel',
+											id : 'flow_carSubsidy.displayAttach',
+											columnWidth : .95,
+											height : 65,
+											frame : false,
+											autoScroll : true,
+											style : 'padding-left:10px;padding-top:0px;',
+											html : ''
+										}, {
+											xtype : 'button',
+											iconCls : 'btn-upload',
+											text : '上传',
+											handler : function() {
+												var dialog = App.createUploadDialog({
+													file_cat : 'flow/carSubsidy',
+													callback : function(data) {
+														var attachFiles = Ext.getCmp("flow_carSubsidy.attachFiles");
+														var fileIds = Ext.getCmp('flow_carSubsidy.attachIds');
+														var display = Ext.getCmp('flow_carSubsidy.displayAttach');
+														display.body.update('');
+														attachFiles.setValue('');
+														fileIds.setValue('');
+														for (var i = 0; i < data.length; i++) {
+															if (fileIds.getValue() != '') {
+																fileIds.setValue(fileIds.getValue() + ',');
+																attachFiles.setValue(attachFiles.getValue() + ',');
+															}
+															attachFiles.setValue(attachFiles.getValue() + data[i].filepath + ":" + data[i].filename.replace(/\s+/g, ""));
+															fileIds.setValue(fileIds.getValue() + data[i].fileId);
+															Ext.DomHelper.append(display.body, '<span><a href="#" onclick="FileAttachDetail.show(' + data[i].fileId + ')">'
+															+ data[i].filename.replace(/\s+/g, "") + '</a>&nbsp;|&nbsp;</span>');
+														}
+													},
+													permitted_max_size : 1024 * 1024 * 20,
+													permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+												});
+												dialog.show(this);
+											}
+										}]
+							}
+							]
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

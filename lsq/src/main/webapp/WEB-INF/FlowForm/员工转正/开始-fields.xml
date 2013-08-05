@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="applyName" label="姓名" type="varchar" length="128" isShowed="true"/>
+	<field name="applyUserId" label="转正员工主键" type="varchar" length="128" isShowed="false"/>
+	<field name="deptName" label="公司/部门" type="varchar" length="128" isShowed="true"/>
+	<field name="workPosition" label="职位" type="varchar" length="128" isShowed="true"/>
+	<field name="accessionTime" label="入职时间" type="varchar" length="128" isShowed="true"/>
+	<field name="probation" label="试用期" type="varchar" length="128" isShowed="true"/>
+ <!--	<field name="staffType" label="员工等级" type="varchar" length="128" isShowed="true"/>-->
+	<field name="score" label="考试分数" type="varchar" length="128" isShowed="true"/>
+	<field name="staffActiveAttachmentAttachIDs" label="上传文件id" type="varchar" length="200"  isShowed="false"/>
+	<field name="staffActiveAttachmentAttachFiles" label="附件" type="file" length="5000"  isShowed="true"/>
+</fields>

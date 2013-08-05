@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.DesignProject"
+        table="design_project"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="proNo"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="proNo"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="proName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="proName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="remark"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="remark"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <!-- many to many  cascade 配置 save-update 删除数据时会删除中间表不会影响另外的表， 配了delete,delete-orphan,不仅会删除中间表，另外的表也会删除 -->
+		<set name="depts" table="design_project_dept" lazy="true" cascade="save-update">
+        	<key column="proId"></key>
+        	<many-to-many column="depId" class="com.xpsoft.oa.model.system.Department" fetch="join" />
+    	</set>
+     </class>
+</hibernate-mapping>

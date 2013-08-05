@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="applyerId" label="申请人Id" type="varchar" length="128" isShowed="false"/>
+	<field name="provinceId" label="省份Id" type="varchar" length="128" isShowed="false"/>
+	<field name="province" label="省份" type="varchar" length="128" isShowed="false"/>
+	<field name="cityId" label="城市Id" type="varchar" length="128" isShowed="false"/>
+	<field name="city" label="城市" type="varchar" length="128" isShowed="false"/>
+	<field name="applyer" label="申请人" type="varchar" length="128" isShowed="true"/>
+	<field name="applyDate" label="申请日期" type="varchar" length="128" isShowed="true"/>
+	<field name="expressType" label="快递属性Value" type="varchar" length="128" isShowed="false"/>
+	<field name="expressTypeText" label="快递属性" type="varchar" length="128" isShowed="true"/>
+	<field name="cityAprovince" label="目的城市" type="varchar" length="512" isShowed="true"/>
+	<field name="toWhereName" label="目的单位" type="varchar" length="128" isShowed="true"/>
+	<field name="dispatchType" label="分摊对象" type="varchar" length="128" isShowed="true"/>
+	<field name="expressApplyDeptName" label="部门" type="varchar" length="128" isShowed="true"/>
+	<field name="expressApplyDeptId" label="部门" type="varchar" length="128" isShowed="false"/>
+	<field name="expressApplyProName" label="项目" type="varchar" length="128" isShowed="true"/>
+	<field name="expressApplyProId" label="项目" type="varchar" length="128" isShowed="false"/>
+	<field name="proArea" label="项目所属区域" type="varchar" length="128" isShowed="true"/>
+	<field name="expressName" label="快递公司" type="varchar" length="512" isShowed="true"/>
+	<field name="expressNo" label="快递单号" type="varchar" length="128" isShowed="true"/>
+	
+	
+</fields>

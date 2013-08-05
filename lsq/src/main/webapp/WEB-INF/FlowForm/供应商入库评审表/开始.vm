@@ -1,0 +1,596 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "供应商入库评审表",
+	labelWidth : 30,
+	labelAlign : "left",
+	layout : "form",
+	width : 670,
+	autoHeight:true,
+	padding : "10px",
+	initComponent : function() {
+		this.items = [{
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '公司名称：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.suppliersName',
+								name : 'suppliersAssess.suppliersName',
+								allowBlank : false,
+								columnWidth : 0.85,
+								listeners:{
+									blur:function(field){
+										var suppliersName = field.getValue();
+										if(!Ext.isEmpty(suppliersName)){
+											var url = __ctxPath + '/customer/checkSuppliersNameSuppliersAssess.do';
+											var params = "suppliersName="+encodeURI(suppliersName);
+											var data = ajaxSyncCall(url,params);
+											if(!data.success){
+												Ext.ux.Toast.msg('操作信息', '信息修改，公司名称为:<font color="red">'+field.getValue()+'</font>的供应商已经存在，请修改公司名称！');
+												field.setValue('');
+											}
+										}
+									}
+								}
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '合作类型：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'combo',
+								id : 'flow_suppliersAssess.cooperateType',
+								name : 'suppliersAssess.cooperateType',
+								allowBlank : false,
+								columnWidth : 0.85,
+								editable : false,
+								triggerAction : 'all',
+								mode : 'local',
+								store : ['战略','长期','临时','待考察'],
+								listeners:{
+									select:function(field){
+									      var cooperateType = field.getValue();
+									      if(cooperateType=='临时'){
+									      	 Ext.getCmp('flow_suppliersAssess.projectContainer').show();
+									      	 Ext.getCmp('flow_suppliersAssess.project.proName').allowBlank=false;
+									      }else{
+									      	 Ext.getCmp('flow_suppliersAssess.projectContainer').hide();
+									      	 Ext.getCmp('flow_suppliersAssess.project.proName').setValue('');
+									      	 Ext.getCmp('flow_suppliersAssess.project.proName').allowBlank=true;
+									      	 Ext.getCmp('flow_suppliersAssess.project.id').setValue('');
+									      }
+									}
+								}
+							}]
+				}, {
+					xtype : "container",
+					layout : 'column',
+					height : 25,
+					id:'flow_suppliersAssess.projectContainer',
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '项目名称：',
+								columnWidth : .15
+							},{
+								xtype : 'textfield',
+								name : 'suppliersAssess.project.proName',
+								id:'flow_suppliersAssess.project.proName',
+								columnWidth : .85,
+								emptyText:'请选择项目',
+								listeners:{
+									'focus':function(){
+										ProjectNewSelector.getView(function(proId,proName,proNo,contractId,contractNo,contractAmount,proAreaId,proArea){
+											Ext.getCmp("flow_suppliersAssess.project.id").setValue(proId);
+											Ext.getCmp("flow_suppliersAssess.project.proName").setValue(proName);
+										},true,true).show();
+									}
+								}
+							},{
+								xtype : 'hidden',
+								name : 'suppliersAssess.project.id',
+								id:'flow_suppliersAssess.project.id',
+								listeners:{
+									afterrender:function(){
+										Ext.getCmp('flow_suppliersAssess.projectContainer').doLayout();
+										Ext.getCmp('flow_suppliersAssess.projectContainer').hide();
+									}
+								}
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '供应商性质：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'combo',
+								id : 'flow_suppliersAssess.suppliersNature',
+								name : 'suppliersAssess.suppliersNature',
+								allowBlank : false,
+								columnWidth : 0.85,
+								editable : false,
+								triggerAction : 'all',
+								mode : 'local',
+								store : ['品牌公司', '总代理', '省级代理', '市级代理', '经销商']
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 35,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '主要产品/业务范围：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.mainProduct',
+								name : 'suppliersAssess.mainProduct',
+								allowBlank : true,
+								columnWidth : 0.85,
+								maxLength : 64
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '注册地址：',
+								columnWidth : .15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.supplierAddress',
+								name : 'suppliersAssess.supplierAddress',
+								allowBlank : true,
+								columnWidth : .3,
+								maxLength : 64
+							}, {
+								text : '法人代表：',
+								style : 'margin-left:10px;',
+								columnWidth : .13
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.legalRepresentative',
+								name : 'suppliersAssess.legalRepresentative',
+								allowBlank : true,
+								maxLength : 64,
+								columnWidth : .15
+							}, {
+								text : '注册资金：',
+								style : 'margin-left:10px;',
+								columnWidth : .12
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.registeredCapital',
+								name : 'suppliersAssess.registeredCapital',
+								allowBlank : true,
+								maxLength : 64,
+								columnWidth : .15
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '公司创立日期：',
+								columnWidth : .15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.establishDate',
+								name : 'suppliersAssess.establishDate',
+								allowBlank : true,
+								columnWidth : .3,
+								maxLength : 64
+							}, {
+								text : '业务联系人：',
+								style : 'margin-left:10px;',
+								columnWidth : .13
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.supplierContacter',
+								name : 'suppliersAssess.supplierContacter',
+								allowBlank : true,
+								maxLength : 64,
+								columnWidth : .15
+							}, {
+								text : '联系电话：',
+								style : 'margin-left:10px;',
+								columnWidth : .12
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.supplierPhone',
+								name : 'suppliersAssess.supplierPhone',
+								allowBlank : true,
+								maxLength : 64,
+								columnWidth : .15
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '公司所有制：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'combo',
+								id : 'flow_suppliersAssess.companyNature',
+								name : 'suppliersAssess.companyNature',
+								allowBlank : true,
+								columnWidth : 0.85,
+								editable : false,
+								triggerAction : 'all',
+								mode : 'local',
+								store : ['国企', '私企', '外资', '其他']
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '开户银行：',
+								columnWidth : .15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.suppliersbank',
+								name : 'suppliersAssess.suppliersbank',
+								allowBlank : false,
+								columnWidth : .3,
+								maxLength : 64
+							}, {
+								text : '开户账号：',
+								style : 'margin-left:10px;',
+								columnWidth : .13
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.bankAccount',
+								name : 'suppliersAssess.bankAccount',
+								allowBlank : false,
+								maxLength : 64,
+								columnWidth : .42
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '雇员总人数：',
+								columnWidth : .16
+							}, {
+								xtype : 'numberfield',
+								id : 'flow_suppliersAssess.staffNum',
+								name : 'suppliersAssess.staffNum',
+								allowBlank : true,
+								columnWidth : .12,
+								maxLength : 9
+							}, {
+								text : '人'
+							}, {
+								text : '管理人员：',
+								style : 'margin-left:10px;',
+								columnWidth : .13
+							}, {
+								xtype : 'numberfield',
+								id : 'flow_suppliersAssess.managerNum',
+								name : 'suppliersAssess.managerNum',
+								allowBlank : true,
+								columnWidth : .12,
+								maxLength : 9
+							}, {
+								text : '人'
+							}, {
+								text : '营销人员：',
+								style : 'margin-left:10px;',
+								columnWidth : .12
+							}, {
+								xtype : 'numberfield',
+								id : 'flow_suppliersAssess.salesNum',
+								name : 'suppliersAssess.salesNum',
+								allowBlank : true,
+								columnWidth : .12,
+								maxLength : 9
+							}, {
+								text : '人'
+							}, {
+								text : '技术人员：',
+								style : 'margin-left:10px;',
+								columnWidth : .12
+							}, {
+								xtype : 'numberfield',
+								id : 'flow_suppliersAssess.techNum',
+								name : 'suppliersAssess.techNum',
+								allowBlank : true,
+								columnWidth : .12,
+								maxLength : 9
+							}, {
+								text : '人'
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '机构性质：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'combo',
+								id : 'flow_suppliersAssess.institutionNature',
+								name : 'suppliersAssess.institutionNature',
+								allowBlank : true,
+								columnWidth : 0.85,
+								editable : false,
+								triggerAction : 'all',
+								mode : 'local',
+								store : ['总公司', '子公司', '分公司']
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 80,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '营业范围：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'textarea',
+								id : 'flow_suppliersAssess.businessArea',
+								name : 'suppliersAssess.businessArea',
+								allowBlank : true,
+								columnWidth : 0.85
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 35,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '经营(代理) 品牌：',
+								columnWidth : .15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.brand',
+								name : 'suppliersAssess.brand',
+								allowBlank : true,
+								columnWidth : .42,
+								maxLength : 64
+							}, {
+								text : '系统类别：',
+								style : 'margin-left:10px;',
+								columnWidth : .13
+							}, {
+								xtype : 'combo',
+								id : 'flow_suppliersAssess.systemType',
+								name : 'suppliersAssess.systemType',
+								allowBlank : false,
+								maxLength : 64,
+								columnWidth : .3,
+								editable : false,
+								triggerAction : 'all',
+								mode : 'local',
+								store : [],
+								listeners : {
+									'afterrender' : function(combo) {
+										var _store = Ext.getCmp('flow_suppliersAssess.systemType').getStore();
+										if (_store.getCount() <= 0) {
+											Ext.Ajax.request({
+												url : __ctxPath + '/system/loadDictionary.do',
+												method : 'post',
+												params : {
+													itemName : '系统类别'
+												},
+												success : function(response) {
+													var result = Ext.util.JSON.decode(response.responseText);
+													_store.loadData(result);
+												}
+											});
+										}
+									}
+								}
+							}]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '所在省市：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'textfield',
+								id : 'flow_suppliersAssess.provinceCity',
+								name : 'suppliersAssess.provinceCity',
+								allowBlank : false,
+								columnWidth : 0.85,
+								emptyText:'请选择省市',
+								editable : false,
+								listeners : {
+									'focus' : function() {
+										CitySelector.getView(function(cityId, cityName, provinceId, provinceName) {
+											if(!Ext.isEmpty(cityId)&&!Ext.isEmpty(provinceId)){
+												Ext.getCmp('flow_suppliersAssess.provinceCity').setValue(provinceName + '/' + cityName);
+												Ext.getCmp('flow_suppliersAssess.province.provinceId').setValue(provinceId);
+												Ext.getCmp('flow_suppliersAssess.city.cityId').setValue(cityId);
+											}
+										}, true).show()
+									}
+								}
+							},
+							{
+								xtype:'hidden',
+								name:'suppliersAssess.province.provinceId',
+								id:'flow_suppliersAssess.province.provinceId'
+							},
+							{
+								xtype:'hidden',
+								name:'suppliersAssess.city.cityId',
+								id:'flow_suppliersAssess.city.cityId'
+							}
+							]
+				}, {
+					xtype : 'container',
+					layout : 'column',
+					height : 80,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '推荐原因：',
+								columnWidth : 0.15
+							}, {
+								xtype : 'textarea',
+								id : 'flow_suppliersAssess.recommendReason',
+								name : 'suppliersAssess.recommendReason',
+								allowBlank : false,
+								columnWidth : 0.85
+							}]
+				}, {
+					xtype : 'container',
+					autoHeight : true,
+					layout : 'column',
+					autoWidth : true,
+					defaultType : 'label',
+					style : 'padding-left:0px;padding-bottom:5px;',
+					items : [{
+								text : '附件:',
+								width : 85,
+								style : "margin-top:15px;"
+							}, {
+								xtype : 'hidden',
+								name : 'suppliersAssess.attachIds',
+								id : 'flow_suppliersAssess.attachIds'
+							}, {
+								xtype : 'hidden',
+								name : 'suppliersAssess.attachFiles',
+								id : 'flow_suppliersAssess.attachFiles'
+							}, {
+								xtype : 'panel',
+								id : 'flow_suppliersAssess.displayAttach',
+								columnWidth : .95,
+								height : 65,
+								frame : false,
+								autoScroll : true,
+								style : 'padding-left:10px;padding-top:0px;',
+								html : ''
+							}, {
+								xtype : 'button',
+								iconCls : 'btn-upload',
+								text : '上传',
+								handler : function() {
+									var dialog = App.createUploadDialog({
+										file_cat : 'flow/suppliersAssess',
+										callback : function(data) {
+											var attachFiles = Ext.getCmp("flow_suppliersAssess.attachFiles");
+											var fileIds = Ext.getCmp('flow_suppliersAssess.attachIds');
+											var display = Ext.getCmp('flow_suppliersAssess.displayAttach');
+											display.body.update('');
+											attachFiles.setValue('');
+											fileIds.setValue('');
+											for (var i = 0; i < data.length; i++) {
+												if (fileIds.getValue() != '') {
+													fileIds.setValue(fileIds.getValue() + ',');
+													attachFiles.setValue(attachFiles.getValue() + ',');
+												}
+												attachFiles.setValue(attachFiles.getValue() + data[i].filepath + ":" + data[i].filename.replace(/\s+/g, ""));
+												fileIds.setValue(fileIds.getValue() + data[i].fileId);
+												Ext.DomHelper.append(display.body, '<span><a href="#" onclick="FileAttachDetail.show(' + data[i].fileId + ')">'
+												+ data[i].filename.replace(/\s+/g, "") + '</a>&nbsp;|&nbsp;</span>');
+											}
+										},
+										permitted_max_size : 1024 * 1024 * 20,
+										permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+									});
+									dialog.show(this);
+								}
+							}]
+				}
+				]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

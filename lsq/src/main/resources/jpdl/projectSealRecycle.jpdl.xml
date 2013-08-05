@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="projectSealRecycle" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="256,64,48,48" name="开始">
+      <transition g="-38,-11" name="提交" to="项目经理"/>
+   </start>
+   <task g="235,171,92,52" name="项目经理">
+      <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-项目经理"/>  
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-28,-19" name="提交" to="区域经理"/>
+      <transition g="-5,-17" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task g="234,274,92,52" name="区域经理">
+      <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-区域经理"/>  
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-27,-17" name="提交" to="工管部经理"/>
+      <transition g="-9,-18" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task g="235,379,92,52" name="工管部经理">
+      <transition g="-27,-23" name="提交" to="工程总监"/>
+      <transition g="-20,-15" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task g="239,473,92,52" name="工程总监">
+      <transition g="-45,6" name="审批通过" to="审批通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.ProjectSealRecycleFinishListener"/>
+      </transition>
+      <transition g="-45,-22" name="取消" to="审批不通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <end g="40,474,48,48" name="审批通过"/>
+   <end-cancel g="43,301,48,48" name="审批不通过"/>
+</process>

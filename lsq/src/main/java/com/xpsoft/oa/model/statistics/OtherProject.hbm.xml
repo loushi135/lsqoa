@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.OtherProject"
+        table="other_project"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="proNo"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="proNo"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="proName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="proName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="remark"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="remark"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

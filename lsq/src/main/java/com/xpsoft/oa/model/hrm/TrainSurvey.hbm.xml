@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.hrm.TrainSurvey"
+        table="train_survey"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="sn"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="sn"
+            length="200"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="verNum"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="verNum"
+            length="200"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="beginTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="beginTime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="endTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="endTime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        
+        <many-to-one
+			name="sponsor"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="sponsor" />
+		</many-to-one>
+        <property
+            name="createTime"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="createTime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="remark"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="remark"
+            length="500"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="status"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="status"
+            length="2"
+            not-null="false"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

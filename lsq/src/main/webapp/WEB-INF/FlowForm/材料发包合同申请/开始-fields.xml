@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="contractNo" label="合同编号" type="varchar" length="512"/>
+	<field name="materialProId" label="项目" type="varchar" length="512" isShowed="false"/>
+	<field name="proNo" label="项目编号" type="varchar" length="512"/>
+	<field name="proName" label="项目名称" type="varchar" length="512"/>
+	<field name="applyer" label="申请人/经办人" type="varchar" length="512"/>
+	<field name="dept" label="申请部门" type="varchar" length="512"/>
+	<field name="chValue" label="合同总价(中文)" type="varchar" length="512"/>
+	<field name="contractAmount" label="合同总价(数字)" type="varchar" length="512"/>
+	<field name="areanum" label="数量/面积" type="varchar" length="512"/>
+	<field name="mainItem" label="合同类型" type="varchar" length="512"/>
+	<field name="sysItem" label="系统类别" type="varchar" length="512"/>
+	<field name="xydw" label="签约单位" type="varchar"/>
+	<field name="suppliersId" label="签约单位" type="varchar" isShowed="false" />
+	<field name="tel" label="联系人及电话" type="varchar" length="512"/>
+	<field name="yfk" label="预付款" type="varchar"/>
+	<field name="jdk" label="进度款" type="varchar" length="512"/>
+	<field name="wgk" label="完工款" type="varchar" length="512"/>
+	<field name="jsk" label="结算款" type="varchar" length="512"/>
+	<field name="zbj" label="质保金" type="varchar" length="512"/>
+	<field name="jdkReceive" label="进度款收取时间" type="varchar" length="512"/>
+	<field name="usefull" label="合同陈述" type="varchar" length="512"/>
+	
+	<field name="contractAttachIDs" label="合同附件ID" type="varchar" length="512"  isShowed="false"/>
+	<field name="contractAttachFile" label="合同附件" type="file" length="512"/>
+	<field name="remark" label="经办人员" type="varchar" length="512"/>
+	<field name="materialDeptType" label="类型" type="varchar" length="255" isShowed="true"/>
+	<field name="materialDeptId" label="施工区域" type="varchar" length="255" isShowed="false"/>
+	<field name="materialProjectRegional" label="施工区域" type="varchar" length="255" isShowed="true"/>
+	<field name="materialDeptChargerId" label="区域经理" type="varchar" length="255" isShowed="false"/>
+	<field name="materialDeptCharger" label="区域经理" type="varchar" length="255" isShowed="true"/> 
+	<field name="preCalcUserId" label="预决算员" type="varchar" length="255" isShowed="false"/>
+	<field name="preCalcUsername" label="预决算员" type="varchar" length="255" isShowed="true"/> 
+</fields>

@@ -1,0 +1,496 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "招聘申请",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 670,
+			height : 750,
+			padding : "10px",
+			initComponent : function() {
+				var url = __ctxPath + "/system/listDepartment.do?opt=appUser";
+				var depTreeSelector = new TreeSelector("flow_staffRecruitapply@depTreeSelector", url, "所属部门", "flow_staffRecruitapply@dept@depId",false,247,"staffRecruitapply@depTreeSelector");
+				Ext.getCmp("flow_staffRecruitapply@depTreeSelectorTree").on("click", function(g) {
+					Ext.getCmp("flow_staffRecruitapply@jobName").setValue("");
+					Ext.getCmp("flow_staffRecruitapply@jobName").getStore().removeAll();
+					var deptId = Ext.getCmp("flow_staffRecruitapply@dept@depId").getValue();
+					if (!Ext.isEmpty(deptId)) {
+						Ext.getCmp("flow_staffRecruitapply@jobName").
+							getStore().reload( {
+										params : {
+											depId : deptId
+										}
+									});
+					}
+				});
+				
+				var mainPositionCombo = new Ext.ux.form.LovCombo({
+										  hiddenName:"staffRecruitapply@mainPositionIDs",
+										  id:'flow_staffRecruitapply@mainPositionIDs',
+										  fieldLabel:"主要工作地点",
+										  columnWidth:0.85,
+										  store : new Ext.data.JsonStore({
+												baseParams:{"Q_itemName_S_EQ":'工作地点'},
+												autoLoad:true,
+												root : "result",
+												totalProperty : "totalCounts",
+												url : __ctxPath
+														+ "/system/listDictionary.do",
+												fields : [ "dicId", "itemName","itemValue" ]
+											}),
+										  mode:'local',
+										  triggerAction:'all',
+										  hideTrigger:false,
+										  showSelectAll:true,
+										  allowBlank:false,
+										  displayField:'itemValue',
+										  valueField:'dicId',
+//										  value: "小学,初中",  
+										  emptyText:'请选择主要工作地点',
+										  editable:false,
+										  listeners:{
+										  	select : function(combo,record,index){
+//										  		alert(combo.getCheckedDisplay());//显示的值
+										  		Ext.getCmp("flow_staffRecruitapply@mainPositionNames").setValue(combo.getCheckedDisplay());
+											}
+										  }
+										 });
+				this.items = [
+							{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'申请公司：',
+										width:97
+									},
+									{
+										xtype:'textfield',
+										id:'flow_staffRecruitapply@companyName',
+										name:'staffRecruitapply@companyName',
+										maxLength : 64,
+										value:__companyName,
+										allowBlank :false,
+										style:"background:#F0F0F0;",
+										width:200
+									},
+									{
+										text:'部门：',
+										style:'margin-left:10px;',
+										width:97
+									},
+									{
+										xtype : "hidden",
+										name : "staffRecruitapply@dept@depId",
+										id : "flow_staffRecruitapply@dept@depId"
+									},
+									depTreeSelector
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'空缺职位名称：',
+										width:97
+									},
+									{
+										fieldLabel : "职位",
+										id:'flow_staffRecruitapply@jobName',
+										hiddenName:'staffRecruitapply@jobName',
+										xtype : "combo",
+										mode : "local",
+										width:195,
+										editable : false,
+										allowBlank:false,
+										valueField : "jobName",
+										displayField : "jobName",
+										triggerAction : "all",
+										store : new Ext.data.SimpleStore( {
+											url : __ctxPath
+													+ "/hrm/comboJob.do",
+											fields : [ "jobId", "jobName" ]
+										}),
+										listeners : {
+											focus : function(h) {
+												var deptId = Ext.getCmp("flow_staffRecruitapply@dept@depId").getValue();
+												if (Ext.isEmpty(deptId)) {
+													 Ext.ux.Toast.msg("操作信息","请先选择部门！");
+												}
+											},
+											select : function(combo,record,index){
+												var jobId = record.data.jobId;
+												var jobName = record.data.jobName;
+												Ext.getCmp("flow_staffRecruitapply@job@jobId").setValue(jobId);
+												var url = __ctxPath + "/system/listAppUser.do";
+												var paramsStr = "Q_department.depId_L_EQ="+Ext.getCmp("flow_staffRecruitapply@dept@depId").getValue()+"&Q_position_S_EQ="+jobName;
+												var totalCounts = ajaxSyncCall(url,paramsStr).totalCounts;
+												Ext.getCmp("flow_staffRecruitapply@currentNum").setValue(totalCounts);
+											}
+										}
+									},
+									{
+										xtype:'hidden',
+										id:'flow_staffRecruitapply@job@jobId',
+										name:'staffRecruitapply@job@jobId'
+									},
+									{
+										text:'该职位目前人数：',
+										style:'margin-left:10px;',
+										width:97
+									},
+									{
+										xtype:'numberfield',
+										id:'flow_staffRecruitapply@currentNum',
+										name:'staffRecruitapply@currentNum',
+										maxLength : 10,
+										readOnly:true,
+										style:"background:#F0F0F0;",
+										width:70
+									},
+									{
+										text:'此次申请人数：',
+										style:'margin-left:10px;',
+										width:97
+									},
+									{
+										xtype:'numberfield',
+										id:'flow_staffRecruitapply@applyNum',
+										name:'staffRecruitapply@applyNum',
+										maxLength : 10,
+										allowBlank :false,
+										width:83
+									}
+								]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '申请理由：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_staffRecruitapply@applyReason',
+											name:'staffRecruitapply@applyReason',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+						   },{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label'
+								},
+								items:[
+									{
+										text:'年龄：',
+										columnWidth:0.15
+									},
+									{
+										xtype:'textfield',
+										id:'flow_staffRecruitapply@age',
+										name:'staffRecruitapply@age',
+										allowBlank:false,
+										maxLength:64,
+										columnWidth:.2
+									},
+									{
+										text:'性别：',
+										style:'margin-left:10px;',
+										columnWidth:.15
+									},
+									{
+										xtype:'combo',
+										id:'flow_staffRecruitapply@sex',
+										hiddenName:'staffRecruitapply@sex',
+										mode:'local',
+										store:['男','女'],
+										columnWidth:0.2,
+										editable:false,
+										allowBlank :false
+									},
+									{
+										text:'专业：',
+										style:'margin-left:10px;',
+										columnWidth:.1
+									},
+									{
+										xtype:'combo',
+										id:'flow_staffRecruitapply@majorDic@itemValue',
+										hiddenName:'staffRecruitapply@majorDic@itemValue',
+										mode:'local',
+										valueField : "itemValue",
+										displayField : "itemValue",
+										triggerAction : "all",
+										store : new Ext.data.JsonStore({
+											baseParams:{"Q_itemName_S_EQ":'专业'},
+											autoLoad:true,
+											root : "result",
+											totalProperty : "totalCounts",
+											url : __ctxPath
+													+ "/system/listDictionary.do",
+											fields : ["dicId","itemName","itemValue" ]
+										}),
+										columnWidth:0.2,
+										editable:false,
+										allowBlank :false,
+										listeners : {
+											select : function(combo,record,index){
+												var dicId = record.data.dicId;
+												Ext.getCmp("flow_staffRecruitapply@majorDic@dicId").setValue(dicId);
+											}
+										}
+									},{
+										xtype:'hidden',
+										id:'flow_staffRecruitapply@majorDic@dicId',
+										name:'staffRecruitapply@majorDic@dicId'
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label'
+								},
+								items:[
+									{
+										text:'学历：',
+										columnWidth:.15
+									},
+									{
+										xtype:'combo',
+										id:'flow_staffRecruitapply@educationDic@itemValue',
+										hiddenName:'staffRecruitapply@educationDic@itemValue',
+										mode:'local',
+										valueField : "itemValue",
+										displayField : "itemValue",
+										triggerAction : "all",
+										store : new Ext.data.JsonStore({
+											baseParams:{"Q_itemName_S_EQ":'学历'},
+											autoLoad:true,
+											root : "result",
+											totalProperty : "totalCounts",
+											url : __ctxPath
+													+ "/system/listDictionary.do",
+											fields : [ "dicId", "itemName","itemValue" ]
+										}),
+										columnWidth:0.2,
+										editable:false,
+										allowBlank :false,
+										listeners : {
+											select : function(combo,record,index){
+												var dicId = record.data.dicId;
+												Ext.getCmp("flow_staffRecruitapply@educationDic@dicId").setValue(dicId);
+											}
+										}
+									},{
+										xtype:'hidden',
+										id:'flow_staffRecruitapply@educationDic@dicId',
+										name:'staffRecruitapply@educationDic@dicId'
+									},
+									{
+										text:'工作年限：',
+										style:'margin-left:10px;',
+										columnWidth:.15
+									},
+									{
+										xtype:'textfield',
+										id:'flow_staffRecruitapply@workYear',
+										name:'staffRecruitapply@workYear',
+										columnWidth:0.5,
+										allowBlank :false
+									}
+								]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '该职位的主要职责：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_staffRecruitapply@positionDuty',
+											name:'staffRecruitapply@positionDuty',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+						   },{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '技能要求：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_staffRecruitapply@skillRequirement',
+											name:'staffRecruitapply@skillRequirement',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+						   },{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '工作经历：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_staffRecruitapply@workExperience',
+											name:'staffRecruitapply@workExperience',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+						   },{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '个性：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_staffRecruitapply@personality',
+											name:'staffRecruitapply@personality',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+						   },{
+								xtype : 'container',
+								layout : 'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '主要工作地点：',
+											columnWidth:0.15
+										},mainPositionCombo,
+										{
+											xtype:'hidden',
+											name:'staffRecruitapply@mainPositionNames',
+											id:'flow_staffRecruitapply@mainPositionNames'
+										}
+											]
+						   },{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '其他要求：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_staffRecruitapply@otherRequirement',
+											name:'staffRecruitapply@otherRequirement',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+						   },{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label'
+								},
+								items:[
+									{
+										text:'到岗期限：',
+										columnWidth:.15
+									},
+									{
+										xtype:'datefield',
+										id:'flow_staffRecruitapply@deadline',
+										name:'staffRecruitapply@deadline',
+										format:'Y-m-d',
+										columnWidth:0.4,
+										editable:false,
+										allowBlank :false
+									},
+									{
+										text:'人员性质：',
+										style:'margin-left:10px;',
+										columnWidth:.15
+									},
+									{
+										xtype:'radiogroup',
+										id:'flow_staffRecruitapply@personalCharacter',
+										name:'staffRecruitapply@personalCharacter',
+										columnWidth:.28,
+										items:[
+											{
+												name:'staffRecruitapply@personalCharacter',
+												boxLabel:"编内",
+												inputValue:'编内'
+											},{
+												name:'staffRecruitapply@personalCharacter',
+												boxLabel:"编外",
+												inputValue:'编外'
+											}
+										],
+										allowBlank :false
+									}
+								]
+							}
+							]
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

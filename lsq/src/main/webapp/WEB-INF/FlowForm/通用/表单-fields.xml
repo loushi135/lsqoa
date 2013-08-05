@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="commonAttachIDs" label="附件ID" type="varchar" length="512"  isShowed="false"/>
+	<field name="commonAttachFile" label="附件" type="file" length="512"/>
+	<field name="superOption" label="审批意见"/>
+</fields>

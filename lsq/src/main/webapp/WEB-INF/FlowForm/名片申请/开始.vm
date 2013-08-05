@@ -1,0 +1,303 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "名片申请",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 600,
+			height : 470,
+			padding : "10px",
+			initComponent : function() {
+				this.items = [
+				                    {
+												xtype:'panel',
+												border:false,
+												layout:'column',
+												style : 'padding-left:0px;margin-bottom:14px',
+												items:[{
+											              xtype:'label',
+											              text:'印制数量:',
+											              width:67
+					                               },{
+															xtype:"numberfield",
+															name:"amount",
+															maxLength:10 ,
+															id:"flow_amount"
+					                               },{
+															xtype: 'radiogroup',
+															id   : 'flow_type',
+															name: 'type',
+															style:'margin-left:15px;',
+															width:100,
+														  items:[{
+															 	checked : true,
+															 	name:'type',
+																boxLabel:'新印',
+																inputValue:'新印'
+													},{
+															name:'type',
+															boxLabel:'重印',
+															inputValue:'重印'
+													}]
+												 },{
+														xtype:'label',
+													 	style:'margin-top:5px;',
+														text:'（请上传一张原有名片扫描件或照片） '
+												}
+												]
+				},
+				    {
+					   xtype:"container",
+					   layout:'column',
+					   style : 'padding-left:0px;margin-bottom:14px',
+					   items:[	{
+					              xtype:'label',
+					              text:'是否高印:',
+					              width:67
+					            },
+					      {
+							xtype : "combo",
+							width:124,
+							allowBlank : false,
+							hiddenName :'isType',
+							id : "flow_isType",
+							mode : "local",
+							editable : false,
+							triggerAction : "all",
+							store :[["否", "否"], ["是", "是"]]
+						 },
+					    {
+				              xtype:'label',
+				              text:'姓名:',
+				              width:67,
+				              style:'margin-left:92px'
+					     },
+					    {
+							xtype:"textfield",
+							name:"cardProposer",
+							maxLength:30 ,
+							id:"flow_cardProposer",
+							value:__currentUser
+									
+							  }
+						]
+					
+					     },
+	                 {
+					   xtype:'container',
+					   layout:'column',
+					   style : 'margin-bottom:14px',
+					   items:[  
+					   	      {
+					              xtype:'label',
+					              text:'Email:',
+					              width:67,
+					              style:'margin-left:0px'
+					            },
+								{
+								    xtype:'textfield',
+									name:'Email',
+									maxLength:40,
+									id:"flow_Email",
+									value:__currentUserEmail
+							  }
+					   	     ,{
+					              xtype:'label',
+					              text:'电话:',
+					              width:67,
+					              style:'margin-left:95px'
+					            },
+								{
+								    xtype:'textfield',
+									name:'phone',
+									maxLength:14 ,
+									id:"flow_phone",
+									value: __currentUserPhone
+							  }
+								
+					        ]
+			},{
+					   xtype:'container',
+					   layout:'column',
+					   style : 'margin-bottom:14px',
+					   items:[  
+					   	      {
+					              xtype:'label',
+					              text:'公司:',
+					              width:67
+					            },
+							    {
+									xtype:"textfield",
+									name:"companyName",
+									maxLength:30 ,
+									id:"flow_companyName",
+									value:__companyName
+									
+							  },{
+					              xtype:'label',
+					              text:'传真:',
+					              width:67,
+					              style:'margin-left:95px'
+					            },
+								{
+								    xtype:'textfield',
+									name:'fax',
+									maxLength:14 ,
+									id:"flow_fax",
+									value: __currentUserFax
+							  }
+					        ]
+			       },{
+					   xtype:'container',
+					   layout:'column',
+					   style : 'margin-bottom:14px',
+					   items:[  
+					   	      {
+					              xtype:'label',
+					              text:'所属部门:',
+					              width:67,
+					              style:'margin-left:0px'
+					            },
+								{
+								    xtype:'textfield',
+									name:'deptName',
+									maxLength:14 ,
+									id:"flow_deptName",
+									value:__currentUserDept
+							  },{
+					                xtype:'hidden',
+					                name:'deptId',
+					                id:"flow_deptId",
+					                value:__currentUserDeptId
+					          },{
+					              xtype:'label',
+					              text:'手机:',
+					              width:67,
+					              style:'margin-left:95px'
+					            },
+								{
+								    xtype:'textfield',
+									name:'mobile',
+									maxLength:14 ,
+									id:"flow_mobile",
+									value: __currentUserMobile
+							  }
+					        ]
+			       },{
+					   xtype:"container",
+					   layout:'column',
+					   style : 'padding-left:0px;margin-bottom:14px',
+					   items:[ {
+					              xtype:'label',
+					              text:'职位:',
+					              width:67,
+					              style:'margin-left:0px'
+					            },
+								{
+								    xtype:'textfield',
+									name:'position',
+									maxLength:14 ,
+									id:"flow_position",
+									value:__currentUserPosition
+							  }
+//							  ,{
+//					              xtype:'label',
+//					              text:'邮政编码:',
+//					              width:67,
+//					              style:'margin-left:95px'
+//					             },
+//								 {
+//								    xtype:"numberfield",
+//									name:"postalCode",
+//									maxLength:10,
+//									allowBlank:false,
+//									value:__currentUserZip,
+//									id:"flow_postalCode"
+//								}
+								
+					         ]
+							},
+						    {
+										 xtype:'panel',
+										 layout:'column',
+										 border:false,
+										 style : 'padding-left:0px;margin-bottom:14px',
+										 items:[  {
+										              xtype:'label',
+										              text:'其他:',
+										              width:67
+										          },{
+										 				xtype:"textarea",
+										 				allowBlank:false,
+														name:"other",
+														id:"flow_other",
+														height:110,
+														width:430
+											   }]
+									
+							 },
+					    {
+							xtype : 'container',
+							autoHeight : true,
+							layout : 'column',
+							autoWidth : true,
+							defaultType : 'label',
+							style : 'padding-left:0px;padding-bottom:15px;',
+							items : [{
+										text : '附件:',
+										width : 59,
+										style : 'padding-left:0px;padding-top:3px;'
+									},{
+										xtype : 'hidden',
+										name : 'cardAttachIDs',
+										id : 'flow_cardAttachIDs'
+									},{
+										xtype : 'hidden',
+										name : 'cardAttachFile',
+										id : 'flow_cardAttachFile'
+									},{
+										xtype : 'panel',
+										id:'flow_displayAttach',
+										width : 434,
+										height: 65,
+										frame:false,
+										autoScroll:true,
+										style : 'padding-left:10px;padding-top:0px;',
+										html : ''
+									},{
+										xtype : 'button',
+										iconCls : 'btn-upload',
+										text : '上传',
+										handler : function() {
+											
+											var dialog = App.createUploadDialog({
+																	file_cat : 'flow/materialContract',
+																	callback : function(data) {
+																		Ext.getCmp('flow_displayAttach').body.update('');
+																		Ext.getCmp("flow_cardAttachFile").setValue('');
+																		Ext.getCmp('flow_cardAttachIDs').setValue('');
+																		var contractFile = Ext.getCmp("flow_cardAttachFile");
+																		var fileIds = Ext.getCmp('flow_cardAttachIDs');
+																		var display = Ext.getCmp('flow_displayAttach');
+																		for (var i = 0; i < data.length; i++) {
+																			if (fileIds.getValue() != '') {
+																				fileIds.setValue(fileIds.getValue()+ ',');
+																				contractFile.setValue(contractFile.getValue()+ ',');
+																			}
+																			contractFile.setValue(contractFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+//																			contractFile.setValue(contractFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+																			fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																			Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																		}
+																	},
+																	permitted_max_size :1024*1024*20,
+																	permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+																});
+												dialog.show(this);
+										}
+									}]
+				}
+]
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

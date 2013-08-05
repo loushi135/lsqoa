@@ -1,0 +1,130 @@
+[{
+	layout : 'form',
+	margins : '0',
+	labelHeight: 40,
+	items : [{
+    			xtype : 'combo',
+    			fieldLabel : '审批快速回复',
+    			id : 'quickReply',
+				emptyText : '--请选择--',
+				allowBlank:false,
+				editable:false,
+				width : 380,
+				selectOnFocus : true,
+				forceSelection : true,
+				triggerAction : 'all',
+    			store:[['同意','同意'],['不同意','不同意']],
+    			listeners : {
+    				select : function(){
+    					var quickReplyValue = Ext.getCmp('quickReply').getValue();
+    					if(quickReplyValue == '不同意'){
+    						Ext.getCmp('meetingRoom').setDisabled(true);
+    						Ext.getCmp('result').setValue(quickReplyValue);
+    						Ext.getCmp('pass').setDisabled(true);
+    						Ext.getCmp('unPass').setDisabled(false);
+    					}else{
+    						Ext.getCmp('meetingRoom').setDisabled(false);
+    						Ext.getCmp('result').setValue(quickReplyValue);
+    						Ext.getCmp('pass').setDisabled(false);
+    						Ext.getCmp('unPass').setDisabled(true);
+    					}
+    				}
+    			}
+    		},
+			{
+			  	fieldLabel:'指定会议室',
+    			id:'meetingRoom',
+    			xtype:'textfield',
+    			name:'meetingRoom',
+    			editable:true,
+    			readOnly:true,
+    			allowBlank:false,
+    			value:'${meetingRoom}',
+    			width:380,
+    			listeners:{
+		    				'focus' : function() {
+		    					var meetingRoom = Ext.getCmp('meetingRoom').getValue();
+		    					var startTime = Ext.getCmp('startTime').getValue();
+		    					var endTime = Ext.getCmp('endTime').getValue();
+		    					 MeetingRoomSelector.getView(
+			        						 function(id,name,statuss,beginTimes,endTimes){
+			        						      Ext.getCmp('meetingRoom').setValue(name);
+			        						      Ext.getCmp('startTime').setValue(beginTimes);
+			        						      Ext.getCmp('endTime').setValue(endTimes);
+			        						  },true,startTime,endTime
+			        					 ).show();
+		    				}
+		    		  }
+    		},{
+				xtype : 'panel',
+	    		title:'',
+	    		frame:false,
+	    		layout:'column',
+				border:false,
+	    		height:30,
+				items:[
+		    		{
+		    			xtype:'label',
+		    			text:'开始时间:',
+		    			width:105
+		    		},{
+		    			id:'startTime',
+		    			xtype:'textfield',
+		    			name:'startTime', 
+		    			fieldLabel : '开始时间',
+		    			readOnly:true,
+		    			value:"${startTime}",
+						emptyText : '请选择会议室及时间',
+						allowBlank : false,
+						listeners:{
+		    				'focus' : function() {
+		    					var meetingRoom = Ext.getCmp('meetingRoom').getValue();
+		    					var startTime = Ext.getCmp('startTime').getValue();
+		    					var endTime = Ext.getCmp('endTime').getValue();
+		    					 MeetingRoomSelector.getView(
+			        						 function(id,name,statuss,beginTimes,endTimes){
+			        						      Ext.getCmp('meetingRoom').setValue(name);
+			        						      Ext.getCmp('startTime').setValue(beginTimes);
+			        						      Ext.getCmp('endTime').setValue(endTimes);
+			        						  },true,startTime,endTime
+			        					 ).show();
+		    				}
+		    		  }
+		    		},{
+		    			xtype:'label',
+		    			text:'结束时间:',
+		    			style:'margin-left:10px;'
+		    		},{
+		    			id:'endTime',
+		    			xtype:'textfield',
+		    			name:'endTime', 
+		    			fieldLabel : '结束时间',
+		    			readOnly:true,
+		    			value:'${endTime}',
+						emptyText : '请选择会议室及时间',
+						allowBlank : false,
+						listeners:{
+		    				'focus' : function() {
+		    					var meetingRoom = Ext.getCmp('meetingRoom').getValue();
+		    					var startTime = Ext.getCmp('startTime').getValue();
+		    					var endTime = Ext.getCmp('endTime').getValue();
+		    					 MeetingRoomSelector.getView(
+			        						 function(id,name,statuss,beginTimes,endTimes){
+			        						      Ext.getCmp('meetingRoom').setValue(name);
+			        						      Ext.getCmp('startTime').setValue(beginTimes);
+			        						      Ext.getCmp('endTime').setValue(endTimes);
+			        						  },true,startTime,endTime
+			        					 ).show();
+		    				}
+		    		  }
+		    		}
+	    		]
+			},{
+				xtype:'textarea',
+				fieldLabel:'审批意见',
+				width:380,
+				id:'result',
+				name:'opinion',
+				height:150
+			}]
+}]

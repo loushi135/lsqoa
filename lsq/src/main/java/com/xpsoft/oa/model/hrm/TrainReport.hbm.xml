@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.hrm.TrainReport"
+        table="train_report"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <many-to-one
+			name="trainPlan"
+			class="com.xpsoft.oa.model.hrm.TrainPlan"
+            not-null="false"
+			fetch="join"
+		>
+			<column name="planId" />
+		</many-to-one>
+        <property
+            name="remark"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="remark"
+            length="200"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="trainReportTarget"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="trainReportTarget"
+            length="5000"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="trainReportAgenda"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="trainReportAgenda"
+            length="5000"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="examine"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="examine"
+            length="5000"
+            not-null="false"
+            unique="false"
+        />
+        <set name="trainReportFiles"
+	     table="trainReport_files"
+	     lazy="true"
+	     inverse="false"
+	     cascade="save-update"
+	     sort="unsorted"
+		>
+		<key>
+			<column name="trainReportId"/>
+		</key>
+		<many-to-many fetch="join" class="com.xpsoft.oa.model.system.FileAttach" column="fileId"/>
+	</set>
+     </class>
+</hibernate-mapping>

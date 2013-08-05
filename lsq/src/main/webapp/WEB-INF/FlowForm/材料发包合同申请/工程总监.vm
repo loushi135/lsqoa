@@ -1,0 +1,400 @@
+[
+	{
+		fieldLabel:'快速回复',
+		xtype:'combo',
+		mode : 'local',
+		editable : false,
+		anchor:'90%,90%',
+		triggerAction : 'all',
+		store :['同意','不同意'],
+		listeners:
+			{
+				select:{
+					fn:function(field,record,index){//select : ( Ext.form.ComboBox combo, Ext.data.Record record, Number index ) 
+						var options=Ext.getCmp('superOption');
+						if(options!=null){
+							options.setValue(field.getValue());
+							if(field.getValue()=='不同意'){
+								Ext.getCmp('pass').setDisabled(true);
+    							Ext.getCmp('unPass').setDisabled(false);
+							}else{
+								Ext.getCmp('pass').setDisabled(false);
+    							Ext.getCmp('unPass').setDisabled(true);
+							}
+						}
+					}
+				}
+			}
+	},{
+		xtype : 'container',
+		layout : 'column',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '合同总价:',
+			width : 105
+		}, {
+			name : 'contractAmount',
+			xtype : 'textfield',
+			value:'${contractAmount}',
+			width:80,
+			allowBlank : false,
+			enableKeyEvents:true,
+			regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+			regexText:'请输入正确格式的金额',
+			listeners : { 
+				keyup: function(field) { 	
+					function Arabia_to_Chinese(Num)
+					　　{
+					　　for(i=Num.length-1;i>=0;i--)
+					　　{
+					　　Num = Num.replace(",","")//替换tomoney()中的","
+					　　Num = Num.replace(" ","")//替换tomoney()中的空格
+					　　}
+					　　Num = Num.replace("￥","")//替换掉可能出现的￥字符
+					　　if(isNaN(Num))
+					　　{ //验证输入的字符是否为数字
+					　　//alert("请检查小写金额是否正确");
+					　　return;
+					　　}
+					　　//---字符处理完毕，开始转换，转换采用前后两部分分别转换---//
+					　　part = String(Num).split(".");
+					　　newchar = "";
+					　　//小数点前进行转化
+					　　for(i=part[0].length-1;i>=0;i--)
+					　　{
+					　　if(part[0].length > 10)
+					　　{
+					　　alert("位数过大，无法计算");
+					　　return "";
+					　　}//若数量超过拾亿单位，提示
+					　　tmpnewchar = ""
+					　　perchar = part[0].charAt(i);
+					　　switch(perchar)
+					　　{
+					　　case "0": tmpnewchar="零" + tmpnewchar ;break;
+					　　case "1": tmpnewchar="壹" + tmpnewchar ;break;
+					　　case "2": tmpnewchar="贰" + tmpnewchar ;break;
+					　　case "3": tmpnewchar="叁" + tmpnewchar ;break;
+					　　case "4": tmpnewchar="肆" + tmpnewchar ;break;
+					　　case "5": tmpnewchar="伍" + tmpnewchar ;break;
+					　　case "6": tmpnewchar="陸" + tmpnewchar ;break;
+					　　case "7": tmpnewchar="柒" + tmpnewchar ;break;
+					　　case "8": tmpnewchar="捌" + tmpnewchar ;break;
+					　　case "9": tmpnewchar="玖" + tmpnewchar ;break;
+					　　}
+					　　switch(part[0].length-i-1)
+					　　{
+					　　case 0: tmpnewchar = tmpnewchar +"元" ;break;
+					　　case 1: if(perchar!=0)tmpnewchar= tmpnewchar +"拾" ;break;
+					　　case 2: if(perchar!=0)tmpnewchar= tmpnewchar +"佰" ;break;
+					　　case 3: if(perchar!=0)tmpnewchar= tmpnewchar +"仟" ;break;
+					　　case 4: tmpnewchar= tmpnewchar +"万" ;break;
+					　　case 5: if(perchar!=0)tmpnewchar= tmpnewchar +"拾" ;break;
+					　　case 6: if(perchar!=0)tmpnewchar= tmpnewchar +"佰" ;break;
+					　　case 7: if(perchar!=0)tmpnewchar= tmpnewchar +"仟" ;break;
+					　　case 8: tmpnewchar= tmpnewchar +"亿" ;break;
+					　　case 9: tmpnewchar= tmpnewchar +"拾" ;break;
+					　　}
+					　　newchar = tmpnewchar + newchar;
+					　　}//for
+					　　//小数点之后进行转化
+					　　if(Num.indexOf(".")!=-1)
+					　　{
+					　　if(part[1].length > 2)
+					　　{
+					　　alert("小数点之后只能保留两位,系统将自动截段");
+					　　part[1] = part[1].substr(0,2)
+					　　}
+					　　for(i=0;i<part[1].length;i++)
+					　　{//for2
+					　　tmpnewchar = ""
+					　　perchar = part[1].charAt(i)
+					　　switch(perchar)
+					　　{
+					　　case "0": tmpnewchar="零" + tmpnewchar ;break;
+					　　case "1": tmpnewchar="壹" + tmpnewchar ;break;
+					　　case "2": tmpnewchar="贰" + tmpnewchar ;break;
+					　　case "3": tmpnewchar="叁" + tmpnewchar ;break;
+					　　case "4": tmpnewchar="肆" + tmpnewchar ;break;
+					　　case "5": tmpnewchar="伍" + tmpnewchar ;break;
+					　　case "6": tmpnewchar="陸" + tmpnewchar ;break;
+					　　case "7": tmpnewchar="柒" + tmpnewchar ;break;
+					　　case "8": tmpnewchar="捌" + tmpnewchar ;break;
+					　　case "9": tmpnewchar="玖" + tmpnewchar ;break;
+					　　}
+					　　if(i==0)tmpnewchar =tmpnewchar + "角";
+					　　if(i==1)tmpnewchar = tmpnewchar + "分";
+					　　newchar = newchar + tmpnewchar;
+					　　}//for2
+					　　}
+					　　//替换所有无用汉字
+					　　while(newchar.search("零零") != -1)
+					　　newchar = newchar.replace("零零", "零");
+					　　newchar = newchar.replace("亿零万", "亿");
+					　　newchar = newchar.replace("零亿", "亿");
+					　　newchar = newchar.replace("亿万", "亿");
+					　　newchar = newchar.replace("零万", "万");
+					　　newchar = newchar.replace("零元", "元");
+					　　newchar = newchar.replace("零角", "");
+					　　newchar = newchar.replace("零分", "");
+					　　if (newchar.charAt(newchar.length-1) == "元" || newchar.charAt(newchar.length-1) == "角")
+					　　newchar = newchar+"整"
+					　　return newchar;
+					}
+					Ext.getCmp('adopt_chlabel').setText('('+Arabia_to_Chinese(field.getValue())+')'); 
+					Ext.getCmp('adopt_chValue').setValue(Arabia_to_Chinese(field.getValue())); 
+				} 
+			} 
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;color:red;',
+			id:'adopt_chlabel',
+			text:'(${chValue})',
+			width :300
+		},{
+			name : 'chValue',
+			id : 'adopt_chValue',
+			xtype:'hidden',
+			value:'${chValue}'
+		}]
+	}
+	,{
+		xtype : 'container',
+		layout : 'column',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '付款方式:',
+			width : 105
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '预付款:',
+			width : 45
+		},{
+			name : 'yfk',
+			xtype : 'textfield',
+			id : 'flow_yfk',
+			value:'${yfk}',
+			allowBlank : false,
+			regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					var flow_yfk = Ext.getCmp("flow_yfk").getValue();       
+					var flow_jdk = Ext.getCmp("flow_jdk").getValue();
+					var flow_wgk = Ext.getCmp("flow_wgk").getValue();
+					var flow_jsk = Ext.getCmp("flow_jsk").getValue();
+					var flow_zbj = Ext.getCmp("flow_zbj").getValue();
+					if(flow_yfk != "" && flow_jdk != "" && flow_wgk != "" && flow_jsk != "" && flow_zbj != ""){
+						if((flow_yfk*1 + flow_jdk*1 + flow_wgk*1 + flow_jsk*1 + flow_zbj*1) != 100){
+							obj.setValue("");
+							Ext.getCmp("flow_error_info").setText("<font color='red'>提示:请输入正确的金额以达到预付款方式的总和为100%</font>",false);
+						}else{
+							Ext.getCmp("flow_error_info").setText("",false);
+						}
+					}else{
+						Ext.getCmp("flow_error_info").setText("",false);
+					}
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width :7
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '进度款:',
+			width :45
+		},{
+			name : 'jdk',
+			xtype : 'textfield',
+			id : 'flow_jdk',
+			value:'${jdk}',
+			regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			allowBlank : false,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					var flow_yfk = Ext.getCmp("flow_yfk").getValue();       
+					var flow_jdk = Ext.getCmp("flow_jdk").getValue();
+					var flow_wgk = Ext.getCmp("flow_wgk").getValue();
+					var flow_jsk = Ext.getCmp("flow_jsk").getValue();
+					var flow_zbj = Ext.getCmp("flow_zbj").getValue();
+					if(flow_yfk != "" && flow_jdk != "" && flow_wgk != "" && flow_jsk != "" && flow_zbj != ""){
+						if((flow_yfk*1 + flow_jdk*1 + flow_wgk*1 + flow_jsk*1 + flow_zbj*1) != 100){
+							obj.setValue("");
+							Ext.getCmp("flow_error_info").setText("<font color='red'>提示:请输入正确的金额以达到预付款方式的总和为100%</font>",false);
+						}else{
+							Ext.getCmp("flow_error_info").setText("",false);
+						}
+					}else{
+						Ext.getCmp("flow_error_info").setText("",false);
+					}
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width : 7
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '完工款:',
+			width : 45
+		},{
+			name : 'wgk',
+			xtype : 'textfield',
+			id : 'flow_wgk',
+			value:'${wgk}',
+		    regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			allowBlank : false,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					var flow_yfk = Ext.getCmp("flow_yfk").getValue();       
+					var flow_jdk = Ext.getCmp("flow_jdk").getValue();
+					var flow_wgk = Ext.getCmp("flow_wgk").getValue();
+					var flow_jsk = Ext.getCmp("flow_jsk").getValue();
+					var flow_zbj = Ext.getCmp("flow_zbj").getValue();
+					if(flow_yfk != "" && flow_jdk != "" && flow_wgk != "" && flow_jsk != "" && flow_zbj != ""){
+						if((flow_yfk*1 + flow_jdk*1 + flow_wgk*1 + flow_jsk*1 + flow_zbj*1) != 100){
+							obj.setValue("");
+							Ext.getCmp("flow_error_info").setText("<font color='red'>提示:请输入正确的金额以达到预付款方式的总和为100%</font>",false);
+						}else{
+							Ext.getCmp("flow_error_info").setText("",false);
+						}
+					}else{
+						Ext.getCmp("flow_error_info").setText("",false);
+					}
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width :7
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '结算款:',
+			width :45
+		},{
+			name : 'jsk',
+			xtype : 'textfield',
+			id : 'flow_jsk',
+			value:'${jsk}',
+		    regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			allowBlank : false,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					var flow_yfk = Ext.getCmp("flow_yfk").getValue();       
+					var flow_jdk = Ext.getCmp("flow_jdk").getValue();
+					var flow_wgk = Ext.getCmp("flow_wgk").getValue();
+					var flow_jsk = Ext.getCmp("flow_jsk").getValue();
+					var flow_zbj = Ext.getCmp("flow_zbj").getValue();
+					if(flow_yfk != "" && flow_jdk != "" && flow_wgk != "" && flow_jsk != "" && flow_zbj != ""){
+						if((flow_yfk*1 + flow_jdk*1 + flow_wgk*1 + flow_jsk*1 + flow_zbj*1) != 100){
+							obj.setValue("");
+							Ext.getCmp("flow_error_info").setText("<font color='red'>提示:请输入正确的金额以达到预付款方式的总和为100%</font>",false);
+						}else{
+							Ext.getCmp("flow_error_info").setText("",false);
+						}
+					}else{
+						Ext.getCmp("flow_error_info").setText("",false);
+					}
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width : 7
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '质保金:',
+			width : 45
+		},{
+			name : 'zbj',
+			xtype : 'textfield',
+			id : 'flow_zbj',
+			value:'${zbj}',
+		    regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			allowBlank : false,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					var flow_yfk = Ext.getCmp("flow_yfk").getValue();       
+					var flow_jdk = Ext.getCmp("flow_jdk").getValue();
+					var flow_wgk = Ext.getCmp("flow_wgk").getValue();
+					var flow_jsk = Ext.getCmp("flow_jsk").getValue();
+					var flow_zbj = Ext.getCmp("flow_zbj").getValue();
+					if(flow_yfk != "" && flow_jdk != "" && flow_wgk != "" && flow_jsk != "" && flow_zbj != ""){
+						if((flow_yfk*1 + flow_jdk*1 + flow_wgk*1 + flow_jsk*1 + flow_zbj*1) != 100){
+							obj.setValue("");
+							Ext.getCmp("flow_error_info").setText("<font color='red'>提示:请输入正确的金额以达到预付款方式的总和为100%</font>",false);
+						}else{
+							Ext.getCmp("flow_error_info").setText("",false);
+						}
+					}else{
+						Ext.getCmp("flow_error_info").setText("",false);
+					}
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width : 7
+		}]
+		
+	},{
+		xtype : 'container',
+		layout : 'column',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [
+			{
+				xtype : 'label',
+				id : 'flow_error_info'
+			}
+		]
+	},{
+		xtype : 'container',
+		layout : 'column',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '进度款收取时间:',
+			columnWidth : .145
+		}, {
+			xtype:'combo',
+			mode : 'local',
+			editable : false,
+			allowBlank:false,
+			columnWidth : .75,
+			triggerAction : 'all',
+			store : ['货前','货后'],
+			hiddenName:'jdkReceive',
+			id:'flow_jdkReceive',
+			allowBlank:false,
+			value:'${jdkReceive}'
+		}]
+	},
+	{
+		fieldLabel:'审批意见',
+		xtype:'textarea',
+		id:'superOption',
+		name:'superOption',
+		allowBlank:false,
+		anchor:'90%'
+	}
+]

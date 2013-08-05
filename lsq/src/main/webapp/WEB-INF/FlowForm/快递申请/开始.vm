@@ -1,0 +1,359 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "快递申请",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 670,
+			height : 300,
+			padding : "10px",
+			initComponent : function() {
+				this.items = [{
+							xtype:'hidden',
+							id:'flow_applyerId',
+							name:'applyerId',
+							value:__currentUserId
+						},{
+							name : 'provinceId',
+							id : 'flow_provinceId',
+							xtype:'hidden'
+						},{
+							name : 'province',
+							id : 'flow_province',
+							xtype:'hidden'
+						}, {
+							name : 'cityId',
+							id : 'flow_cityId',
+							xtype:'hidden'
+						},{
+							name : 'city',
+							id : 'flow_city',
+							xtype:'hidden'
+						},{
+							name : 'expressTypeText',
+							id : 'flow_expressTypeText',
+							xtype:'hidden'
+						},{
+							xtype : 'container',
+							style : 'padding-left:0px;margin-bottom:20px',
+							layout : 'column',
+							items : [{
+										xtype : 'label',
+										text : '申请人:',
+										style:'margin-top:3px;',
+										width:55
+									}, {
+										xtype : 'textfield',
+										style : 'margin-left:12px',
+										width : '40%',
+										id : 'flow_applyer',
+										name : 'applyer',
+										allowBlank:false,
+										readOnly : true,
+										style:"background:#F0F0F0;",
+										value : __currentUser
+									}, {
+										xtype : 'label',
+										text : '申请日期:',
+										style:'padding-left:3px;margin-top:3px;'
+									}, {
+										xtype : 'textfield',
+										readOnly : true,
+										style:"background:#F0F0F0;",
+										width:'40%',
+										allowBlank:false,
+										id : 'flow_applyDate',
+										name : 'applyDate',
+										value:formatDate(new Date(),'yyyy-MM-dd')
+									}]
+						},{
+							xtype : 'container',
+							style : 'padding-left:0px;margin-bottom:20px',
+							layout : 'column',
+							items : [{
+										xtype : 'label',
+										text : '快递属性:',
+										style:'margin-top:3px;',
+										width:55
+									}, {
+										style : 'margin-left:0px',
+										xtype : 'combo',
+										hiddenName : 'expressType',
+										id : 'flow_expressType',
+										mode : 'local',
+										width:260,
+										editable : false,
+										allowBlank : false,
+										triggerAction : 'all',
+										store : [[1, '客户'], [2, '供应商'], [3, '其他']],
+										listeners:{
+											'select':function(cmb){
+												Ext.getCmp('flow_toWhereName').setValue('');
+												if(cmb.value==3){
+													Ext.getCmp('flow_expressTypeText').setValue('其他');
+													Ext.getCmp('flow_toWhereNamelab').setText('其他:');
+													Ext.getCmp('flow_toWhereNameSelectbtn').disable();
+													Ext.getCmp('flow_toWhereNameCancelbtn').disable();
+												}else{
+													if(cmb.value==1){
+														Ext.getCmp('flow_expressTypeText').setValue('客户');
+														Ext.getCmp('flow_toWhereNamelab').setText('客户:');
+													}else{
+														Ext.getCmp('flow_expressTypeText').setValue('供应商');
+														Ext.getCmp('flow_toWhereNamelab').setText('供应商:');
+													}
+													Ext.getCmp('flow_toWhereNameSelectbtn').enable();
+													Ext.getCmp('flow_toWhereNameCancelbtn').enable();
+												}
+												
+											}
+										}
+									}, {
+										xtype : 'label',
+										text : '目的城市:',
+										style:'padding-left:3px;margin-top:3px;'
+									}, {
+										xtype : 'textfield',
+										readOnly : true,
+										width:170,
+										allowBlank:false,
+										name : 'cityAprovince',
+										id : 'flow_cityAprovince',
+										listeners : {
+											'focus' : function() {
+												CitySelector.getView(function(cityId, cityName,provinceId,provinceName) {
+																	//alert(cityId+'-'+cityName+'-'+provinceId+'-'+provinceName);
+																	if(!Ext.isEmpty(cityId)&&!Ext.isEmpty(provinceId)){
+																		Ext.getCmp('flow_cityAprovince').setValue(provinceName+'/'+cityName);
+																		Ext.getCmp('flow_provinceId').setValue(provinceId);
+																		Ext.getCmp('flow_cityId').setValue(cityId);
+																		Ext.getCmp('flow_province').setValue(provinceName);
+																		Ext.getCmp('flow_city').setValue(cityName);
+																	}
+																},true)
+														.show()
+											}
+										}
+									}, {
+										xtype : 'button',
+										text : '选择',
+										iconCls : 'btn-user-sel',
+										handler : function() {
+											CitySelector.getView(function(cityId, cityName,provinceId,provinceName) {
+																	//alert(cityId+'-'+cityName+'-'+provinceId+'-'+provinceName);
+																	if(!Ext.isEmpty(cityId)&&!Ext.isEmpty(provinceId)){
+																		Ext.getCmp('flow_cityAprovince').setValue(provinceName+'/'+cityName);
+																		Ext.getCmp('flow_provinceId').setValue(provinceId);
+																		Ext.getCmp('flow_cityId').setValue(cityId);
+																		Ext.getCmp('flow_province').setValue(provinceName);
+																		Ext.getCmp('flow_city').setValue(cityName);
+																	}
+																},true)
+														.show()
+											}
+									}, {
+										xtype : 'button',
+										text : '清除',
+										iconCls : 'reset',
+										handler : function() {
+											Ext.getCmp('flow_cityAprovince').setValue("");
+											Ext.getCmp('flow_provinceId').setValue("");
+											Ext.getCmp('flow_cityId').setValue("");
+											Ext.getCmp('flow_province').setValue("");
+											Ext.getCmp('flow_city').setValue("");
+										}
+									}
+									]
+						},{
+							xtype : 'container',
+							layout : 'column',
+							style : 'padding-left:0px;padding-bottom:20px;',
+							items : [{
+								xtype : 'label',
+								id:'flow_toWhereNamelab',
+								text : '目的单位:',
+								width : 55,
+								style : 'padding-left:0px;padding-bottom:3px;'
+							}, {
+								name : 'toWhereName',
+								id : 'flow_toWhereName',
+								xtype : 'textfield',
+								readOnly : false,
+								allowBlank : false,
+								width : 170
+							}, {
+								xtype : 'button',
+								text : '选择',
+								id:'flow_toWhereNameSelectbtn',
+								iconCls : 'btn-user-sel',
+								handler : function() {
+									
+									var expressType= Ext.getCmp('flow_expressType').getValue();
+									switch(expressType){
+										case 1:
+											CustomerSelector.getView(function(customerId, customerName) {
+												Ext.getCmp('flow_toWhereName').setValue(customerName);
+											}, true).show();
+											break;
+										case 2:
+											new SuppliersAssessSelector(function(suppliersId,suppliersName,contractNo) {
+												Ext.getCmp('flow_toWhereName').setValue(suppliersName);
+											}, true).show();
+											break;
+										default:
+											Ext.ux.Toast.msg('操作信息', '请先选择快递属性！');
+										
+									}
+								}
+							}, {
+								xtype : 'button',
+								text : '清除',
+								id:'flow_toWhereNameCancelbtn',
+								iconCls : 'reset',
+								handler : function() {
+									Ext.getCmp('flow_toWhereName').setValue('');
+								}
+							},{
+								xtype : 'label',
+								text : '分摊对象:',
+								style:'padding-left:3px;margin-top:3px;',
+								width:60
+							},{
+								xtype:'combo',
+								mode:'local',
+								hiddenName:'dispatchType',
+								id:'flow_dispatchType',
+								editable : false,
+								allowBlank : false,
+								triggerAction : 'all',
+								store:['部门','项目'],
+								value:'部门',
+								width:80,
+								listeners:{
+									select:function(field){
+										if(field.getValue()=='部门'){
+											Ext.getCmp("flow_expressApplyDeptName").show();
+											Ext.getCmp("flow_expressApplyDeptName").allowBlank=false;
+											Ext.getCmp("flow_expressApplyProContainer").hide();
+											Ext.getCmp("flow_expressApplyProName").reset();
+											Ext.getCmp("flow_expressApplyProName").allowBlank=true;
+											Ext.getCmp("flow_expressApplyProId").reset();
+											Ext.getCmp("flow_proAreaContainer").hide();
+											Ext.getCmp("flow_proArea").reset();
+										}else if(field.getValue()=='项目'){
+											Ext.getCmp("flow_expressApplyProContainer").show();
+											Ext.getCmp("flow_proAreaContainer").show();
+											Ext.getCmp("flow_expressApplyProName").allowBlank=false;
+											Ext.getCmp("flow_expressApplyDeptName").hide();
+											Ext.getCmp("flow_expressApplyDeptName").reset();
+											Ext.getCmp("flow_expressApplyDeptName").allowBlank=true;
+											Ext.getCmp("flow_expressApplyDeptId").reset();
+										}
+									}
+								}
+							},{
+								xtype:'textfield',
+								name:'expressApplyDeptName',
+								id:'flow_expressApplyDeptName',
+								style:'margin-left:5px;',
+								width:180,
+								emptyText:'请选择部门',
+								allowBlank : false,
+								listeners:{
+									focus:function(){
+										DepSelector.getView(function(ids, names) {
+											Ext.getCmp("flow_expressApplyDeptId").setValue(ids);
+											Ext.getCmp("flow_expressApplyDeptName").setValue(names);
+										}, true).show();
+									}
+								}
+							},{
+								xtype:'container',
+								id:'flow_expressApplyProContainer',
+								layout : "column",
+								border : false,
+								unstyled : false,
+								items:[
+									{
+										xtype:'textfield',
+										name:'expressApplyProName',
+										id:'flow_expressApplyProName',
+										style:'margin-left:5px;',
+										width:180,
+										emptyText:'请选择项目',
+										listeners:{
+											'focus':function(){
+												ProjectNewSelector.getView(function(proId,proName,proNo,contractId,contractNo,contractAmount,proAreaId,proArea){
+													Ext.getCmp("flow_expressApplyProId").setValue(proId);
+													Ext.getCmp("flow_expressApplyProName").setValue(proName);
+													Ext.getCmp("flow_proArea").setValue(proArea);
+												},true,true).show();
+											},
+											afterrender:function(field){
+												Ext.getCmp("flow_expressApplyProContainer").hide();
+											}
+										}
+									}
+								]
+							},{
+								xtype:'hidden',
+								name:'expressApplyProId',
+								id:'flow_expressApplyProId'
+							},{
+								xtype:'hidden',
+								name:'expressApplyDeptId',
+								id:'flow_expressApplyDeptId'
+							}
+							]
+						},{
+							xtype : 'container',
+							style : 'padding-left:0px;margin-bottom:20px',
+							layout : 'column',
+							items : [{
+										xtype : 'label',
+										text : '快递公司:',
+										style:'margin-top:3px;',
+										width:55
+									}, {	
+										name : 'expressName',
+										id : 'flow_expressName',
+										xtype : 'textfield',
+										width:'40%',
+										allowBlank : false
+									}, {
+										xtype : 'label',
+										text : '快递单号:',
+										style:'padding-left:3px;margin-top:3px;'
+									}, {
+										name : 'expressNo',
+										id : 'flow_expressNo',
+										xtype : 'textfield',
+										width:'40%',
+										allowBlank : false
+									}]
+						},{
+						    
+							xtype : 'container',
+							style : 'padding-left:0px;margin-bottom:20px',
+							id:'flow_proAreaContainer',
+							layout : 'column',
+							items : [{
+										xtype : 'label',
+										text : '项目所属:',
+										style:'margin-top:3px;',
+										width:55
+									}, {	
+										name : 'proArea',
+										id : 'flow_proArea',
+										xtype : 'textfield',
+										width:'40%',
+										readOnly : true
+										
+									}]
+						}]
+				Ext.MyForm.superclass.initComponent.call(this);
+				
+				
+				
+			}
+		})

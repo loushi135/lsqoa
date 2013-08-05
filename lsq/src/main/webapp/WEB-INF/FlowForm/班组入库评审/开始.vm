@@ -1,0 +1,596 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "班组入库评审申请表",
+			layout : "form",
+			bodyStyle : 'padding:10px 10px 10px 10px',
+			border : true,
+			autoScroll : true,
+			bodyStyle : 'padding:10px 10px 10px 10px;',
+			defaults : {
+				anchor : '98%,98%'
+			},
+			defaultType : 'textfield',
+			width : 600,
+			autoHeight : true,
+			padding : "10px",
+			initComponent : function() {
+
+				this.items = [{
+							xtype : "container",
+							layout : "column",
+							height : 25,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '单位名称：',
+										width : 85
+									}, {
+										xtype : 'textfield',
+										name : 'flowItem.suppliersName',
+										id:'flow_flowItem.suppliersName',
+										allowBlank : false,
+										width : 200
+									}, {
+										text : '推荐人：',
+										width : 80
+									}, {
+										xtype : 'textfield',
+										name : 'flowItem.inviteUserName',
+										id:'flow_flowItem.inviteUserName',
+										allowBlank : true,
+										width : 200
+									}]
+						}, {
+							xtype : "container",
+							layout : "column",
+							height : 25,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '法定代表人：',
+										width : 85
+									}, {
+										xtype : 'textfield',
+										name : 'flowItem.legalRepresentative',
+										id:'flow_flowItem.legalRepresentative',
+										allowBlank : true,
+										width : 200
+									},{
+										text : '联系人：',
+										width : 80
+									}, {
+										xtype : 'textfield',
+										name : 'flowItem.supplierContacter',
+										id:'flow_flowItem.supplierContacter',
+										allowBlank : false,
+										width : 200
+									}]
+						}, {
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '通讯地址：',
+										width : 85
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.supplierAddress',
+										id:'flow_flowItem.supplierAddress',
+										allowBlank : false,
+										width : 200
+									},{
+										text : '联系人电话：',
+										width : 80
+									}, {
+										xtype : 'textfield',
+										name : 'flowItem.supplierPhone',
+										id:'flow_flowItem.supplierPhone',
+										allowBlank : false,
+										width : 200
+									}]
+						}, {
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '注册资金：',
+										width : 85
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.registeredCapital',
+										id:'flow_flowItem.registeredCapital',
+										allowBlank : true,
+										width : 200
+									}, {
+										text : '邮      编：',
+										width : 80
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.zip',
+										id:'flow_flowItem.zip',
+										allowBlank : true,
+										width : 200
+									}]
+						}, {xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '开户银行：',
+										width : 85
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.suppliersbank',
+										id:'flow_flowItem.suppliersbank',
+										allowBlank : true,
+										width : 200
+									}, {
+										text : '开户账号：',
+										width : 80
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.bankAccount',
+										id:'flow_flowItem.bankAccount',
+										allowBlank : true,
+										width : 200
+									}]
+						}, {
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '合作类型：',
+										width : 85
+									}, {
+										xtype : 'combo',
+										name : 'flowItem.cooperateType',
+										id : 'flow_flowItem.cooperateType',
+										allowBlank : false,
+										width : 195,
+										editable : false,
+										triggerAction : 'all',
+										mode : 'local',
+										store : ['战略','长期','临时','待考察'],
+										listeners:{
+											select:function(field){
+											      var cooperateType = field.getValue();
+											      if(cooperateType=='临时'){
+											      	 Ext.getCmp('flow_flowItem.projectContainer').show();
+											      	 Ext.getCmp('flow_flowItem.project.proName').allowBlank=false;
+											      }else{
+											      	 Ext.getCmp('flow_flowItem.projectContainer').hide();
+											      	 Ext.getCmp('flow_flowItem.project.proName').setValue('');
+											      	 Ext.getCmp('flow_flowItem.project.proName').allowBlank=true;
+											      	 Ext.getCmp('flow_flowItem.project.id').setValue('');
+											      }
+											}
+										}
+									}, {
+										text : '所在省市：',
+										width : 80
+									}, {
+										xtype : 'textfield',
+										id : 'flow_flowItem.provinceCity',
+										name : 'flowItem.provinceCity',
+										allowBlank : false,
+										width : 200,
+										emptyText:'请选择省市',
+										editable : false,
+										listeners : {
+											'focus' : function() {
+												CitySelector.getView(function(cityId, cityName, provinceId, provinceName) {
+													if(!Ext.isEmpty(cityId)&&!Ext.isEmpty(provinceId)){
+														Ext.getCmp('flow_flowItem.provinceCity').setValue(provinceName + '/' + cityName);
+														Ext.getCmp('flow_flowItem.province.provinceId').setValue(provinceId);
+														Ext.getCmp('flow_flowItem.city.cityId').setValue(cityId);
+													}
+												}, true).show()
+											}
+										}
+									},
+									{
+										xtype:'hidden',
+										name:'flowItem.province.provinceId',
+										id:'flow_flowItem.province.provinceId'
+									},
+									{
+										xtype:'hidden',
+										name:'flowItem.city.cityId',
+										id:'flow_flowItem.city.cityId'
+									}]
+						}, {
+							xtype : "container",
+							layout : "column",
+							id:'flow_flowItem.projectContainer',
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '项目名称：',
+										width : 85
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.project.proName',
+										id:'flow_flowItem.project.proName',
+										width : 475, 
+										emptyText:'请选择项目',
+										listeners:{
+											'focus':function(){
+												ProjectNewSelector.getView(function(proId,proName,proNo,contractId,contractNo,contractAmount,proAreaId,proArea){
+													Ext.getCmp("flow_flowItem.project.id").setValue(proId);
+													Ext.getCmp("flow_flowItem.project.proName").setValue(proName);
+												},true,true).show();
+											}
+										}
+									},{
+										xtype : 'hidden',
+										name : 'flowItem.project.id',
+										id:'flow_flowItem.project.id',
+										listeners:{
+											afterrender:function(){
+												Ext.getCmp('flow_flowItem.projectContainer').hide();
+											}
+										}
+									}]
+						}, {
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '办公电话：',
+										width : 85
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.officeTel',
+										id:'flow_flowItem.officeTel',
+										allowBlank : true,
+										width : 130
+									}, {
+										text : '传真：',
+										width : 40
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.fax',
+										id:'flow_flowItem.fax',
+										allowBlank : true,
+										width : 130
+									}, {
+										text : 'email：',
+										width : 40
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.email',
+										id:'flow_flowItem.email',
+										allowBlank : true,
+										width : 145
+									}]
+						},{
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '3px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '固定员工人数：',
+										width : 85
+									},{
+										xtype : 'numberfield',
+//										style:'margin-top:27px;',
+										name : 'flowItem.fixedStaffNum',
+										id:'flow_flowItem.fixedStaffNum',
+										allowBlank : true,
+										width : 70
+									}, {
+										text : '其中专业技术安装调试人员数：',
+										width : 169
+									},{
+										xtype : 'numberfield',
+//										style:'margin-top:27px;',
+										name : 'flowItem.techDebugNum',
+										id:'flow_flowItem.techDebugNum',
+										allowBlank : true,
+										width : 63
+									},
+									{
+										text : '其中班组长人数：',
+										width : 98
+									},{
+										xtype : 'numberfield',
+//										style:'margin-top:27px;',
+										name : 'flowItem.leaderNum',
+										id:'flow_flowItem.leaderNum',
+										allowBlank : true,
+										width : 86
+									}
+										]
+						},{
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '10px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '持有效电工证工人数：',
+										width : 85
+									},{
+										xtype : 'numberfield',
+										name : 'flowItem.validElecNum',
+										id:'flow_flowItem.validElecNum',
+										allowBlank : true,
+										width : 70
+									}, {
+										text : '持有效焊工证工人数：',
+										width : 120
+									},{
+										xtype : 'numberfield',
+										name : 'flowItem.validWelderNum',
+										id:'flow_flowItem.validWelderNum',
+										allowBlank : true,
+										width : 113
+									}, {
+										text : '持资格证书人数：',
+										width : 98
+									},{
+										xtype : 'numberfield',
+										name : 'flowItem.validQualifyNum',
+										id:'flow_flowItem.validQualifyNum',
+										allowBlank : true,
+										width : 85
+									}]
+						},{
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '高峰可上人员：',
+										width : 85
+									},{
+										xtype : 'numberfield',
+										name : 'flowItem.peakNum',
+										id:'flow_flowItem.peakNum',
+										allowBlank : true,
+										width : 200
+									}, {
+										text : '工人主要来自地区：',
+										width : 110
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.mainArea',
+										id:'flow_flowItem.mainArea',
+										allowBlank : true,
+										width :170
+									}]
+						},{
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '0px 0px 3px 0px'
+								}
+							},
+							items : [{
+										text : '工程产值',
+										width : 80
+									},{
+										text : '前年：',
+										width : 40
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.previousYearOutput',
+										id:'flow_flowItem.previousYearOutput',
+										allowBlank : true,
+										width : 165
+									}, {
+										text : '去年：',
+										width : 45
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.lastYearOutput',
+										id:'flow_flowItem.lastYearOutput',
+										allowBlank : true,
+										width : 235
+									}]
+						},{
+							border : true,
+							autoScroll : true,
+							//bodyStyle: 'padding:10px 10px 10px 10px;',
+							autoHeight : true,
+							padding : "10px",
+							xtype : "container",
+							layout : "column",
+							defaults : {
+								xtype : 'label',
+								anchor : '98%,98%'
+							},
+							items : [{
+										text : '主要骨干姓名及联系电话擅长系统信息:',
+										width : 105
+									},{
+										xtype : 'textarea',
+										name : 'flowItem.mainInfo',
+										id:'flow_flowItem.mainInfo',
+										width : 450,
+										allowBlank : true,
+										autoScroll : true
+									}]
+						},{
+										xtype : 'container',
+										autoHeight : true,
+										layout : 'column',
+										autoWidth : true,
+										defaultType : 'label',
+										style : 'padding-left:0px;padding-bottom:5px;margin-top:3px;',
+										items : [{
+													text : '附件:',
+													width:95,
+													style : "margin-top:15px;"
+												},{
+													xtype : 'hidden',
+													name : 'flowItem.attachIds',
+													id : 'flow_flowItem.attachIds'
+												},{
+													xtype : 'hidden',
+													name : 'flowItem.attachFiles',
+													id : 'flow_flowItem.attachFiles'
+												},{
+													xtype : 'panel',
+													id:'flow_flowItem.displayAttach',
+													columnWidth:.95,
+													height: 65,
+													frame:false,
+													autoScroll:true,
+													style : 'padding-left:10px;padding-top:0px;',
+													html : ''
+												},{
+													xtype : 'button',
+													iconCls : 'btn-upload',
+													text : '上传',
+													handler : function() {
+														var dialog = App.createUploadDialog({
+																				file_cat : 'flow/teamInStock',
+																				callback : function(data) {
+																					var attachFiles = Ext.getCmp("flow_flowItem.attachFiles");
+																					var fileIds = Ext.getCmp('flow_flowItem.attachIds');
+																					var display = Ext.getCmp('flow_flowItem.displayAttach');
+																					display.body.update('');
+																					attachFiles.setValue('');
+																					fileIds.setValue('');
+																					for (var i = 0; i < data.length; i++) {
+																						if (fileIds.getValue() != '') {
+																							fileIds.setValue(fileIds.getValue()+ ',');
+																							attachFiles.setValue(attachFiles.getValue()+ ',');
+																						}
+																						attachFiles.setValue(attachFiles.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+																						fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																						Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																					}
+																				},
+																				permitted_max_size :1024*1024*20
+																			});
+															dialog.show(this);
+													}
+												}]
+									},{
+										xtype : 'label',
+										style:"color:red;",
+										text:"营业执照、法人身份证、骨干人员身份证、相关人员证书、工程照片。"
+									},{
+						border : true,
+							autoScroll : true,
+							//bodyStyle: 'padding:10px 10px 10px 10px;',
+							autoHeight : true,
+							padding : "10px",
+							xtype : "container",
+							layout : "column",
+							defaults : {
+								xtype : 'label',
+								anchor : '98%,98%'
+							},
+							items : [{
+										text : '推荐原因：',
+										width : 105
+									},{
+										xtype : 'textarea',
+										name : 'flowItem.recommendReason',
+										id:'flow_flowItem.recommendReason',
+										allowBlank : false,
+										autoScroll : true,
+										columnWidth:.98
+									}]
+						},{
+							xtype : "panel",
+							layout : "column",
+							border : false,
+							unstyled : false,
+							defaults : {
+								xtype : 'label',
+								style : {
+									margin : '5px 0px 0px 0px'
+								}
+							},
+							items : [{
+										text : '经办人：',
+										width : 105
+									},{
+										xtype : 'textfield',
+										name : 'flowItem.applyUserName',
+										id:'flow_flowItem.applyUserName',
+										allowBlank : false,
+										readOnly:true,
+										width : 455,
+										value : __currentUser
+									},{
+										xtype : 'hidden',
+										name : 'flowItem.applyUserId',
+										id:'flow_flowItem.applyUserId',
+										value : __currentUserId
+									}]
+						}]
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

@@ -1,0 +1,414 @@
+/**
+ * @author:
+ * @class StaffEmployapplyView
+ * @extends Ext.Panel
+ * @description [StaffEmployapply]管理
+ * @company 
+ * @createtime:2010-07-19
+ */
+StaffEmployapplyView = Ext.extend(Ext.Panel, {
+	//条件搜索Panel
+	searchPanel : null,
+	//数据展示Panel
+	gridPanel : null,
+	//GridPanel的数据Store
+	store : null,
+	//头部工具栏
+	topbar : null,
+	//构造函数
+	constructor : function(_cfg) {
+		Ext.applyIf(this, _cfg);
+		//初始化组件
+		this.initUIComponents();
+		//调用父类构造
+		StaffEmployapplyView.superclass.constructor.call(this, {
+					id : 'StaffEmployapplyView',
+					title : '[员工录用]管理',
+					region : 'center',
+					layout : 'border',
+					items : [this.searchPanel, this.gridPanel]
+				});
+	},//end of constructor
+
+	//初始化组件
+	initUIComponents : function() {
+		//初始化搜索条件Panel
+		this.searchPanel = new Ext.FormPanel({
+					layout : 'column',
+					region : 'north',
+					bodyStyle : 'padding:6px 10px 6px 10px',
+					border : false,
+					frame : true,
+					height : 70,
+					defaults : {
+						border : false,
+						anchor : '98%,98%'
+					},
+					items : [{
+								style : 'margin-top:5px;',
+								xtype : 'label',
+								text : '请输入查询条件:'
+							}, {
+								style : 'margin-top:5px;',
+								xtype : 'label',
+								text : '员工姓名:'
+							}, {
+								name : 'Q_staffName_S_LK',
+								xtype : 'textfield'
+							}, {
+								style : 'margin-top:5px;',
+								xtype : 'label',
+								text : '部门:'
+							}, {
+								name : 'Q_dept.depName_S_LK',
+								xtype : 'textfield'
+							}, {
+								style : 'margin-top:5px;',
+								xtype : 'label',
+								text : '职位:'
+							}, {
+								name : 'Q_job.jobName_S_LK',
+								xtype : 'textfield'
+							}, {
+								style : 'margin-top:5px;',
+								xtype : 'label',
+								text : '考试成绩:'
+							}, {
+								name : 'Q_score_S_LK',
+								xtype : 'textfield'
+							}, {
+								style : 'margin-top:5px;',
+								xtype : 'label',
+								text : '体检情况:'
+							}, {
+								name : 'Q_medicalCheck_S_LK',
+								xtype : 'textfield'
+							}, {
+								bodyStyle:"padding-left: 88px",
+								layout : 'column',
+								items: [
+											{
+										style : 'margin-top:5px;',
+										xtype : 'label',
+										text : '招聘渠道:'
+									}, {
+										name : 'Q_inviteWay_S_LK',
+										xtype : 'combo',
+										mode : "local",
+										triggerAction : "all",
+										store : ['公开招聘', '推荐']
+									}, {
+										style : 'margin-top:5px;',
+										xtype : 'label',
+										text : '推荐人:'
+									}, {
+										name : 'Q_inviteUser.fullname_S_LK',
+										xtype : 'textfield'
+									}, {
+										xtype : 'button',
+										text : '查询',
+										iconCls : 'search',
+										handler : this.search.createCallback(this)
+									}
+								]
+							}]
+				});//end of the searchPanel
+
+		//加载数据至store
+		this.store = new Ext.data.JsonStore({
+					url : __ctxPath + "/statistics/listStaffEmployapply.do",
+					root : 'result',
+					totalProperty : 'totalCounts',
+					remoteSort : true,
+					fields : [{
+								name : 'id',
+								type : 'int'
+							}, 'staffName', 'dept', 'job', 'inviteWay',
+							'publicWay', 'inviteUser', 'inviteReason',
+							'attachFile', 'professional', 'experience',
+							'confident', 'thinkability', 'expressability',
+							'looks', 'inspect', 'inspectSalary', 'probation',
+							'probationSalary', 'agreeEnterType', 'processRunId','medicalCheck','score']
+				});
+		this.store.setDefaultSort('id', 'desc');
+		//加载数据
+		this.store.load({
+					params : {
+						start : 0,
+						limit : 25
+					}
+				});
+
+		this.rowActions = new Ext.ux.grid.RowActions({
+					header : '管理',
+					width : 80,
+					actions : [{
+								iconCls : 'btn-del',
+								qtip : '删除',
+								style : 'margin:0 3px 0 3px',
+								hide : !isGranted("_StaffEmployapplyDel")
+							}, {
+								iconCls : 'btn-edit',
+								qtip : '编辑',
+								style : 'margin:0 3px 0 3px',
+								hide : !isGranted("_StaffEmployapplyEdit")
+							}, {
+								iconCls : 'btn-flowView',
+								qtip : '查看审批表单',
+								style : 'margin:0 3px 0 3px'
+							}]
+				});
+
+		//初始化ColumnModel
+		var sm = new Ext.grid.CheckboxSelectionModel();
+		var cm = new Ext.grid.ColumnModel({
+					columns : [sm, new Ext.grid.RowNumberer(), {
+								header : 'id',
+								dataIndex : 'id',
+								hidden : true
+							}, {
+								header : '员工姓名',
+								dataIndex : 'staffName'
+							}, {
+								header : '部门',
+								dataIndex : 'dept',
+								renderer : function(value, metadata, record,
+										rowIndex, colIndex) {
+									var str = '';
+									if (!Ext.isEmpty(value)) {
+										str = value.depName;
+									}
+									return str;
+								}
+							}, {
+								header : '职位',
+								dataIndex : 'job',
+								renderer : function(value, metadata, record,
+										rowIndex, colIndex) {
+									var str = '';
+									if (!Ext.isEmpty(value)) {
+										str = value.jobName;
+									}
+									return str;
+								}
+							}, {
+								header : '招聘渠道',
+								dataIndex : 'inviteWay'
+							}, {
+								header : '途径',
+								dataIndex : 'publicWay'
+							}, {
+								header : '推荐人',
+								dataIndex : 'inviteUser',
+								renderer : function(value, metadata, record,
+										rowIndex, colIndex) {
+									var str = '';
+									if (!Ext.isEmpty(value)) {
+										str = value.fullname;
+									}
+									return str;
+								}
+							}, {
+								header : '推荐理由',
+								dataIndex : 'inviteReason'
+							}, {
+								header : '附件',
+								dataIndex : 'attachFile'
+							}, {
+								header : '专业知识',
+								dataIndex : 'professional'
+							}, {
+								header : '工作经历',
+								dataIndex : 'experience'
+							}, {
+								header : '自信度',
+								dataIndex : 'confident'
+							}, {
+								header : '思维能力',
+								dataIndex : 'thinkability'
+							}, {
+								header : '表达能力',
+								dataIndex : 'expressability'
+							}, {
+								header : '仪表',
+								dataIndex : 'looks'
+							}, {
+								header : '考察期',
+								dataIndex : 'inspect'
+							}, {
+								header : '考察期月薪',
+								dataIndex : 'inspectSalary'
+							}, {
+								header : '试用期',
+								dataIndex : 'probation'
+							}, {
+								header : '试用期月薪',
+								dataIndex : 'probationSalary'
+							}, {
+								header : '同意新进',
+								dataIndex : 'agreeEnterType'
+							}, {
+								header : '考试成绩',
+								dataIndex : 'score'
+							}, {
+								header : '体检情况',
+								dataIndex : 'medicalCheck'
+							}, this.rowActions],
+					defaults : {
+						sortable : true,
+						menuDisabled : false,
+						width : 100
+					}
+				});
+		//初始化工具栏
+		this.topbar = new Ext.Toolbar({
+					height : 30,
+					bodyStyle : 'text-align:left',
+					items : [{
+								iconCls : 'btn-add',
+								text : '添加[员工录用]',
+								xtype : 'button',
+								handler : this.createRecord,
+								hidden : !isGranted("_StaffEmployapplyAdd")
+							}, {
+								iconCls : 'btn-del',
+								text : '删除[员工录用]',
+								xtype : 'button',
+								hidden : !isGranted("_StaffEmployapplyDel"),
+								handler : this.delRecords,
+								scope : this
+							}]
+				});
+
+		this.gridPanel = new Ext.grid.GridPanel({
+					id : 'StaffEmployapplyGrid',
+					region : 'center',
+					stripeRows : true,
+					tbar : this.topbar,
+					store : this.store,
+					trackMouseOver : true,
+					disableSelection : false,
+					autoScroll : true,
+					loadMask : true,
+					height : 100,
+					cm : cm,
+					sm : sm,
+					plugins : this.rowActions,
+					viewConfig : {
+						forceFit : false
+						// showPreview : false
+					},
+					bbar : new Ext.PagingToolbar({
+								pageSize : 25,
+								store : this.store,
+								plugins : [new Ext.ux.PageSizePlugin()],
+								displayInfo : true,
+								displayMsg : '当前页记录索引{0}-{1}， 共{2}条记录',
+								emptyMsg : "当前没有记录"
+							})
+				});
+
+		this.gridPanel.addListener('rowdblclick', function(grid, rowindex, e) {
+					grid.getSelectionModel().each(function(rec) {
+								if (isGranted("_StaffEmployapplyEdit")) {
+									new StaffEmployapplyForm({
+												id : rec.data.id
+											}).show();
+								}
+							});
+				});
+		this.rowActions.on('action', this.onRowAction, this);
+	},//end of the initComponents()
+
+	/**
+	 * 
+	 * @param {} self 当前窗体对象
+	 */
+	search : function(self) {
+		if (self.searchPanel.getForm().isValid()) {// 如果合法
+			var params = self.gridPanel.getStore().baseParams;
+			Ext.apply(params, self.searchPanel.getForm().getValues());
+			self.gridPanel.getStore().load(params);
+		}
+	},
+
+	/**
+	 * 添加记录
+	 */
+	createRecord : function() {
+		new StaffEmployapplyForm().show();
+	},
+	/**
+	 * 按IDS删除记录
+	 * @param {} ids
+	 */
+	delByIds : function(ids) {
+		Ext.Msg.confirm('信息确认', '您确认要删除所选记录吗？', function(btn) {
+			if (btn == 'yes') {
+				Ext.Ajax.request({
+					url : __ctxPath + '/statistics/multiDelStaffEmployapply.do',
+					params : {
+						ids : ids
+					},
+					method : 'POST',
+					success : function(response, options) {
+						Ext.ux.Toast.msg('操作信息', '成功删除该[员工录用]！');
+						Ext.getCmp('StaffEmployapplyGrid').getStore().reload();
+					},
+					failure : function(response, options) {
+						Ext.ux.Toast.msg('操作信息', '操作出错，请联系管理员！');
+					}
+				});
+			}
+		});//end of comfirm
+	},
+	/**
+	 * 删除多条记录
+	 */
+	delRecords : function() {
+		var gridPanel = Ext.getCmp('StaffEmployapplyGrid');
+		var selectRecords = gridPanel.getSelectionModel().getSelections();
+		if (selectRecords.length == 0) {
+			Ext.ux.Toast.msg("信息", "请选择要删除的记录！");
+			return;
+		}
+		var ids = Array();
+		for (var i = 0; i < selectRecords.length; i++) {
+			ids.push(selectRecords[i].data.id);
+		}
+		this.delByIds(ids);
+	},
+
+	/**
+	 * 编辑记录
+	 * @param {} record
+	 */
+	editRecord : function(record) {
+		new StaffEmployapplyForm({
+					id : record.data.id
+				}).show();
+	},
+	/**
+	 * 管理列中的事件处理
+	 * @param {} grid
+	 * @param {} record
+	 * @param {} action
+	 * @param {} row
+	 * @param {} col
+	 */
+	onRowAction : function(gridPanel, record, action, row, col) {
+		switch (action) {
+			case 'btn-del' :
+				this.delByIds(record.data.id);
+				break;
+			case 'btn-edit' :
+				this.editRecord(record);
+				break;
+			case 'btn-flowView' :
+				AppUtil.selectProcessForm(record.data.processRunId);
+				break;
+			default :
+				break;
+		}
+	}
+});

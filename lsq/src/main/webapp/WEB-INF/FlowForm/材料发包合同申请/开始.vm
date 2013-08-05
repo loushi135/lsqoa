@@ -1,0 +1,849 @@
+Ext.MyForm=Ext.extend(Ext.form.FormPanel ,{
+        xtype:"formpanel",
+	title:"材料发包合同申请",
+	labelWidth:100,
+	labelAlign:"left",
+	layout:"form",
+	width:600,
+	height:500,
+	padding:"10px",
+//	listeners:{
+//		'afterrender':function(){
+//			if(__currentUserRoleNames.indexOf('流程-项目经理')<0 && __currentUserRoleNames.indexOf('流程-项目副经理')<0 ){
+//				Ext.getCmp('startFlowBtn').disable();
+//			}else{
+//				Ext.getCmp('startFlowBtn').enable();
+//			}
+//		}
+//	},
+	initComponent: function(){
+		var thiz = this;
+		var _url = __ctxPath + '/system/listWorkDepartment.do?opt=appUser';
+		var depSelector = new TreeSelector('flow_materialProjectRegional', _url, '',
+				'materialProjectRegional', false, 110,'materialProjectRegional');
+						
+		Ext.getCmp("flow_materialProjectRegionalTree").on("click", function(g) {
+			Ext.getCmp("flow_materialDeptId").setValue(Ext.getCmp("flow_materialProjectRegional").id);
+		});
+		this.items=[{
+		xtype : 'container',
+		layout : 'column',
+		id : 'subjectContainer',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'container',
+			layout : 'column',
+			id : 'firstContainer',
+			style : 'padding-left:0px;padding-bottom:5px;',
+			items : [{
+					xtype : 'label',
+					style : 'padding-left:0px;padding-top:3px;',
+					html : 'a.适用于分包与采购合同签订审核；</br>b.条款改变需经法务部审核；</br>c.本表由核算部归档；',
+					width : 220
+			},{
+				xtype : 'label',
+				style : 'margin-left:55px;margin-top:40px;',
+				text : '合同编号:',
+				width : 55
+			}, {
+				name : 'contractNo',
+				xtype : 'textfield',
+				style : 'margin-left:0px;padding:0px;margin-top:40px;',
+				id : 'flow_contractNo',
+				emptyText : '流程审批通过后自动生成',
+				allowBlank : true,
+				readOnly:true,
+				width:210
+			}]
+		}]
+		
+	},{
+		xtype : 'container',
+		layout : 'column',
+		id : 'proContainer',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype:'label',
+			text:'项目编号:',
+			style : 'padding-left:0px;padding-top:3px;',
+			width : 70
+		},{
+			xtype:'hidden',
+			id:'flow_materialProId',
+			name:'materialProId'
+		},{
+			id:'flow_proNo',
+			xtype:'textfield',
+			name:'proNo',
+			editable:true,
+			readOnly:false,
+			allowBlank:false,
+			emptyText:'请选择项目',
+			width:200,
+			listeners:{
+				'focus':function(){
+					ProjectNewSelector.getView(function(proId,proName,proNo,contractId,contractNo,contractAmount,proAreaId,proArea){
+						Ext.getCmp("flow_proNo").setValue(proNo);
+						Ext.getCmp("flow_proName").setValue(proName);
+						Ext.getCmp("flow_materialProId").setValue(proId);
+						if(!Ext.isEmpty(proArea)&&Ext.isEmpty(proAreaId)){
+							var url = __ctxPath + '/system/getDeptByNameDepartment.do'
+							var params = "depName="+proArea;
+							var data = ajaxSyncCall(url,params).data;
+							if(!Ext.isEmpty(data)){
+								Ext.getCmp("flow_materialDeptId").setValue(data.depId);
+								Ext.getCmp("flow_materialProjectRegional").setValue(data.depName);
+							}
+						}else{
+							Ext.getCmp("flow_materialDeptId").setValue(proAreaId);
+							Ext.getCmp("flow_materialProjectRegional").setValue(proArea);
+						}
+					},true,true).show();
+				}
+			}
+		},{
+			xtype:'label',
+			text:'项目名称:',
+			style:'margin-left:10px;'
+		},{
+			id:'flow_proName',
+			xtype:'textfield',
+			emptyText:'请选择项目',
+			name:'proName',
+			editable:true,
+			readOnly:false,
+			style:'margin-left:3px;',
+			width:215,
+			allowBlank:false,
+			listeners:{
+				'focus':function(){
+					ProjectNewSelector.getView(function(proId,proName,proNo,contractId,contractNo,contractAmount,proAreaId,proArea){
+						Ext.getCmp("flow_proNo").setValue(proNo);
+						Ext.getCmp("flow_proName").setValue(proName);
+						Ext.getCmp("flow_materialProId").setValue(proId);
+						if(!Ext.isEmpty(proArea)&&Ext.isEmpty(proAreaId)){
+							var url = __ctxPath + '/system/getDeptByNameDepartment.do'
+							var params = "depName="+proArea;
+							var data = ajaxSyncCall(url,params).data;
+							if(!Ext.isEmpty(data)){
+								Ext.getCmp("flow_materialDeptId").setValue(data.depId);
+								Ext.getCmp("flow_materialProjectRegional").setValue(data.depName);
+							}
+						}else{
+							Ext.getCmp("flow_materialDeptId").setValue(proAreaId);
+							Ext.getCmp("flow_materialProjectRegional").setValue(proArea);
+						}
+					},true,true).show();
+				}
+			}
+		}]
+	},{
+		xtype : 'container',
+		layout : 'column',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype:'label',
+			text:'预决算员:',
+			style : 'padding-left:0px;padding-top:3px;',
+			width : 70
+		},{
+			xtype:'combo',
+			mode : 'remote',
+			editable : false,
+			allowBlank:false,
+			width:195,
+			valueField : 'userId',
+			displayField : 'fullname',
+			triggerAction : 'all',
+			store : new Ext.data.JsonStore({
+					url : __ctxPath
+							+ '/system/listAppUser.do',
+					baseParams:{'Q_roles.roleName_S_EQ':'流程-预决算员'},
+					root : 'result',
+					totalProperty : 'totalCounts',
+					fields : [{name:'userId',type:'int'},'fullname']
+				}),
+			hiddenName:'preCalcUserId',
+			id:'flow_preCalcUserId',
+			allowBlank:false,
+			anchor:'90%',
+			listeners:{
+					select : function(combo, record,index) {
+									var preCalcUsername = record.data.fullname;
+									Ext.getCmp("flow_preCalcUsername").setValue(preCalcUsername);
+							}
+			}
+		},
+		{
+			xtype:'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text:'类型:'
+		},
+		{
+			xtype:'combo',
+			mode : 'local',
+			editable : false,
+			allowBlank:false,
+			width:60,
+			triggerAction : 'all',
+			store : ['区域','经理'],
+			hiddenName:'materialDeptType',
+			id:'flow_materialDeptType',
+			allowBlank:false,
+			value:'区域',
+			anchor:'90%',
+			listeners:{
+					select : function(combo, record,index) {
+									if(combo.getValue()=='经理'){
+										Ext.getCmp("flow_materialProjectRegional").allowBlank=true;
+										Ext.getCmp("flow_materialDeptCharger").allowBlank=false;
+										Ext.getCmp("flow_materialProjectRegional").hide();
+										Ext.getCmp("flow_materialDeptLabel").hide();
+										Ext.getCmp("flow_materialDeptContainer").show();
+										Ext.getCmp("flow_materialDeptContainer").doLayout();
+									}else if(combo.getValue()=='区域'){
+										Ext.getCmp("flow_materialProjectRegional").allowBlank=false;
+										Ext.getCmp("flow_materialDeptCharger").allowBlank=true;
+										Ext.getCmp("flow_materialProjectRegional").show();
+										Ext.getCmp("flow_materialDeptLabel").show();
+										Ext.getCmp("flow_materialDeptContainer").hide();
+									}
+							 }
+			}
+		},
+		{
+			xtype:'hidden',
+			name:'preCalcUsername',
+			id:'flow_preCalcUsername'
+		},{
+			xtype:'label',
+			text:'施工区域:',
+			id:'flow_materialDeptLabel',
+			style:'margin-left:10px;'
+		}, {
+			xtype : 'hidden',
+			name : 'materialDeptId',
+			id : 'flow_materialDeptId'
+		}, depSelector,
+		{
+			xtype:'container',
+			id:'flow_materialDeptContainer',
+			items:[
+				{
+					xtype:'label',
+					id:'flow_materialDeptChargerLabel',
+					style:'margin-left:10px;',
+					text:'区域经理:'
+				},
+				{
+					xtype:"textfield",
+					name:"materialDeptCharger",
+					id:'flow_materialDeptCharger',
+					width:110,
+					listeners : {
+						'focus' : function() {
+							UserSelector.getView(function(n,l,mobile) {
+												var flow_materialDeptChargerId = Ext.getCmp("flow_materialDeptChargerId");
+												var flow_materialDeptCharger = Ext.getCmp("flow_materialDeptCharger");
+												flow_materialDeptChargerId.setValue(n);
+												flow_materialDeptCharger.setValue(l);
+											},true)
+									.show()
+						}
+					}
+				},{
+					xtype:'hidden',
+					name:'materialDeptChargerId',
+					id:'flow_materialDeptChargerId',
+					listeners :{
+								afterrender:function(container){
+										Ext.getCmp("flow_materialDeptContainer").hide();
+								}
+							}
+				}
+			]
+		}
+		]
+	},{
+		xtype : 'container',
+		layout : 'column',
+		id : 'applyinfoContainer',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '申请部门:',
+			width : 70
+		}, {
+			name : 'dept',
+			xtype : 'textfield',
+			id : 'flow_dept',
+			allowBlank : false,
+			width : 200,
+			editable : false,
+			readOnly : true,
+			style:"background:#F0F0F0;",
+			value:__currentUserDept
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '申请人/经办人:',
+			width : 90
+		}, {
+			name : 'applyer',
+			xtype : 'textfield',
+			id : 'flow_applyer',
+			allowBlank : false,
+			editable:false,
+			readOnly:true,
+			width : 182,
+			style:"background:#F0F0F0;",
+			value:__currentUser
+		}]
+		
+	},{
+		xtype : 'container',
+		layout : 'column',
+		id : 'amountContainer',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '合同总价:',
+			width : 70
+		}, {
+			name : 'contractAmount',
+			xtype : 'textfield',
+			id : 'flow_contractAmount',
+			width:80,
+			allowBlank : false,
+			enableKeyEvents:true,
+			regex:/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+			regexText:'请输入正确格式的金额',
+			listeners : { 
+				keyup: function(field) { 	
+					function Arabia_to_Chinese(Num)
+					　　{
+					　　for(i=Num.length-1;i>=0;i--)
+					　　{
+					　　Num = Num.replace(",","")//替换tomoney()中的","
+					　　Num = Num.replace(" ","")//替换tomoney()中的空格
+					　　}
+					　　Num = Num.replace("￥","")//替换掉可能出现的￥字符
+					　　if(isNaN(Num))
+					　　{ //验证输入的字符是否为数字
+					　　//alert("请检查小写金额是否正确");
+					　　return;
+					　　}
+					　　//---字符处理完毕，开始转换，转换采用前后两部分分别转换---//
+					　　part = String(Num).split(".");
+					　　newchar = "";
+					　　//小数点前进行转化
+					　　for(i=part[0].length-1;i>=0;i--)
+					　　{
+					　　if(part[0].length > 10)
+					　　{
+					　　alert("位数过大，无法计算");
+					　　return "";
+					　　}//若数量超过拾亿单位，提示
+					　　tmpnewchar = ""
+					　　perchar = part[0].charAt(i);
+					　　switch(perchar)
+					　　{
+					　　case "0": tmpnewchar="零" + tmpnewchar ;break;
+					　　case "1": tmpnewchar="壹" + tmpnewchar ;break;
+					　　case "2": tmpnewchar="贰" + tmpnewchar ;break;
+					　　case "3": tmpnewchar="叁" + tmpnewchar ;break;
+					　　case "4": tmpnewchar="肆" + tmpnewchar ;break;
+					　　case "5": tmpnewchar="伍" + tmpnewchar ;break;
+					　　case "6": tmpnewchar="陸" + tmpnewchar ;break;
+					　　case "7": tmpnewchar="柒" + tmpnewchar ;break;
+					　　case "8": tmpnewchar="捌" + tmpnewchar ;break;
+					　　case "9": tmpnewchar="玖" + tmpnewchar ;break;
+					　　}
+					　　switch(part[0].length-i-1)
+					　　{
+					　　case 0: tmpnewchar = tmpnewchar +"元" ;break;
+					　　case 1: if(perchar!=0)tmpnewchar= tmpnewchar +"拾" ;break;
+					　　case 2: if(perchar!=0)tmpnewchar= tmpnewchar +"佰" ;break;
+					　　case 3: if(perchar!=0)tmpnewchar= tmpnewchar +"仟" ;break;
+					　　case 4: tmpnewchar= tmpnewchar +"万" ;break;
+					　　case 5: if(perchar!=0)tmpnewchar= tmpnewchar +"拾" ;break;
+					　　case 6: if(perchar!=0)tmpnewchar= tmpnewchar +"佰" ;break;
+					　　case 7: if(perchar!=0)tmpnewchar= tmpnewchar +"仟" ;break;
+					　　case 8: tmpnewchar= tmpnewchar +"亿" ;break;
+					　　case 9: tmpnewchar= tmpnewchar +"拾" ;break;
+					　　}
+					　　newchar = tmpnewchar + newchar;
+					　　}//for
+					　　//小数点之后进行转化
+					　　if(Num.indexOf(".")!=-1)
+					　　{
+					　　if(part[1].length > 2)
+					　　{
+					　　alert("小数点之后只能保留两位,系统将自动截段");
+					　　part[1] = part[1].substr(0,2)
+					　　}
+					　　for(i=0;i<part[1].length;i++)
+					　　{//for2
+					　　tmpnewchar = ""
+					　　perchar = part[1].charAt(i)
+					　　switch(perchar)
+					　　{
+					　　case "0": tmpnewchar="零" + tmpnewchar ;break;
+					　　case "1": tmpnewchar="壹" + tmpnewchar ;break;
+					　　case "2": tmpnewchar="贰" + tmpnewchar ;break;
+					　　case "3": tmpnewchar="叁" + tmpnewchar ;break;
+					　　case "4": tmpnewchar="肆" + tmpnewchar ;break;
+					　　case "5": tmpnewchar="伍" + tmpnewchar ;break;
+					　　case "6": tmpnewchar="陸" + tmpnewchar ;break;
+					　　case "7": tmpnewchar="柒" + tmpnewchar ;break;
+					　　case "8": tmpnewchar="捌" + tmpnewchar ;break;
+					　　case "9": tmpnewchar="玖" + tmpnewchar ;break;
+					　　}
+					　　if(i==0)tmpnewchar =tmpnewchar + "角";
+					　　if(i==1)tmpnewchar = tmpnewchar + "分";
+					　　newchar = newchar + tmpnewchar;
+					　　}//for2
+					　　}
+					　　//替换所有无用汉字
+					　　while(newchar.search("零零") != -1)
+					　　newchar = newchar.replace("零零", "零");
+					　　newchar = newchar.replace("亿零万", "亿");
+					　　newchar = newchar.replace("零亿", "亿");
+					　　newchar = newchar.replace("亿万", "亿");
+					　　newchar = newchar.replace("零万", "万");
+					　　newchar = newchar.replace("零元", "元");
+					　　newchar = newchar.replace("零角", "");
+					　　newchar = newchar.replace("零分", "");
+					　　if (newchar.charAt(newchar.length-1) == "元" || newchar.charAt(newchar.length-1) == "角")
+					　　newchar = newchar+"整"
+					　　return newchar;
+					}
+					Ext.getCmp('flow_chlabel').setText('('+Arabia_to_Chinese(field.getValue())+')'); 
+					Ext.getCmp('flow_chValue').setValue(Arabia_to_Chinese(field.getValue())); 
+				} 
+			} 
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;color:red;',
+			id:'flow_chlabel',
+			text:'(请输入纯数字的金额)',
+			width :120
+		},{
+			name : 'chValue',
+			id : 'flow_chValue',
+			xtype:'hidden'
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '数量/面积:',
+			width : 74
+		}, {
+			name : 'areanum',
+			xtype : 'textfield',
+			id : 'flow_areanum',
+			allowBlank:false,
+			width : 197,
+			maxLength:20
+		}]
+	},{
+		xtype : 'container',
+		layout : 'column',
+		id : 'contractContainer',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '合同类别',
+			width : 70
+		}, {			
+			xtype : 'combo',
+			id : 'flow_mainItem',
+			hiddenName : 'mainItem',
+			emptyText : '---请选择---',
+			selectOnFocus : true,
+			forceSelection : true,
+			triggerAction : 'all',
+			store : [],
+			allowBlank:false,
+			width:195,
+			listeners:{
+				'select':function(cmb){
+					if(cmb.getValue()=='04单包'||cmb.getValue()=='05小双包'||cmb.getValue()=='06大双包'){
+						Ext.getCmp('flow_sysItem').setValue('无');
+					}else{
+						Ext.getCmp('flow_sysItem').setValue('');
+					}					
+				},
+				'focus' : function(combo) {
+						var _store = Ext.getCmp('flow_mainItem').getStore();
+						if (_store.getCount() <= 0){
+							Ext.Ajax.request({
+								url : __ctxPath+ '/system/loadDictionary.do',
+								method : 'post',
+								params : {
+										itemName : '合同类别'
+								},
+								success : function(response) {
+										var result = Ext.util.JSON.decode(response.responseText);
+										_store.loadData(result);
+								}
+							});
+						}
+					}
+			}
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '系统类别:',
+			width : 74
+		}, {
+			hiddenName: 'sysItem',
+			xtype : 'combo',
+			id : 'flow_sysItem',
+			emptyText : '---请选择---',
+			selectOnFocus : true,
+			forceSelection : true,
+			editable:false,
+			triggerAction : 'all',
+			store:[],
+			allowBlank:false,
+			listeners:{
+				'focus' : function(combo) {
+						var _store = Ext.getCmp('flow_sysItem').getStore();
+						if (_store.getCount() <= 0){
+							Ext.Ajax.request({
+								url : __ctxPath+ '/system/loadDictionary.do',
+								method : 'post',
+								params : {
+										itemName : '系统类别'
+								},
+								success : function(response) {
+										var result = Ext.util.JSON.decode(response.responseText);
+										_store.loadData(result);
+								}
+							});
+						}
+					}
+			},
+			width:190
+		}]
+		
+	},{
+		xtype : 'container',
+		layout : 'column',
+		id : 'qydwContainer',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '签约单位:',
+			width : 70
+		}, {
+			id : 'flow_xydw',
+			name:'xydw',
+			allowBlank : false,
+			xtype : 'textfield',
+			width : 195,
+			readOnly:true,
+			listeners:{
+				focus:function(){
+					new SuppliersAssessSelector(function(supplierId,supplierName,supplierNo){
+							Ext.getCmp("flow_xydw").setValue(supplierName);
+							Ext.getCmp("flow_suppliersId").setValue(supplierId);
+					},true,Ext.getCmp("flow_materialProId").getValue()).show();
+				}
+			}
+		},{
+			xtype:'hidden',
+			name:'suppliersId',
+			id:'flow_suppliersId'
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '联系人及电话:',
+			width : 90
+		}, {
+			name : 'tel',
+			xtype : 'textfield',
+			id : 'flow_tel',
+			allowBlank : false,
+			width : 180,
+			maxLength:50
+		}]
+		
+	},{
+		xtype : 'container',
+		layout : 'column',
+		id : 'fkfsContainer',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '付款方式:',
+			width : 70
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '预付款:',
+			width : 45
+		},{
+			name : 'yfk',
+			xtype : 'textfield',
+			id : 'flow_yfk',
+			allowBlank : false,
+			regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					thiz.checkTextFiled(obj);
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width :7
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '进度款:',
+			width :45
+		},{
+			name : 'jdk',
+			xtype : 'textfield',
+			id : 'flow_jdk',
+			regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			allowBlank : false,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					thiz.checkTextFiled(obj);
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width : 7
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '完工款:',
+			width : 45
+		},{
+			name : 'wgk',
+			xtype : 'textfield',
+			id : 'flow_wgk',
+		    regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			allowBlank : false,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					thiz.checkTextFiled(obj);
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width :7
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '结算款:',
+			width :45
+		},{
+			name : 'jsk',
+			xtype : 'textfield',
+			id : 'flow_jsk',
+		    regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			allowBlank : false,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					thiz.checkTextFiled(obj);
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width : 7
+		},{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+			text : '质保金:',
+			width : 45
+		},{
+			name : 'zbj',
+			xtype : 'textfield',
+			id : 'flow_zbj',
+		        regex:/^(([1-9]\d{0,2})|0)(\.\d{1,2})?$/,
+			allowBlank : false,
+			width :40,
+			listeners : {
+				blur : function(obj){
+					thiz.checkTextFiled(obj);
+				}
+			}
+		}, {
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '%',
+			width : 7
+		}]
+	},{
+		xtype : 'container',
+		layout : 'column',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [
+			{
+				xtype : 'label',
+				id : 'flow_error_info'
+			}
+		]
+	},{
+		xtype : 'container',
+		layout : 'column',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '进度款收取时间:',
+			width : 70
+		}, {
+			xtype:'combo',
+			mode : 'local',
+			editable : false,
+			allowBlank:false,
+			width : 470,
+			triggerAction : 'all',
+			store : ['货前','货后'],
+			hiddenName:'jdkReceive',
+			id:'flow_jdkReceive',
+			allowBlank:false
+		}]
+	},{
+		xtype : 'container',
+		layout : 'column',
+		id : 'usefullContainer',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '合同陈述:',
+			width : 70
+		}, {
+			name : 'usefull',
+			xtype : 'textarea',
+			id : 'flow_usefull',
+			allowBlank : true,
+			width : 470,
+			height:70
+		}]
+		
+	},
+	{
+		xtype : 'container',
+		autoHeight : true,
+		layout : 'column',
+		autoWidth : true,
+		defaultType : 'label',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+					text : '合同附件:',
+					width : 61,
+					style : 'padding-left:0px;padding-top:3px;'
+				},{
+					xtype : 'hidden',
+					name : 'contractAttachIDs',
+					id : 'flow_contractAttachIDs'
+				},{
+					xtype : 'hidden',
+					name : 'contractAttachFile',
+					id : 'flow_contractAttachFile'
+				},{
+					xtype : 'panel',
+					id:'flow_displayAttach',
+					width : 430,
+					height: 65,
+					frame:false,
+					autoScroll:true,
+					style : 'padding-left:10px;padding-top:0px;',
+					html : ''
+				},{
+					xtype : 'button',
+					iconCls : 'btn-upload',
+					text : '上传',
+					handler : function() {
+						
+						var dialog = App.createUploadDialog({
+												file_cat : 'flow/materialContract',
+												callback : function(data) {
+													Ext.getCmp('flow_displayAttach').body.update('');
+													Ext.getCmp("flow_contractAttachFile").setValue('');
+													Ext.getCmp('flow_contractAttachIDs').setValue('');
+													var contractFile = Ext.getCmp("flow_contractAttachFile");
+													var fileIds = Ext.getCmp('flow_contractAttachIDs');
+													var display = Ext.getCmp('flow_displayAttach');
+													for (var i = 0; i < data.length; i++) {
+														if (fileIds.getValue() != '') {
+															fileIds.setValue(fileIds.getValue()+ ',');
+															contractFile.setValue(contractFile.getValue()+ ',');
+														}
+														contractFile.setValue(contractFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+//														contractFile.setValue(contractFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+														fileIds.setValue(fileIds.getValue()+data[i].fileId);
+														Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+													}
+												},
+												permitted_max_size :1024*1024*20,
+												permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+											});
+							dialog.show(this);
+					}
+				}]
+	},{
+		xtype : 'container',
+		layout : 'column',
+		id : 'remarkContainer',
+		style : 'padding-left:0px;padding-bottom:5px;',
+		items : [{
+			xtype : 'label',
+			style : 'padding-left:0px;padding-top:3px;',
+			text : '经办人员:',
+			width : 70
+		}, {
+			name : 'remark',
+			id : 'remark',
+			readOnly:true,
+			xtype : 'textfield',
+			allowBlank : true,
+			width : 470,
+			style:"background:#F0F0F0;",
+			value:__currentUser
+		}]
+		
+	}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	},
+	checkTextFiled:function(obj){
+		var flow_yfk = Ext.getCmp("flow_yfk").getValue();       
+		var flow_jdk = Ext.getCmp("flow_jdk").getValue();
+		var flow_wgk = Ext.getCmp("flow_wgk").getValue();
+		var flow_jsk = Ext.getCmp("flow_jsk").getValue();
+		var flow_zbj = Ext.getCmp("flow_zbj").getValue();
+		if(flow_yfk != "" && flow_jdk != "" && flow_wgk != "" && flow_jsk != "" && flow_zbj != ""){
+			if((flow_yfk*1 + flow_jdk*1 + flow_wgk*1 + flow_jsk*1 + flow_zbj*1) != 100){
+				obj.setValue("");
+				Ext.getCmp("flow_error_info").setText("<font color='red'>提示:请输入正确的金额以达到预付款方式的总和为100%</font>",false);
+			}else{
+				Ext.getCmp("flow_error_info").setText("",false);
+			}
+		}else{
+			Ext.getCmp("flow_error_info").setText("",false);
+		}
+	}
+})

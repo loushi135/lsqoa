@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="localProductApply" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="49,42,48,48" name="开始">
+      <transition g="0,-22" name="提交" to="分管领导"/>
+   </start>
+   <task g="173,41,92,52" name="分管领导">
+   	 <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-分管领导"/>
+     	  </field>
+   	  </assignment-handler>
+      <transition g="-12,-23" name="提交" to="常务副总"/>
+      <transition g="-64,-20" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task g="351,42,92,52" name="常务副总">
+      <transition g="-19,-20" name="提交" to="总经理"/>
+      <transition g="-29,-16" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task g="548,39,92,52" name="总经理">
+      <transition g="4,-16" name="审批通过" to="审批通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.LocalProductApplyFinishListener"/>
+      </transition>
+      <transition g="-22,-20" name="取消" to="取消">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <end-cancel g="375,166,48,48" name="取消"/>
+   <end g="572,172,48,48" name="审批通过"/>
+</process>

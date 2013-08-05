@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="PersonLoan" xmlns="http://jbpm.org/4.0/jpdl">
+   <start g="378,37,48,48" name="开始">
+      <transition g="272,80:-34,18" name="至决策" to="决策"/>
+   </start>
+   <task g="358,120,92,52" name="部门领导">
+     <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-部门经理"/>  
+     	  </field>  
+   	  	</assignment-handler>
+      <transition g="-38,-17" name="至分管领导" to="分管领导"/>
+       <transition g="-15,-9" name="取消" to="审批不通过">
+       <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	 	  <field name="roleName">  
+       	    <string value="部门领导"/>  
+    	  </field>  
+        </event-listener>
+       </transition>
+   </task>
+   <task g="361,208,92,52" name="分管领导">
+     <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">  
+        		<string value="流程-分管领导"/>  
+     	  </field>  
+   	  	</assignment-handler>
+      <transition g="-30,-17" name="至财务部" to="财务部"/>
+       <transition g="-15,-12" name="取消" to="审批不通过">
+       <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	 	  <field name="roleName">  
+       	    <string value="分管领导"/>  
+    	  </field>  
+        </event-listener>
+       </transition>
+   </task>
+   <task g="357,284,92,52" name="财务部">
+      <transition g="-47,-16" name="至总经理" to="总经理"/>
+        <transition g="4,-11" name="取消" to="审批不通过">
+        <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	 	  <field name="roleName">  
+       	    <string value="财务部"/>  
+    	  </field>  
+        </event-listener>
+       </transition>
+   </task>
+   <task g="359,353,92,52" name="总经理">
+      <transition g="-47,-15" name="至董事长" to="董事长"/>
+         <transition g="-7,-8" name="取消" to="审批不通过">
+         <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	 	  <field name="roleName">  
+       	    <string value="总经理"/>  
+    	  </field>  
+        </event-listener>
+       </transition>
+   </task>
+   <task g="359,426,92,52" name="董事长">
+      <transition g="-30,-11" name="至审批通过" to="审批通过">
+      	<event-listener class="com.xpsoft.oa.workflow.event.PersonLoanFinishListener">
+        </event-listener>
+      </transition>
+       <transition g="-1,-12" name="取消" to="审批不通过">
+       <event-listener class="com.xpsoft.oa.workflow.event.CancelListener">
+	 	  <field name="roleName">  
+       	    <string value="董事长"/>  
+    	  </field>  
+        </event-listener>
+       </transition>
+   </task>
+   <end g="208,431,48,48" name="审批通过"/>
+   <end-cancel g="530,280,48,48" name="审批不通过"/>
+   <decision g="215,152,48,48" name="决策">
+      <handler class="com.xpsoft.oa.workflow.event.PersonLoanFirstListener"/>
+      <transition g="-25,-11" name="普通员工" to="部门领导"/>
+      <transition g="-35,-9" name="部门领导" to="分管领导"/>
+      <transition g="279,266:-35,-15" name="分管领导" to="财务部"/>
+   </decision>
+</process>

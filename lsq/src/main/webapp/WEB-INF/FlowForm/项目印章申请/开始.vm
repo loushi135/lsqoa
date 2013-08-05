@@ -1,0 +1,211 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "项目印章申请表",
+	layout : "form",
+	bodyStyle : 'padding:10px 10px 10px 10px',
+	border : true,
+	autoScroll : true,
+	bodyStyle : 'padding:10px 10px 10px 10px;',
+	defaults : {
+		anchor : '98%,98%'
+	},
+	defaultType : 'textfield',
+	width : 500,
+	autoHeight : true,
+	padding : "10px",
+	initComponent : function() {
+
+		this.items = [{
+			xtype : "container",
+			layout : "column",
+			height : 25,
+			defaults : {
+				xtype : 'label',
+				style : {
+					margin : '0px 0px 3px 0px'
+				}
+			},
+			items : [{
+						xtype : 'hidden',
+						name : 'bpaDeptId',
+						id : 'flow_bpaDeptId'
+					}, {
+						xtype : 'hidden',
+						name : 'flowSeal.proId',
+						id : 'flow_flowSeal.proId'
+					}, {
+						text : '项目名称：',
+						width : 100
+					}, {
+						xtype : 'textfield',
+						name : 'flowSeal.proName',
+						id : 'flow_flowSeal.proName',
+						allowBlank : false,
+						emptyText : '请选择项目',
+						width : 350,
+						listeners : {
+							'focus' : function() {
+								ProjectNewSelector.getView(
+										function(proId, proName, proNo,
+												contractId, contractNo,
+												contractAmount, proAreaId,
+												proArea, proChargerUserId,
+												proChargerUserName,
+												proChargerUserTel, proAdress) {
+											Ext.getCmp("flow_flowSeal.proId")
+													.setValue(proId);
+											Ext.getCmp("flow_flowSeal.proName")
+													.setValue(proName);
+											if (!Ext.isEmpty(proArea)
+													&& Ext.isEmpty(proAreaId)) {
+												var url = __ctxPath
+														+ '/system/getDeptByNameDepartment.do'
+												var params = "depName="
+														+ proArea;
+												var data = ajaxSyncCall(url,
+														params).data;
+												if (!Ext.isEmpty(data)) {
+													Ext
+															.getCmp("flow_bpaDeptId")
+															.setValue(data.depId);
+												}
+											} else {
+												Ext.getCmp("flow_bpaDeptId")
+														.setValue(proAreaId);
+											}
+
+										}, true, true).show();
+							}
+						}
+					}]
+		}, {
+			xtype : "container",
+			layout : "column",
+			height : 25,
+			defaults : {
+				xtype : 'label',
+				style : {
+					margin : '0px 0px 3px 0px'
+				}
+			},
+			items : [{
+						text : '项目章刻印内容：',
+						width : 100
+					}, {
+						xtype : 'textfield',
+						name : 'flowSeal.content',
+						id : 'flow_flowSeal.content',
+						allowBlank : false,
+						width : 350
+					}]
+		}, {
+			xtype : "panel",
+			layout : "column",
+			border : false,
+			unstyled : false,
+			defaults : {
+				xtype : 'label',
+				style : {
+					margin : '0px 0px 3px 0px'
+				}
+			},
+			items : [
+
+			{
+						style : 'margin-top:15px',
+						text : '保管责任人：',
+						width : 100
+					}, {
+						xtype : 'hidden',
+						name : 'flowSeal.keeperId',
+						id : 'flow_flowSeal.keeperId'
+					}, {
+						style : 'margin-top:15px',
+						xtype : 'textfield',
+						name : 'flowSeal.keeperName',
+						id : 'flow_flowSeal.keeperName',
+						allowBlank : false,
+						width : 150,
+						emptyText : '请选择一个保管责任人',
+						listeners : {
+							'focus' : function() {
+								UserSelector.getView(function(id, name, mo) {
+									if (id.indexOf(",") != -1) {
+										Ext.getCmp("flow_flowSeal.keeperName")
+												.setValue("");
+										return;
+									}
+									Ext.getCmp("flow_flowSeal.keeperId")
+											.setValue(id);
+									Ext.getCmp("flow_flowSeal.keeperName")
+											.setValue(name);
+
+								}, false).show();
+							}
+						}
+					}, {
+						xtype : "container",
+						layout : "form",
+						border : false,
+						width : 220,
+						labelWidth : 60,
+						height : 60,
+						unstyled : false,
+						defaults : {
+							xtype : 'datefield',
+							style : {
+								margin : '0px 0px 3px 0px'
+							}
+						},
+						items : [{
+									fieldLabel : "申领时间",
+									labelStyle : 'text-align:right;width:60;',
+									id : "flow_flowSeal.applyDate",
+									name : "flowSeal.applyDate",
+									width : 135,
+									allowBlank : false,
+									format : 'Y-m-d'
+								}, {
+									fieldLabel : "归还时间",
+									labelStyle : 'text-align:right;width:60;',
+									id : "flow_flowSeal.returnDate",
+									name : "flowSeal.returnDate",
+									format : 'Y-m-d',
+									allowBlank : false,
+									width : 135
+								}
+
+						]
+					}]
+		}, {
+			xtype : "panel",
+			layout : "column",
+			border : false,
+			unstyled : false,
+			defaults : {
+				xtype : 'label',
+				style : {
+					margin : '0px 0px 3px 0px'
+				}
+			},
+			items : [{
+						text : '经办人：',
+						width : 100
+					}, {
+						xtype : 'hidden',
+						name : 'flowSeal.applyUserId',
+						id : 'flow_flowSeal.applyUserId',
+						value : __currentUserId
+					}, {
+						xtype : 'textfield',
+						name : 'flowSeal.applyUserName',
+						id : 'flow_flowSeal.applyUserName',
+						allowBlank : false,
+						readOnly : true,
+						width : 350,
+						value : __currentUser
+					}]
+		}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

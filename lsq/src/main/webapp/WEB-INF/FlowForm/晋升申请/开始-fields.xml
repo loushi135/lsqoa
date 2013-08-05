@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="staffPromoteapply@promoteUserName" label="员工姓名" type="varchar" length="128" isShowed="true"/>
+	<field name="staffPromoteapply@promoteUser@userId" label="员工姓名" type="varchar" length="128" isShowed="false"/>
+	<field name="staffPromoteapply@oldDepTreeSelector" label="原部门" type="varchar" length="128" isShowed="true"/>
+	<field name="staffPromoteapply@oldDept@depId" label="原部门" type="varchar" length="128" isShowed="false"/>
+	<field name="staffPromoteapply@oldJobName" label="原职位" type="varchar" length="128" isShowed="true"/>
+	<field name="staffPromoteapply@newDepTreeSelector" label="拟晋升部门" type="varchar" length="128" isShowed="true"/>
+	<field name="staffPromoteapply@newDept@depId" label="拟晋升部门" type="varchar" length="128" isShowed="false"/>
+	<field name="staffPromoteapply@newJobName" label="拟晋升职位" type="varchar" length="128" isShowed="true"/>
+	<field name="staffPromoteapply@newJob@jobId" label="拟晋升职位" type="varchar" length="128" isShowed="false"/>
+	<field name="staffPromoteapply@activeDate" label="生效日期" type="datetime" isShowed="true"/>
+	<field name="staffPromoteapply@promoteReason" label="晋升理由" type="text" isShowed="true"/>
+	<field name="staffPromoteapply@advantageOrChange" label="个人优点和需改进的方面" type="text" isShowed="true"/>
+	<field name="staffPromoteapply@professional" label="专业能力" type="varchar" length="128" isShowed="true"/>
+	<field name="staffPromoteapply@mixedAbility" label="综合能力" type="varchar" length="128" isShowed="true"/>
+</fields>

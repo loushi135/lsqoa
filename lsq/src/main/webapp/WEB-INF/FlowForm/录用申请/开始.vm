@@ -1,0 +1,326 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "录用申请",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 670,
+			height : 270,
+			padding : "10px",
+			initComponent : function() {
+				var url = __ctxPath + "/system/listDepartment.do?opt=appUser";
+				var depTreeSelector = new TreeSelector("flow_innerFlowDeptName", url, "所属部门", "flow_staffEmployapply@dept@depId",false,200,"innerFlowDeptName");
+				Ext.getCmp("flow_innerFlowDeptNameTree").on("click", function(g) {
+					Ext.getCmp("flow_staffEmployapply@jobName").setValue("");
+					Ext.getCmp("flow_staffEmployapply@jobName").getStore().removeAll();
+					var deptId = Ext.getCmp("flow_staffEmployapply@dept@depId").getValue();
+					if (!Ext.isEmpty(deptId)) {
+						Ext.getCmp("flow_staffEmployapply@jobName").
+							getStore().reload( {
+										params : {
+											depId : deptId
+										}
+									});
+					}
+				});
+				
+				this.items = [
+							{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'员工姓名：',
+										width:97
+									},
+									{
+										xtype:'textfield',
+										id:'flow_staffEmployapply@staffName',
+										name:'staffEmployapply@staffName',
+										maxLength : 64,
+										allowBlank :false,
+										width:100
+									},
+									{
+										text:'部门：',
+										style:'margin-left:10px;',
+										width:50
+									},
+									{
+										xtype : "hidden",
+										name : "staffEmployapply@dept@depId",
+										id : "flow_staffEmployapply@dept@depId"
+									},
+									depTreeSelector,
+									{
+										text:'岗位：',
+										style:'margin-left:10px;',
+										width:50
+									},
+									{
+										id:'flow_staffEmployapply@jobName',
+										hiddenName:'staffEmployapply@jobName',
+										xtype : "combo",
+										mode : "local",
+										width:130,
+										editable : false,
+										valueField : "jobName",
+										displayField : "jobName",
+										triggerAction : "all",
+										allowBlank:false,
+										store : new Ext.data.SimpleStore( {
+											url : __ctxPath
+													+ "/hrm/comboJob.do",
+											fields : [ "jobId", "jobName" ]
+										}),
+										listeners : {
+											focus : function(h) {
+												var deptId = Ext.getCmp("flow_staffEmployapply@dept@depId").getValue();
+												if (Ext.isEmpty(deptId)) {
+													Ext.ux.Toast.msg("操作信息","请先选择部门！");
+												}
+											},
+											select : function(combo,record,index){
+												var jobId = record.data.jobId;
+												var jobName = record.data.jobName;
+												Ext.getCmp("flow_staffEmployapply@job@jobId").setValue(jobId);
+											}
+										}
+									},
+									{
+										xtype:'hidden',
+										id:'flow_staffEmployapply@job@jobId',
+										name:'staffEmployapply@job@jobId'
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'分数：',
+										width:97
+									},
+									{
+										xtype:'textfield',
+										id:'flow_staffEmployapply@score',
+										name:'staffEmployapply@score',
+										maxLength : 11,
+										allowBlank :false,
+										width:150
+									},
+									{
+										text:'体检情况：',
+										style:'margin-left:10px;',
+										width:60
+									},
+									{
+										xtype:'textfield',
+										id:'flow_staffEmployapply@medicalCheck',
+										name:'staffEmployapply@medicalCheck',
+										maxLength : 512,
+										allowBlank :false,
+										width:335
+									}
+								]
+							},{
+										xtype:"container",
+										style:"margin-top:10px;",
+										width:'100%',
+										height: 60,
+										layout:"column",
+										items:[
+											{
+												xtype:"label",
+												text:"招聘渠道：",
+												style:"margin-top:15px;"
+											},
+											{
+												xtype:'container',
+												width:'90%',
+												layout:'hbox',
+												height: 60,
+												items:[
+													{
+														xtype:"radiogroup",
+														name:'staffEmployapply@inviteWay',
+														id:'flow_staffEmployapply@inviteWay',
+														defaults:{
+															style:"margin-top:3px;"
+														},
+														width:'12%',
+														columns: 1,
+														items:[
+															{
+																name:'staffEmployapply@inviteWay',
+																boxLabel:"公开招聘",
+																inputValue:"公开招聘",
+																checked:true
+															},{
+																name:'staffEmployapply@inviteWay',
+																boxLabel:"推荐",
+																inputValue:"推荐"
+															}
+														],
+														listeners:{
+															change:function(field,newValue,oldValue){
+																var inviteWay = newValue.getRawValue();
+																if(inviteWay=='公开招聘'){
+																	Ext.getCmp("flow_staffEmployapply@publicWay").enable();
+																	Ext.getCmp("flow_staffEmployapply@publicWay").allowBlank=false;
+																	Ext.getCmp("flow_inviteUserName").disable();
+																	Ext.getCmp("flow_inviteUserName").reset();
+																	Ext.getCmp("flow_inviteUserId").reset();
+																}else if(inviteWay=='推荐'){
+																	Ext.getCmp("flow_inviteUserName").enable();
+																	Ext.getCmp("flow_inviteUserName").allowBlank=false;
+																	Ext.getCmp("flow_staffEmployapply@publicWay").disable();
+																	Ext.getCmp("flow_staffEmployapply@publicWay").reset();
+																}
+															}
+														}
+													}
+													,{
+														xtype:"container",
+														width:'88%',
+														layout:"vbox",
+														height: 60,
+														defaults:{
+															style:"margin-top:3px;"
+														},
+														items:[
+															{
+																xtype:'container',
+																width:'100%',
+																height: 30,
+																layout:'column',
+																items:[
+																	{
+																		xtype:'label',
+																		text:',途径:',
+																		style:'margin-right:12px;'
+																	},{
+																		xtype:'textfield',
+																		name:'staffEmployapply@publicWay',
+																		id:'flow_staffEmployapply@publicWay',
+																		maxLength:64,
+																		allowBlank:false,
+																		width:'90%'
+																	}
+																]
+															},
+															{
+																xtype:'container',
+																width:'100%',
+																layout:'column',
+																height: 30,
+																items:[
+																	{
+																		xtype:'label',
+																		text:',推荐人:'
+																	},{
+																		xtype:'textfield',
+																		name:'inviteUserName',
+																		id:'flow_inviteUserName',
+																		emptyText:'请选择推荐人',
+																		disabled:true,
+																		width:'90%',
+																		listeners:{
+																		     focus:function(){
+																		     	UserSelector.getView(function(ids, names) {
+																						Ext.getCmp("flow_inviteUserName").setValue(names);
+																						Ext.getCmp("flow_inviteUserId").setValue(ids);
+																					}, true).show();
+																		     }
+																		}
+																	},{
+																		xtype:'hidden',
+																		name:'inviteUserId',
+																		id:'flow_inviteUserId'
+																	}
+																]
+														}
+														]
+													}
+												]
+											}
+										]
+									},{
+										xtype : 'container',
+										autoHeight : true,
+										layout : 'column',
+										autoWidth : true,
+										defaultType : 'label',
+										style : 'padding-left:0px;padding-bottom:5px;',
+										items : [{
+													text : '附件:',
+													width : 86,
+													style : "margin-top:15px;"
+												},{
+													xtype : 'hidden',
+													name : 'staffEmployapply@attachIDs',
+													id : 'flow_staffEmployapply@attachIDs'
+												},{
+													xtype : 'hidden',
+													name : 'staffEmployapply@attachFile',
+													id : 'flow_staffEmployapply@attachFile'
+												},{
+													xtype : 'panel',
+													id:'flow_staffEmployapply@displayAttach',
+													width : 510,
+													height: 65,
+													frame:false,
+													autoScroll:true,
+													style : 'padding-left:10px;padding-top:0px;',
+													html : ''
+												},{
+													xtype : 'button',
+													iconCls : 'btn-upload',
+													text : '上传',
+												    handler : function() {
+														var dialog = App.createUploadDialog({
+																				file_cat : 'flow/staffEmployapply',
+																				callback : function(data) {
+																					Ext.getCmp('flow_staffEmployapply@displayAttach').body.update('');
+																					Ext.getCmp("flow_staffEmployapply@attachFile").setValue('');
+																					Ext.getCmp('flow_staffEmployapply@attachIDs').setValue('');
+																					var staffEmployFile = Ext.getCmp("flow_staffEmployapply@attachFile");
+																					var fileIds = Ext.getCmp('flow_staffEmployapply@attachIDs');
+																					var display = Ext.getCmp('flow_staffEmployapply@displayAttach');
+																					for (var i = 0; i < data.length; i++) {
+																						if (fileIds.getValue() != '') {
+																							fileIds.setValue(fileIds.getValue()+ ',');
+																							staffEmployFile.setValue(staffEmployFile.getValue()+ ',');
+																						}
+																						staffEmployFile.setValue(staffEmployFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+//																						staffEmployFile.setValue(staffEmployFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+																						fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																						Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																					}
+																				},
+																				permitted_max_size :1024*1024*20,
+																				permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+																			});
+															dialog.show(this);
+													}
+												}]
+								        }
+								
+							]
+				Ext.MyForm.superclass.initComponent.call(this);
+			}
+		})

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.info.ArticleSend"
+        table="article_send"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+	<id name="noticeId" type="java.lang.Long">
+  		<generator class="native"></generator>
+  	</id>
+  	<property name="postName" not-null="true"></property>
+  	<property name="noticeTitle" not-null="true"></property>
+  	<property name="noticeContent"></property>
+  	<property name="effectiveDate" type="java.util.Date"></property>
+  	<property name="expirationDate" type="java.util.Date"></property>
+  	<property name="state" type="java.lang.Short"/>
+  	<many-to-one name="treeType"
+         class="com.xpsoft.oa.model.system.TreeType" 
+         not-null="false"
+         fetch="join">
+        	<column name="typeId"></column>
+     </many-to-one>
+     <set name="attachFiles" table="article_send_file" cascade="save-update" inverse="false" lazy="true">
+        	<key column="articleId"/>
+        	<many-to-many fetch="join" class="com.xpsoft.oa.model.system.FileAttach" column="fileId"/>
+        </set>
+     </class>
+</hibernate-mapping>

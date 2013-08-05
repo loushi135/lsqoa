@@ -1,0 +1,973 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "工程项目银行付款申请",
+	labelWidth : 100,
+	labelAlign : "left",
+	layout : "form",
+	width : 650,
+	height : 550,
+	padding : "10px",
+	// listeners:{
+	// 'afterrender':function(){
+	// if(__currentUserRoleNames.indexOf('流程-项目经理')<0 &&
+	// __currentUserRoleNames.indexOf('流程-项目副经理')<0 ){
+	// Ext.getCmp('startFlowBtn').disable();
+	// }else{
+	// Ext.getCmp('startFlowBtn').enable();
+	// }
+	// }
+	// },
+	initComponent : function() {
+		var _url = __ctxPath + '/system/listWorkDepartment.do?opt=appUser';
+		var depSelector = new TreeSelector('flow_payprojectRegional', _url, '', 'payprojectRegional', false, 523, 'payprojectRegional');
+		Ext.getCmp("flow_payprojectRegionalTree").on("click", function(g) {
+			// Ext.getCmp("flow_projectRegional").setValue(Ext.getCmp("bankPayDepTreeSelector").getValue());
+			Ext.getCmp("flow_bpaDeptId").setValue(Ext.getCmp("flow_payprojectRegional").id);
+		});
+		this.items = [{
+				xtype : "label",
+				name : "MyLabel",
+				text : "工程项目银行付款申请",
+				style : "padding-left:250px;font-weight:bold;font-size:20px;"
+			}, {
+				xtype : "panel",
+				layout : "column",
+				border : false,
+				unstyled : false,
+				style : 'margin-top:20px;',
+				items : [{
+						xtype : "label",
+						name : "MyLabel1",
+						text : "项目名称:",
+						width : 90
+					}, {
+						xtype : 'hidden',
+						name : 'materialContractId',
+						id : 'flow_materialContractId'
+					}, {
+						xtype : 'hidden',
+						name : 'bpaProId',
+						id : 'flow_bpaProId'
+					}, {
+						xtype : 'hidden',
+						id : 'flow_tmp_proId'
+					}, {
+						xtype : "textfield",
+						name : "bpaProjectName",
+						id : 'flow_bpaProjectName',
+						emptyText : '请选择项目',
+						width : 140,
+						allowBlank : false,
+						readOnly : true,
+						style : "background:#F0F0F0;",
+						listeners : {
+							focus : function() {
+								new MaterialContractSelector(function(id, contractNo, contractAmount, proName, proNo, suppliersName, suppliersId, projectId, departmentId, departmentIdName, projectChargerId, projectChargerName, processRunId) {
+									Ext.getCmp("flow_bpaProjectNo").setValue(proNo);
+									Ext.getCmp("flow_bpaProjectName").setValue(proName);
+									Ext.getCmp("flow_materialContractId").setValue(id);
+									Ext.getCmp("flow_tmp_proId").setValue(projectId);
+
+									Ext.getCmp('flow_bpaProcessRunId').setValue(processRunId);
+									Ext.getCmp('flow_bpaProId').setValue(projectId);
+									if (suppliersName != null && suppliersName != '' && typeof(suppliersName) != 'undefined') {
+										Ext.getCmp("flow_bpaReceiptDept").setValue(suppliersName);
+									} else {
+										Ext.getCmp("flow_bpaReceiptDept").setValue('');
+									}
+									if (contractAmount != null && contractAmount != '') {
+										Ext.getCmp("flow_bpaContract").setValue(contractAmount);
+									} else {
+										Ext.getCmp("flow_bpaContract").setValue('');
+									}
+									if (suppliersId != null && suppliersId != '' && typeof(suppliersId) != 'undefined') {
+										Ext.getCmp("flow_bpaReceiptDeptId").setValue(suppliersId);
+										var url = __ctxPath + '/statistics/getPayedByProNoBankpayapply.do';// 获取累计已付款金额
+										// =
+										// 同一材料付款下所有的工程银行付款和付款基数之和
+										var params = 'Q_bpaProjectNo_S_EQ=' + proNo + '&Q_suppliersAssess.suppliersId_L_EQ=' + suppliersId + "&proId=" + projectId;
+										var data = ajaxSyncCall(url, params).data;
+										if (data != null) {
+											Ext.getCmp("flow_bpaSumMoney").setValue(data);
+										} else {
+											Ext.getCmp("flow_bpaSumMoney").setValue('');
+										}
+										Ext.getCmp("flow_bpaSumMoney").fireEvent('keyup');
+									} else {
+										Ext.getCmp("flow_bpaReceiptDeptId").setValue('');
+										Ext.getCmp("flow_bpaSumMoney").setValue('');
+										Ext.getCmp("flow_bpaSumMoney").fireEvent('keyup');
+									}
+									if (!Ext.isEmpty(id)) {// 给付款方式赋值
+										var url = __ctxPath + '/statistics/getMaterialContract.do';
+										var params = 'id=' + id;
+										var data = ajaxSyncCall(url, params).data;
+										Ext.getCmp("flow_bpaYfk").setValue(data.yfk);
+										Ext.getCmp("flow_bpaJdk").setValue(data.jdk);
+										Ext.getCmp("flow_bpaWgk").setValue(data.wgk);
+										Ext.getCmp("flow_bpaJsk").setValue(data.jsk);
+										Ext.getCmp("flow_bpaZbj").setValue(data.zbj);
+									} else {
+										Ext.getCmp("flow_bpaYfk").setValue('');
+										Ext.getCmp("flow_bpaJdk").setValue('');
+										Ext.getCmp("flow_bpaWgk").setValue('');
+										Ext.getCmp("flow_bpaJsk").setValue('');
+										Ext.getCmp("flow_bpaZbj").setValue('');
+									}
+									if (!Ext.isEmpty(suppliersId)) {// 给开户行
+										// 账号赋值
+										var url = __ctxPath + '/customer/getSuppliersAssess.do';
+										var params = 'suppliersId=' + suppliersId;
+										var data = ajaxSyncCall(url, params).data;
+										Ext.getCmp("flow_receiptSuppliersbank").setValue(data.suppliersbank);
+										Ext.getCmp("flow_receiptBankAccount").setValue(data.bankAccount);
+									} else {
+										Ext.getCmp("flow_receiptSuppliersbank").setValue('');
+										Ext.getCmp("flow_receiptBankAccount").setValue('');
+									}
+									var url = __ctxPath + '/statistics/getProjectByNoProjectNew.do';
+									var params = 'Q_proNo_S_EQ=' + proNo;
+									var data = ajaxSyncCall(url, params).data;
+									if (data != null && data.contract != null && data.contract.deptRegional != null) {
+										Ext.getCmp("flow_bpaDeptId").setValue(data.contract.deptRegional.depId);
+										Ext.getCmp("flow_payprojectRegional").setValue(data.contract.deptRegional.depName);
+									} else {
+										Ext.getCmp("flow_bpaDeptId").setValue('');
+										Ext.getCmp("flow_payprojectRegional").setValue('');
+									}
+									// 得到 资金结余等
+									if (!Ext.isEmpty(proNo) && !Ext.isEmpty(projectId) && !Ext.isEmpty(suppliersId)) {
+										var url2 = __ctxPath + '/statistics/getApplyDataBankpayapply.do';
+										var params2 = "proNo=" + proNo + "&materialId=" + id + "&projectId=" + projectId + "&suppliersId=" + suppliersId;
+										var data2 = ajaxSyncCall(url2, params2).data;
+										if (!Ext.isEmpty(data2.leftMoney)) {
+											Ext.getCmp('flow_bpaFundBalance').setValue(data2.leftMoney);
+										}
+										if (!Ext.isEmpty(data2.quota)) {
+											Ext.getCmp('flow_bpaPayRatio').setValue(data2.quota);
+										}
+										if (!Ext.isEmpty(data2.leftBill)) {
+											Ext.getCmp('flow_bpaInvoiceBalance').setValue(data2.leftBill);
+										} else {
+											Ext.getCmp('flow_bpaInvoiceBalance').setValue("");
+										}
+									} else {
+										Ext.getCmp('flow_bpaFundBalance').setValue("");
+										Ext.getCmp('flow_bpaPayRatio').setValue("");
+										Ext.getCmp('flow_bpaInvoiceBalance').setValue("");
+									}
+								}, true).show();
+							}
+						}
+					}, {
+						xtype : "label",
+						name : "MyLabel2",
+						text : "项目编号:",
+						style : "padding-left:5px;"
+					}, {
+						xtype : "textfield",
+						name : "bpaProjectNo",
+						id : 'flow_bpaProjectNo',
+						width : 160,
+						emptyText : '请选择项目',
+						allowBlank : false,
+						readOnly : true,
+						style : "background:#F0F0F0;",
+						listeners : {
+							focus : function() {
+								new MaterialContractSelector(function(id, contractNo, contractAmount, proName, proNo, suppliersName, suppliersId, projectId, departmentId, departmentIdName, projectChargerId, projectChargerName, processRunId) {
+									Ext.getCmp("flow_bpaProjectNo").setValue(proNo);
+									Ext.getCmp("flow_bpaProjectName").setValue(proName);
+									Ext.getCmp("flow_materialContractId").setValue(id);
+									Ext.getCmp('flow_bpaProcessRunId').setValue(processRunId);
+									Ext.getCmp('flow_bpaProId').setValue(projectId);
+									if (suppliersName != null && suppliersName != '' && typeof(suppliersName) != 'undefined') {
+										Ext.getCmp("flow_bpaReceiptDept").setValue(suppliersName);
+									} else {
+										Ext.getCmp("flow_bpaReceiptDept").setValue('');
+									}
+									if (contractAmount != null && contractAmount != '') {
+										Ext.getCmp("flow_bpaContract").setValue(contractAmount);
+									} else {
+										Ext.getCmp("flow_bpaContract").setValue('');
+									}
+									if (suppliersId != null && suppliersId != '' && typeof(suppliersId) != 'undefined') {
+										Ext.getCmp("flow_bpaReceiptDeptId").setValue(suppliersId);
+										var url = __ctxPath + '/statistics/getPayedByProNoBankpayapply.do';// 获取累计已付款金额
+										// =
+										// 同一材料付款下所有的工程银行付款和付款基数之和
+										var params = 'Q_bpaProjectNo_L_EQ=' + proNo + '&Q_suppliersAssess.suppliersId_L_EQ=' + suppliersId + "&proId=" + projectId;
+
+										var data = ajaxSyncCall(url, params).data;
+										if (data != null) {
+											Ext.getCmp("flow_bpaSumMoney").setValue(data);
+										} else {
+											Ext.getCmp("flow_bpaSumMoney").setValue('');
+										}
+										Ext.getCmp("flow_bpaSumMoney").fireEvent('keyup');
+									} else {
+										Ext.getCmp("flow_bpaReceiptDeptId").setValue('');
+										Ext.getCmp("flow_bpaSumMoney").setValue('');
+										Ext.getCmp("flow_bpaSumMoney").fireEvent('keyup');
+									}
+									if (!Ext.isEmpty(id)) {// 给付款方式赋值
+										var url = __ctxPath + '/statistics/getMaterialContract.do';
+										var params = 'id=' + id;
+										var data = ajaxSyncCall(url, params).data;
+										Ext.getCmp("flow_bpaYfk").setValue(data.yfk);
+										Ext.getCmp("flow_bpaJdk").setValue(data.jdk);
+										Ext.getCmp("flow_bpaWgk").setValue(data.wgk);
+										Ext.getCmp("flow_bpaJsk").setValue(data.jsk);
+										Ext.getCmp("flow_bpaZbj").setValue(data.zbj);
+									} else {
+										Ext.getCmp("flow_bpaYfk").setValue('');
+										Ext.getCmp("flow_bpaJdk").setValue('');
+										Ext.getCmp("flow_bpaWgk").setValue('');
+										Ext.getCmp("flow_bpaJsk").setValue('');
+										Ext.getCmp("flow_bpaZbj").setValue('');
+									}
+									if (!Ext.isEmpty(suppliersId)) {// 给开户行
+										// 账号赋值
+										var url = __ctxPath + '/customer/getSuppliersAssess.do';
+										var params = 'suppliersId=' + suppliersId;
+										var data = ajaxSyncCall(url, params).data;
+										Ext.getCmp("flow_receiptSuppliersbank").setValue(data.suppliersbank);
+										Ext.getCmp("flow_receiptBankAccount").setValue(data.bankAccount);
+									} else {
+										Ext.getCmp("flow_receiptSuppliersbank").setValue('');
+										Ext.getCmp("flow_receiptBankAccount").setValue('');
+									}
+									var url = __ctxPath + '/statistics/getProjectByNoProjectNew.do';
+									var params = 'Q_proNo_S_EQ=' + proNo;
+									var data = ajaxSyncCall(url, params).data;
+									if (data != null && data.contract != null && data.contract.deptRegional != null) {
+										Ext.getCmp("flow_bpaDeptId").setValue(data.contract.deptRegional.depId);
+										Ext.getCmp("flow_payprojectRegional").setValue(data.contract.deptRegional.depName);
+									} else {
+										Ext.getCmp("flow_bpaDeptId").setValue('');
+										Ext.getCmp("flow_payprojectRegional").setValue('');
+									}
+									// 得到 资金结余等
+									var url2 = __ctxPath + '/statistics/getApplyDataBankpayapply.do';
+									var params2 = 'proNo=' + proNo + "&materialId=" + id + "&projectId=" + projectId + "&suppliersId=" + suppliersId;
+									var data2 = ajaxSyncCall(url2, params2).data;
+									if (!Ext.isEmpty(data2.leftMoney)) {
+										Ext.getCmp('flow_bpaFundBalance').setValue(data2.leftMoney);
+									}
+									if (!Ext.isEmpty(data2.quota)) {
+										Ext.getCmp('flow_bpaPayRatio').setValue(data2.quota);
+									}
+									if (!Ext.isEmpty(data2.leftBill)) {
+										Ext.getCmp('flow_bpaInvoiceBalance').setValue(data2.leftBill);
+									} else {
+										Ext.getCmp('flow_bpaInvoiceBalance').setValue("");
+									}
+								}, true).show();
+							}
+						}
+					}, {
+						xtype : "label",
+						name : "MyLabel3",
+						text : "付款类别:",
+						style : "padding-left:5px;"
+					}, {
+						xtype : "combo",
+						hiddenName : "bpaPayType",
+						id : 'flow_bpaPayType',
+						allowBlank : false,
+						triggerAction : 'all',
+						width : 115,
+						editable : false,
+						store : [['主材（战略）', '主材（战略）'], ['主材（无战略）', '主材（无战略）'], ['常规材料', '常规材料'], ['零星材料', '零星材料'], ['尾款结算', '尾款结算'], ['单包', '单包'], ['小双包', '小双包'], ['大双包', '大双包']],
+						listeners : {
+							select : function(combo, record, index) {
+								var bpaPayType = combo.getValue();
+								switch (bpaPayType) {
+									case '主材（战略）' :
+										Ext.getCmp("bpaPreCalcPanel").hide();
+										Ext.getCmp("bpaDeptTypePanel").show();
+										Ext.getCmp("bpaDeptPanel").show();
+										Ext.getCmp("flow_bpaPreCalcUserId").allowBlank = true;
+										Ext.getCmp("flow_bpaDeptType").allowBlank = false;
+										Ext.getCmp("flow_payprojectRegional").allowBlank = false;
+										break;
+									case '主材（无战略）' :
+									case '常规材料' :
+									case '零星材料' :
+									case '尾款结算' :
+										Ext.getCmp("bpaPreCalcPanel").show();
+										Ext.getCmp("bpaDeptTypePanel").show();
+										Ext.getCmp("bpaDeptPanel").show();
+										Ext.getCmp("flow_bpaPreCalcUserId").allowBlank = false;
+										Ext.getCmp("flow_bpaDeptType").allowBlank = false;
+										Ext.getCmp("flow_payprojectRegional").allowBlank = false;
+										break;
+									case '单包' :
+									case '小双包' :
+									case '大双包' :
+										Ext.getCmp("bpaPreCalcPanel").hide();
+										Ext.getCmp("bpaDeptTypePanel").show();
+										Ext.getCmp("flow_bpaPreCalcUserId").allowBlank = true;
+										Ext.getCmp("flow_bpaDeptType").allowBlank = false;
+										Ext.getCmp("flow_payprojectRegional").allowBlank = false;
+										break;
+								}
+							}
+						}
+					}]
+			}, {
+				xtype : "panel",
+				layout : "column",
+				border : false,
+				unstyled : false,
+				style : 'margin-top:5px;',
+				anchor : "100%",
+				items : [{
+						xtype : "label",
+						text : "收款单位:",
+						width : 90
+					}, {
+						xtype : "textfield",
+						name : "bpaReceiptDept",
+						id : 'flow_bpaReceiptDept',
+						width : 408,
+						allowBlank : false,
+						readOnly : true
+
+						// listeners:{
+					// focus:function(){
+					// new
+					// SuppliersAssessSelector(function(suppliersId,supplierName,supplierNo){
+					// Ext.getCmp("flow_bpaReceiptDept").setValue(supplierName);
+					// Ext.getCmp("flow_bpaReceiptDeptId").setValue(suppliersId);
+					// // var materialContractId =
+					// Ext.getCmp("flow_materialContractId").getValue();
+					// // if(!Ext.isEmpty(materialContractId)){
+					// // var
+					// url=__ctxPath+'/statistics/getPayedByProNoBankpayapply.do';//获取累计已付款金额
+					// = 同一材料付款下所有的工程银行付款和付款基数之和
+					// // var
+					// params='Q_materialContract.id_L_EQ='+materialContractId+"&Q_suppliersAssess.suppliersId_L_EQ="+suppliersId;
+					// // var data = ajaxSyncCall(url,params).data;
+					// // if(data!=null){
+					// // Ext.getCmp("flow_bpaSumMoney").setValue(data);
+					// // }else{
+					// // Ext.getCmp("flow_bpaSumMoney").setValue('');
+					// // }
+					// //
+					// Ext.getCmp("flow_bpaSumMoney").fireEvent('keyup');
+					// // }
+					// if(!Ext.isEmpty(suppliersId)){// 给开户行 账号赋值
+					// var
+					// url=__ctxPath+'/customer/getSuppliersAssess.do';
+					// var params='suppliersId='+suppliersId;
+					// var data = ajaxSyncCall(url,params).data;
+					// Ext.getCmp("flow_receiptSuppliersbank").setValue(data.suppliersbank);
+					// Ext.getCmp("flow_receiptBankAccount").setValue(data.bankAccount);
+					// }else{
+					// Ext.getCmp("flow_receiptSuppliersbank").setValue('');
+					// Ext.getCmp("flow_receiptBankAccount").setValue('');
+					// }
+					//												
+					//												
+					// var
+					// url=__ctxPath+'/statistics/getPayedByProNoBankpayapply.do';//获取累计已付款金额
+					// = 同一材料付款下所有的工程银行付款和付款基数之和
+					// var
+					// params='Q_bpaProjectNo_L_EQ='+Ext.getCmp("flow_bpaProjectNo").value+'&Q_suppliersAssess.suppliersId_L_EQ='+suppliersId+"&proId="+Ext.getCmp("flow_tmp_proId").value;
+					// var data = ajaxSyncCall(url,params).data;
+					// if(data!=null){
+					// Ext.getCmp("flow_bpaSumMoney").setValue(data);
+					// }else{
+					// Ext.getCmp("flow_bpaSumMoney").setValue('');
+					// }
+					//											
+					// //得到 资金结余等
+					// var url2 =
+					// __ctxPath+'/statistics/getApplyDataBankpayapply.do';
+					// var params2 =
+					// 'proNo='+Ext.getCmp("flow_bpaProjectNo").value+"&materialId="+Ext.getCmp("flow_materialContractId").value+
+					// "&projectId="+Ext.getCmp("flow_tmp_proId").value+"&suppliersId="+suppliersId;
+					// var data2 = ajaxSyncCall(url2,params2).data;
+					// if(!Ext.isEmpty(data2.leftMoney)){
+					// Ext.getCmp('flow_bpaFundBalance').setValue(data2.leftMoney);
+					// }
+					// if(!Ext.isEmpty(data2.quota)){
+					// Ext.getCmp('flow_bpaPayRatio').setValue(data2.quota);
+					// }
+					// if(!Ext.isEmpty(data2.leftBill)){
+					// Ext.getCmp('flow_bpaInvoiceBalance').setValue(data2.leftBill);
+					// }else{
+					// Ext.getCmp('flow_bpaInvoiceBalance').setValue("");
+					// }
+					//												
+					//												
+					//												
+					// },true).show();
+					// }
+					// }
+				}	, {
+						xtype : 'hidden',
+						name : 'bpaReceiptDeptId',
+						id : 'flow_bpaReceiptDeptId'
+					}, {
+						xtype : 'button',
+						text : '查看合同审批信息',
+						iconCls : 'btn-flowView',
+						handler : function() {
+							var processRunId = Ext.getCmp('flow_bpaProcessRunId').getValue();
+							if (Ext.isEmpty(processRunId)) {
+								Ext.ux.Toast.msg('操作信息', '请先选择项目后再查看合同审批信息！');
+								return;
+							}
+							AppUtil.selectProcessForm(processRunId);
+						}
+					}, {
+						xtype : 'hidden',
+						id : 'flow_bpaProcessRunId',
+						name : 'bpaProcessRunId'
+					}]
+			}, {
+				xtype : "panel",
+				layout : "column",
+				border : false,
+				unstyled : false,
+				style : 'margin-top:5px;',
+				items : [{
+						xtype : "label",
+						text : "开户行:",
+						width : 90
+					}, {
+						xtype : "textfield",
+						name : "receiptSuppliersbank",
+						id : 'flow_receiptSuppliersbank',
+						readOnly : true,
+						width : 250
+					}, {
+						xtype : "label",
+						text : "账号:",
+						width : 60,
+						style : "padding-left:5px;"
+					}, {
+						xtype : "textfield",
+						name : "receiptBankAccount",
+						id : 'flow_receiptBankAccount',
+						readOnly : true,
+						width : 225
+					}]
+			}, {
+				xtype : "panel",
+				id : 'bpaPreCalcPanel',
+				layout : "column",
+				border : false,
+				unstyled : false,
+				style : 'margin-top:5px;',
+				anchor : "100%",
+				items : [{
+						xtype : "label",
+						text : "预决算员:",
+						width : 90
+					}, {
+						xtype : 'combo',
+						mode : 'remote',
+						editable : false,
+						allowBlank : false,
+						width : 523,
+						valueField : 'userId',
+						displayField : 'fullname',
+						triggerAction : 'all',
+						store : new Ext.data.JsonStore({
+							autoLoad : true,
+							url : __ctxPath + '/system/listAppUser.do',
+							baseParams : {
+								'Q_roles.roleName_S_EQ' : '流程-预决算员'
+							},
+							root : 'result',
+							totalProperty : 'totalCounts',
+							fields : [{
+									name : 'userId',
+									type : 'int'
+								}, 'fullname']
+						}),
+						hiddenName : 'bpaPreCalcUserId',
+						id : 'flow_bpaPreCalcUserId',
+						allowBlank : false,
+						anchor : '90%',
+						listeners : {
+							select : function(combo, record, index) {
+								var preCalcUsername = record.data.fullname;
+								Ext.getCmp("flow_bpaPreCalcUsername").setValue(preCalcUsername);
+							}
+						}
+					}, {
+						xtype : 'hidden',
+						name : 'bpaPreCalcUsername',
+						id : 'flow_bpaPreCalcUsername'
+					}]
+			}, {
+				xtype : "panel",
+				layout : "column",
+				id : 'bpaDeptTypePanel',
+				border : false,
+				unstyled : false,
+				style : 'margin-top:5px;',
+				anchor : "100%",
+				items : [{
+						xtype : "label",
+						text : "类型:",
+						width : 90
+					}, {
+						xtype : 'combo',
+						mode : 'local',
+						editable : false,
+						allowBlank : false,
+						width : 523,
+						triggerAction : 'all',
+						store : ['区域', '经理'],
+						hiddenName : 'bpaDeptType',
+						id : 'flow_bpaDeptType',
+						allowBlank : false,
+						value : '区域',
+						anchor : '90%',
+						listeners : {
+							select : function(combo, record, index) {
+								if (combo.getValue() == '经理') {
+									Ext.getCmp("flow_payprojectRegional").allowBlank = true;
+									Ext.getCmp("flow_bpaDeptCharger").allowBlank = false;
+									Ext.getCmp("flow_payprojectRegional").hide();
+									Ext.getCmp("flow_payprojectRegionalLabel").hide();
+									Ext.getCmp("flow_bpaDeptContainer").show();
+									Ext.getCmp("flow_bpaDeptContainer").doLayout();
+								} else if (combo.getValue() == '区域') {
+									Ext.getCmp("flow_payprojectRegional").allowBlank = false;
+									Ext.getCmp("flow_bpaDeptCharger").allowBlank = true;
+									Ext.getCmp("flow_payprojectRegional").show();
+									Ext.getCmp("flow_payprojectRegionalLabel").show();
+									Ext.getCmp("flow_bpaDeptContainer").hide();
+								}
+							}
+						}
+					}]
+			}, {
+				xtype : "panel",
+				layout : "column",
+				id : 'bpaDeptPanel',
+				border : false,
+				unstyled : false,
+				style : 'margin-top:5px;',
+				anchor : "100%",
+				items : [{
+						xtype : "label",
+						text : "施工区域:",
+						id : 'flow_payprojectRegionalLabel',
+						width : 90
+					}, depSelector, {
+						xtype : 'hidden',
+						name : 'bpaDeptId',
+						id : 'flow_bpaDeptId'
+					}]
+			}, {
+				xtype : 'container',
+				id : 'flow_bpaDeptContainer',
+				layout : "column",
+				border : false,
+				unstyled : false,
+				style : 'margin-top:5px;',
+				anchor : "100%",
+				items : [{
+						xtype : 'label',
+						id : 'flow_bpaDeptChargerLabel',
+						width : 90,
+						text : '区域经理:'
+					}, {
+						xtype : "textfield",
+						name : "bpaDeptCharger",
+						id : 'flow_bpaDeptCharger',
+						width : 528,
+						listeners : {
+							'focus' : function() {
+								UserSelector.getView(function(n, l, mobile) {
+									var flow_bpaDeptChargerId = Ext.getCmp("flow_bpaDeptChargerId");
+									var flow_bpaDeptCharger = Ext.getCmp("flow_bpaDeptCharger");
+									flow_bpaDeptChargerId.setValue(n);
+									flow_bpaDeptCharger.setValue(l);
+								}, true).show()
+							}
+						}
+					}, {
+						xtype : 'hidden',
+						name : 'bpaDeptChargerId',
+						id : 'flow_bpaDeptChargerId',
+						listeners : {
+							afterrender : function(container) {
+								Ext.getCmp("flow_bpaDeptContainer").hide();
+							}
+						}
+					}]
+			}, {
+				xtype : 'container',
+				layout : 'column',
+				style : 'margin-top:5px;',
+				anchor : "100%",
+				items : [{
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;',
+						text : '付款方式:',
+						width : 90
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;',
+						text : '预付款:',
+						width : 45
+					}, {
+						name : 'bpaYfk',
+						xtype : 'textfield',
+						id : 'flow_bpaYfk',
+						width : 40
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;',
+						text : '%',
+						width : 7
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+						text : '进度款:',
+						width : 45
+					}, {
+						name : 'bpaJdk',
+						xtype : 'textfield',
+						id : 'flow_bpaJdk',
+						width : 40
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;',
+						text : '%',
+						width : 7
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+						text : '完工款:',
+						width : 45
+					}, {
+						name : 'bpaWgk',
+						xtype : 'textfield',
+						id : 'flow_bpaWgk',
+						width : 40
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;',
+						text : '%',
+						width : 7
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+						text : '结算款:',
+						width : 45
+					}, {
+						name : 'bpaJsk',
+						xtype : 'textfield',
+						id : 'flow_bpaJsk',
+						width : 40
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;',
+						text : '%',
+						width : 7
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+						text : '质保金:',
+						width : 45
+					}, {
+						name : 'bpaZbj',
+						xtype : 'textfield',
+						id : 'flow_bpaZbj',
+						width : 40
+					}, {
+						xtype : 'label',
+						style : 'padding-left:0px;padding-top:3px;',
+						text : '%',
+						width : 7
+					}]
+			}, {
+				xtype : "panel",
+				layout : "column",
+				border : false,
+				unstyled : false,
+				style : 'margin-top:5px;',
+				items : [{
+						xtype : "label",
+						name : "MyLabel1",
+						text : "付款事由:",
+						height : 50,
+						width : 90
+					}, {
+						xtype : "textarea",
+						name : "bpaReceiptReason",
+						maxLength : 190,
+						id : 'flow_bpaReceiptReason',
+						allowBlank : false,
+						width : 522,
+						height : 50
+					}]
+			}, {
+				xtype : "panel",
+				layout : "column",
+				border : false,
+				unstyled : false,
+				style : 'margin-top:5px;',
+				items : [{
+						xtype : "label",
+						text : "合同/结算金额:",
+						width : 90
+					}, {
+						xtype : "numberfield",
+						regex : /^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+						name : "bpaContract",
+						id : 'flow_bpaContract',
+						allowBlank : false,
+						width : 120,
+						decimalPrecision : 2,
+						enableKeyEvents : true,
+						listeners : {
+							keyup : function(field) {
+								var bpaSumMoney = Ext.getCmp('flow_bpaSumMoney').getValue();
+								var bpaContract = Ext.getCmp('flow_bpaContract').getValue();
+								Ext.getCmp('flow_bpaSumMoneyRatio').setValue(((bpaSumMoney * 100) / bpaContract).toFixed(2));
+							}
+						}
+					}, {
+						xtype : "label",
+						text : "累计已付款:",
+						width : 90,
+						style : "padding-left:5px;"
+					}, {
+						xtype : "numberfield",
+						regex : /^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+						name : "bpaSumMoney",
+						id : 'flow_bpaSumMoney',
+						allowBlank : false,
+						width : 120,
+						decimalPrecision : 2,
+						enableKeyEvents : true,
+						listeners : {
+							keyup : function(field) {
+								var bpaSumMoney = Ext.getCmp('flow_bpaSumMoney').getValue();
+								var bpaContract = Ext.getCmp('flow_bpaContract').getValue();
+								Ext.getCmp('flow_bpaSumMoneyRatio').setValue(((bpaSumMoney * 100) / bpaContract).toFixed(2));
+							}
+						}
+					}, {
+						xtype : "label",
+						text : "已付款比例(%):",
+						width : 90,
+						style : "padding-left:5px;"
+					}, {
+						xtype : "numberfield",
+						name : "bpaSumMoneyRatio",
+						id : 'flow_bpaSumMoneyRatio',
+						style : "background:#F0F0F0;",
+						allowBlank : false,
+						editable : false,
+						readOnly : true,
+						width : 120,
+						decimalPrecision : 2,
+						listeners : {
+							focus : function(field) {
+								var bpaSumMoney = Ext.getCmp('flow_bpaSumMoney').getValue();
+								var bpaContract = Ext.getCmp('flow_bpaContract').getValue();
+								Ext.getCmp('flow_bpaSumMoneyRatio').setValue(((bpaSumMoney * 100) / bpaContract).toFixed(2));
+							}
+						}
+					}]
+			}, {
+				xtype : "panel",
+				layout : "column",
+				border : false,
+				unstyled : false,
+				style : 'margin-top:5px;',
+				items : [{
+						xtype : "label",
+						text : "资金结余:",
+						width : 90
+					}, {
+						xtype : "numberfield",
+						regex : /(^$)|^\-?(([1-9]\d{0,9})|0)(\.\d{1,2})?$/, // 加上（^$）表示可为空
+						// 加\-?表示可以为负数
+						name : "bpaFundBalance",
+						id : "flow_bpaFundBalance",
+						allowBlank : true,
+						width : 120
+					}, {
+						xtype : "label",
+						text : "垫资审批额度:",
+						width : 90,
+						style : "padding-left:5px;"
+					}, {
+						xtype : "numberfield",
+						regex : /(^$)|^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/, // 加上（^$）表示可为空
+						name : "bpaPayRatio",
+						id : "flow_bpaPayRatio",
+						allowBlank : true,
+						width : 120
+					}, {
+						xtype : "label",
+						text : "发票结余:",
+						width : 90,
+						style : "padding-left:5px;"
+					}, {
+						xtype : "numberfield",
+						// regex:/(^$)|^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+						// //加上（^$）表示可为空
+						name : "bpaInvoiceBalance",
+						id : "flow_bpaInvoiceBalance",
+						allowBlank : true,
+						width : 120
+					}]
+			}, {
+				xtype : "panel",
+				layout : "column",
+				border : false,
+				unstyled : false,
+				style : 'padding-top:5px;',
+				items : [{
+						xtype : "label",
+						text : "本次申请用款:",
+						width : 90,
+						style : "margin-top:15px;"
+					}, {
+						xtype : 'container',
+						id : 'thisApplyContainer',
+						style : 'padding-left:0px;padding-bottom:5px;',
+						items : [{
+								xtype : 'container',
+								layout : 'column',
+								style : 'padding-left:0px;padding-bottom:5px;',
+								items : [{
+										xtype : "label",
+										text : "小写:",
+										width : 40
+									}, {
+										xtype : "numberfield",
+										cls : 'textfieldBG',
+										id : 'flow_bpaApplyMoneyXX',
+										name : "bpaApplyMoneyXX",
+										allowBlank : false,
+										width : 490,
+										enableKeyEvents : true,
+										regex : /^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+										regexText : '请输入正确格式的金额',
+										listeners : {
+											keyup : function(field) {
+												var paymentSumBig = AmountInWords(field.getValue());
+												Ext.getCmp('flow_bpaApplyMoneyDX').setValue(paymentSumBig);
+											}
+										}
+									}]
+							}, {
+								xtype : 'container',
+								layout : 'column',
+								style : 'padding-left:0px;padding-bottom:5px;',
+								items : [{
+										xtype : "label",
+										text : "大写:",
+										width : 40
+									}, {
+										xtype : "textfield",
+										id : 'flow_bpaApplyMoneyDX',
+										name : "bpaApplyMoneyDX",
+										width : 490,
+										allowBlank : false,
+										readOnly : true,
+										editable : false,
+										style : "background:#F0F0F0;"
+									}]
+							}]
+					}]
+			}, {
+				xtype : 'container',
+				autoHeight : true,
+				layout : 'column',
+				autoWidth : true,
+				defaultType : 'label',
+				style : 'padding-left:0px;padding-bottom:5px;',
+				items : [{
+						text : '合同附件:',
+						width : 80,
+						style : "margin-top:15px;"
+					}, {
+						xtype : 'hidden',
+						name : 'bpaAttachIDs',
+						id : 'flow_bpaAttachIDs'
+					}, {
+						xtype : 'hidden',
+						name : 'bpaAttachFile',
+						id : 'flow_bpaAttachFile'
+					}, {
+						xtype : 'panel',
+						id : 'flow_displayAttach',
+						width : 480,
+						height : 65,
+						frame : false,
+						autoScroll : true,
+						style : 'padding-left:10px;padding-top:0px;',
+						html : ''
+					}, {
+						xtype : 'button',
+						iconCls : 'btn-upload',
+						text : '上传',
+						handler : function() {
+							var dialog = App.createUploadDialog({
+								file_cat : 'flow/bankPayApply',
+								callback : function(data) {
+									Ext.getCmp('flow_displayAttach').body.update('');
+									Ext.getCmp("flow_bpaAttachFile").setValue('');
+									Ext.getCmp('flow_bpaAttachIDs').setValue('');
+									var contractFile = Ext.getCmp("flow_bpaAttachFile");
+									var fileIds = Ext.getCmp('flow_bpaAttachIDs');
+									var display = Ext.getCmp('flow_displayAttach');
+									for (var i = 0; i < data.length; i++) {
+										if (fileIds.getValue() != '') {
+											fileIds.setValue(fileIds.getValue() + ',');
+											contractFile.setValue(contractFile.getValue() + ',');
+										}
+										contractFile.setValue(contractFile.getValue() + data[i].filepath + ":" + data[i].filename.replace(/\s+/g, ""));
+										// contractFile.setValue(contractFile.getValue()+"<a
+										// href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+										fileIds.setValue(fileIds.getValue() + data[i].fileId);
+										Ext.DomHelper.append(display.body, '<span><a href="#" onclick="FileAttachDetail.show(' + data[i].fileId + ')">' + data[i].filename.replace(/\s+/g, "") + '</a>&nbsp;|&nbsp;</span>');
+									}
+								},
+								permitted_max_size : 1024 * 1024 * 20,
+								permitted_extensions_size : [{
+										'type' : ['jpg', 'png', 'gif', 'bmp', 'jpeg'],
+										'MaxSize' : 1024 * 800
+									}]
+							});
+							dialog.show(this);
+						}
+					}]
+			}, {
+				xtype : 'panel',
+				layout : 'column',
+				defaultType : 'label',
+				border : false,
+				items : [{
+						text : '经办人员:',
+						width : 90
+					}, {
+						xtype : 'textfield',
+						name : 'bpaRemark',
+						id : 'flow_bpaRemark',
+						allowBlank : false,
+						readOnly : true,
+						value : __currentUser,
+						width : 530,
+						style : "background:#F0F0F0;"
+					}]
+
+			}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

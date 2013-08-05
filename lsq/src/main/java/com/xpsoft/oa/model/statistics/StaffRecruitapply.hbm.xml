@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.StaffRecruitapply"
+        table="staff_recruitapply"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="companyName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="companyName"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        
+        <many-to-one name="dept" 
+        	class="com.xpsoft.oa.model.system.Department"
+			not-null="false" fetch="join">
+			<column name="deptId"></column>
+		</many-to-one>
+		
+		<many-to-one name="job" 
+        	class="com.xpsoft.oa.model.hrm.Job"
+			not-null="false" fetch="join">
+			<column name="jobId"></column>
+		</many-to-one>
+		
+        <property
+            name="currentNum"
+            type="java.lang.Integer"
+            update="true"
+            insert="true"
+            access="property"
+            column="currentNum"
+            length="10"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="applyNum"
+            type="java.lang.Integer"
+            update="true"
+            insert="true"
+            access="property"
+            column="applyNum"
+            length="10"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="applyReason"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="applyReason"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="age"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="age"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="sex"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="sex"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        
+        <many-to-one name="majorDic" 
+        	class="com.xpsoft.oa.model.system.Dictionary"
+			not-null="false" fetch="join">
+			<column name="majorDicId"></column>
+		</many-to-one>
+		
+		<many-to-one name="educationDic" 
+        	class="com.xpsoft.oa.model.system.Dictionary"
+			not-null="false" fetch="join">
+			<column name="educationDicId"></column>
+		</many-to-one>
+
+        <property
+            name="workYear"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="workYear"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="positionDuty"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="positionDuty"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="skillRequirement"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="skillRequirement"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="workExperience"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="workExperience"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="personality"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="personality"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="otherPosition"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="otherPosition"
+            length="128"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="otherRequirement"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="otherRequirement"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="deadline"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="deadline"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="personalCharacter"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="personalCharacter"
+            length="255"
+            not-null="false"
+            unique="false"
+        />
+         <property
+            name="mainPositions"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="mainPositions"
+            length="65535"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="processRunId"
+            type="java.lang.Long"
+            update="false"
+            insert="true" 
+            access="property"
+            column="processRunId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+        <set name="mainPositionDics"
+	     table="staff_recruit_dictionary"
+	     lazy="true"
+	     inverse="false"
+	     cascade="save-update"
+	     sort="unsorted"
+		>
+			<key>
+				<column name="recuitId"/>
+			</key>
+			<many-to-many fetch="join" class="com.xpsoft.oa.model.system.Dictionary" column="dicId"/>
+		</set>
+	
+     </class>
+</hibernate-mapping>

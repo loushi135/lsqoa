@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="sumPrice" label="合同总价" type="decimal" length="0" isShowed="true"/>
+	<field name="sumPriceBig" label="合同总价大写" type="varchar" length="0" isShowed="true"/>
+	<field name="payWay" label="付款方式" type="text" isShowed="true"/>
+	<field name="superOption" label="审批意见" type="varchar" isShowed="true"/> 
+</fields>

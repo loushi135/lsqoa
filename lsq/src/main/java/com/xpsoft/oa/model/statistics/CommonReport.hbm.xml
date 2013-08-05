@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.CommonReport"
+        table="common_report"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="30"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="reporter"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="reporter"
+            length="80"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="deptName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="deptName"
+            length="220"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="state"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="state"
+            length="80"
+            not-null="false"
+            unique="false"
+        />
+        <property
+            name="company"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="company"
+            length="80"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="sendDept"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="sendDept"
+            length="80"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="content"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="content"
+            length="65535"
+            not-null="true"
+            unique="false"
+        />
+     </class>
+</hibernate-mapping>

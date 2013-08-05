@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="flowApply.flowName" label="流程名称" type="varchar" length="128" isShowed="true"/>
+	<field name="flowApply.flowDesc" label="流程描述" type="text" isShowed="true"/>
+	<field name="flowApply.flowNode" label="流程节点" type="text" isShowed="true"/>
+	<field name="superOption" label="审批意见"/>
+</fields>

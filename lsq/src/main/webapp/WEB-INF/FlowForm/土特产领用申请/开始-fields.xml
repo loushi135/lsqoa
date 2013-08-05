@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="localProductApply.applyUser.fullname" label="报告人" type="varchar" length="128" isShowed="true"/>
+	<field name="localProductApply.applyUser.userId" label="报告人" type="varchar" length="128" isShowed="false"/>
+	<field name="localProductApply.dept.depName" label="所属部门" type="varchar" length="128" isShowed="true"/>
+	<field name="localProductApply.dept.depId" label="所属部门" type="varchar" length="128" isShowed="false"/>
+	<field name="localProductApply.applyDate" label="报告时间" type="datetime" isShowed="true"/>
+	<field name="localProductApply.resultGridData" label="报告详情" type="text" isShowed="true"/>
+	<field name="localProductApply.dataList" label="报告详情" type="text" isShowed="false"/>
+	<field name="localProductApply.applyReason" label="备注" type="text" isShowed="true"/>
+</fields>

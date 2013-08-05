@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="preQualificaReport" xmlns="http://jbpm.org/4.0/jpdl">
+   <start name="开始" g="278,9,48,48">
+      <transition name="提交" to="业务团队负责人" g="-37,-15"/>
+   </start>
+   <task name="业务团队负责人" g="246,87,111,52">
+  	 <assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-部门经理"/>
+     	  </field>
+   	  	</assignment-handler>
+      <transition name="提交" to="分管领导" g="-24,-10"/>
+      <transition name="取消" to="取消" g="-9,-9">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task name="分管领导" g="255,175,92,52">
+   	<assignment-handler class="com.xpsoft.oa.workflow.event.RoleAssignmentableHandler">
+   	  	  <field name="roleName">
+        		<string value="流程-分管领导"/>
+     	  </field>
+   	  	</assignment-handler>
+      <transition name="提交" to="常务副总" g="-24,-9"/>
+      <transition name="取消" to="取消" g="-11,-7">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task name="常务副总" g="257,254,92,52">
+      <transition name="提交 " to="资审专员" g="-31,-12"/>
+      <transition name="取消" to="取消" g="-10,-9">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <task name="资审专员" g="256,343,92,52">
+      <transition name="审批通过" to="审批通过" g="19,-27">
+      	<event-listener class="com.xpsoft.oa.workflow.event.PreQualificaReportFinishListener"/>
+      </transition>
+      <transition name="取消" to="取消" g="-5,0">
+      	<event-listener class="com.xpsoft.oa.workflow.event.CancelListener"/>
+      </transition>
+   </task>
+   <end name="审批通过" g="450,165,48,48"/>
+   <end-cancel name="取消" g="91,167,48,48"/>
+</process>

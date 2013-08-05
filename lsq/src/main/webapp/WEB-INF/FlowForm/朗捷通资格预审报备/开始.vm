@@ -1,0 +1,402 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "资格预审报备表",
+	layout : "form",
+	bodyStyle : 'padding:10px 10px 10px 10px',
+	border : true,
+	autoScroll : true,
+	bodyStyle : 'padding:10px 10px 10px 10px;',
+	defaults : {
+		anchor : '98%,98%'
+	},
+	defaultType : 'textfield',
+	width : 550,
+	autoHeight : true,
+	padding : "10px",
+	projectPreQFocus : function() {
+		ProjectNewSelector.getView(
+				function(proId, proName, proNo, contractId, contractNo,
+						contractAmount, proAreaId, proArea, proChargerUserId,
+						proChargerUserName, proChargerUserTel, proAdress,buildUnit,designUnit) {
+					Ext.getCmp("flow_flowPreQ.proName").setValue(proName);
+					Ext.getCmp("flow_flowPreQ.proId").setValue(proId);
+					
+					if(!Ext.isEmpty(buildUnit)){
+						Ext.getCmp("flow_flowPreQ.buildUnit").setValue(buildUnit);
+					}else{
+						Ext.getCmp("flow_flowPreQ.buildUnit").emptyText='请填写建设单位';
+						Ext.getCmp("flow_flowPreQ.buildUnit").setValue('');
+						Ext.getCmp("flow_flowPreQ.buildUnit").purgeListeners();
+					}
+					if(!Ext.isEmpty(designUnit)){
+						Ext.getCmp("flow_flowPreQ.designUnit").setValue(designUnit);
+					}else{
+						Ext.getCmp("flow_flowPreQ.designUnit").emptyText='请填写设计单位';
+						Ext.getCmp("flow_flowPreQ.designUnit").setValue('');
+						Ext.getCmp("flow_flowPreQ.designUnit").purgeListeners();
+					}
+					
+					
+				}, true, true).show();
+	},
+	initComponent : function() {
+		var thiz = this;
+		var _url = __ctxPath + '/system/listWorkDepartment.do?opt=appUser&hasUnknow=yes';
+		var depSelector = new TreeSelector('flow_flowPreQ.materialFitDeptName',
+				_url, '', 'flowPreQ.materialFitDeptName', false, 110,
+				'flowPreQ.materialFitDeptName');
+
+		Ext.getCmp("flow_flowPreQ.materialFitDeptNameTree").on("click",
+				function(g) {
+					Ext.getCmp("flow_flowPreQ.materialFitDeptId").setValue(Ext
+							.getCmp("flow_flowPreQ.materialFitDeptName").id);
+				});
+
+		this.items = [{
+					xtype : "container",
+					layout : "column",
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								xtype : 'hidden',
+								name : 'flowPreQ.proId',
+								id : 'flow_flowPreQ.proId'
+							}, {
+								text : '项目名称：',
+								width : 100
+							}, {
+								xtype : 'textfield',
+								name : 'flowPreQ.proName',
+								id : 'flow_flowPreQ.proName',
+								allowBlank : false,
+								//emptyText : '请选择项目',
+								width : 150,
+								listeners : {
+//									'focus' : this.projectPreQFocus
+//											.createCallback()
+								}
+							}, {
+								style : "margin-left:5px",
+								text : '招标类型：',
+								width : 100
+							}, {
+								xtype : "radiogroup",
+								id : 'flow_flowPreQ.bidType',
+								name : "flowPreQ.bidType",
+								width : 100,
+								items : [{
+											boxLabel : '设计',
+											inputValue : "设计",
+											name : "flowPreQ.bidType",
+											checked : true
+										}, {
+											boxLabel : '施工',
+											inputValue : "施工",
+											name : "flowPreQ.bidType"
+										}]
+							}]
+				}, {
+					xtype : "container",
+					layout : "column",
+					height : 25,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '建设单位：',
+								width : 100
+							}, {
+								xtype : 'textfield',
+								name : 'flowPreQ.buildUnit',
+								id : 'flow_flowPreQ.buildUnit',
+								allowBlank : false,
+								//emptyText : '请选择项目',
+								width : 150,
+								listeners : {
+//									'focus' : this.projectPreQFocus
+//											.createCallback()
+								}
+							}, {
+								style : "margin-left:5px",
+								text : '设计单位：',
+								width : 100
+							}, {
+								xtype : 'textfield',
+								name : 'flowPreQ.designUnit',
+								id : 'flow_flowPreQ.designUnit',
+								//emptyText : '请选择项目',
+								allowBlank : false,
+								width : 150,
+								listeners : {
+//									'focus' : this.projectPreQFocus
+//											.createCallback()
+								}
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [
+
+					{
+								text : '招标代理：',
+								width : 100
+							}, {
+								xtype : 'textfield',
+								name : 'flowPreQ.bidProxy',
+								id : 'flow_flowPreQ.bidProxy',
+								allowBlank : false,
+								width : 150
+							}, {
+								style : 'margin-left:5px',
+								text : '项目估算价（万元）：',
+								width : 120
+							}, {
+								xtype : 'numberfield',
+								name : 'flowPreQ.ProEstimatPrice',
+								id : 'flow_flowPreQ.ProEstimatPrice',
+								allowBlank : false,
+								width : 130
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '公告发布时间：',
+								width : 100
+							}, {
+								xtype : 'datefield',
+								name : 'flowPreQ.timeNotice',
+								id : 'flow_flowPreQ.timeNotice',
+								allowBlank : false,
+								width : 145,
+								format : 'Y-m-d'
+							}, {
+								style : "margin-left:5px",
+								text : '资格预审时间：',
+								width : 100
+							}, {
+								xtype : 'datefield',
+								name : 'flowPreQ.timePreQualifica',
+								id : 'flow_flowPreQ.timePreQualifica',
+								allowBlank : false,
+								width : 145,
+								format : 'Y-m-d'
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '预计开标时间：',
+								width : 100
+							}, {
+								xtype : 'datefield',
+								name : 'flowPreQ.timePerBidOpen',
+								id : 'flow_flowPreQ.timePerBidOpen',
+								allowBlank : false,
+								width : 145,
+								format : 'Y-m-d'
+							}, {
+								style : "margin-left:5px",
+								text : '建造师资质要求：',
+								width : 100
+							}, {
+								xtype : "radiogroup",
+								name : 'flowPreQ.requireConstrLevel',
+								id : 'flow_flowPreQ.requireConstrLevel',
+								width : 100,
+								items : [{
+											boxLabel : '一级',
+											inputValue : "一级",
+											name : 'flowPreQ.requireConstrLevel',
+											checked : true
+										}, {
+											boxLabel : '二级',
+											inputValue : "二级",
+											name : 'flowPreQ.requireConstrLevel'
+										}]
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '资格预审是否到场：',
+								width : 110
+							}, {
+								xtype : "radiogroup",
+								name : 'flowPreQ.sureArrivalPreQ',
+								id : 'flow_flowPreQ.sureArrivalPreQ',
+								width : 140,
+								items : [{
+											boxLabel : '否',
+											inputValue : "否",
+											name : "flowPreQ.sureArrivalPreQ",
+											checked : true
+										}, {
+											boxLabel : '是',
+											inputValue : "是",
+											name : "flowPreQ.sureArrivalPreQ"
+										}]
+							}, {
+								style : "margin-left:5px",
+								text : '开标是否到场：',
+								width : 100
+							}, {
+								name : 'flowPreQ.sureArrivalBid',
+								id : 'flow_flowPreQ.sureArrivalBid',
+								xtype : "radiogroup",
+								width : 100,
+								items : [{
+											boxLabel : '否',
+											inputValue : "否",
+											name : "flowPreQ.sureArrivalBid",
+											checked : true
+										}, {
+											boxLabel : '是',
+											inputValue : "是",
+											name : "flowPreQ.sureArrivalBid"
+										}]
+
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '市场部推荐建造师：',
+								width : 110
+							}, {
+								xtype : 'textfield',
+								name : 'flowPreQ.suggestConstructor',
+								id : 'flow_flowPreQ.suggestConstructor',
+								allowBlank : false,
+								width : 140
+							}, {
+								style : "margin-left:5px",
+								text : '施工配合区域：',
+								width : 100
+							}, {
+								xtype : 'hidden',
+								name : 'flowPreQ.materialFitDeptId',
+								id : 'flow_flowPreQ.materialFitDeptId'
+							}, depSelector]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '企业资质要求：',
+								width : 100
+							}, {
+								xtype : 'textarea',
+								name : 'flowPreQ.reqEnterpriseQua',
+								id : 'flow_flowPreQ.reqEnterpriseQua',
+								width : 400,
+								allowBlank : false,
+								autoScroll : true
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '业绩要求（企业、项目经理）：',
+								width : 100
+							}, {
+								xtype : 'textarea',
+								name : 'flowPreQ.reqPerformance',
+								id : 'flow_flowPreQ.reqPerformance',
+								allowBlank : false,
+								width : 400,
+								autoScroll : true
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					defaults : {
+						xtype : 'label',
+						style : {
+							margin : '0px 0px 3px 0px'
+						}
+					},
+					items : [{
+								text : '其他要求：',
+								width : 100
+							}, {
+								xtype : 'textarea',
+								name : 'flowPreQ.reqOther',
+								id : 'flow_flowPreQ.reqOther',
+								width : 400,
+								autoScroll : true
+							}]
+				},{
+					xtype:'hidden',
+					name:'flowPreQ.applyUserId',
+					id : 'flow_flowPreQ.applyUserId',
+					value:__currentUserId
+				}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

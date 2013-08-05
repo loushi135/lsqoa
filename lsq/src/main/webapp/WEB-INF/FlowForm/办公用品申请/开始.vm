@@ -1,0 +1,499 @@
+OfficeGoodsApplyVM=Ext.extend(Ext.form.FormPanel ,{
+    constructor:function(){
+    	OfficeGoodsApplyVM.superclass.constructor.call(this,{
+    		title:"办公用品申请",
+			labelWidth:100,
+			labelAlign:"left",
+			layout:"form",
+			width:600,
+			height:400,
+			padding:"10px",
+			items:[
+			{
+				xtype : 'container',
+				layout : 'column',
+				id : 'infoContainer',
+				style : 'padding-left:0px;padding-bottom:3px;',
+				items : [{
+					xtype : 'label',
+					style : 'padding-left:0px;padding-top:3px;',
+					text : '申请人:',
+					width : 80
+				}, {
+					name : 'name',
+					xtype : 'textfield',
+					id : 'name',
+					allowBlank : false,
+					editable:false,
+					readOnly:true,
+					style:"background:#F0F0F0;",
+					width : 100,
+					value:__currentUser
+				},
+				{
+					xtype : 'label',
+					style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+					text : '申请部门:',
+					width : 70
+				}, {
+					name : 'dept',
+					xtype : 'textfield',
+					id : 'dept',
+					allowBlank : false,
+					width : 100,
+					editable : false,
+					readOnly : true,
+					style:"background:#F0F0F0;",
+					value:__currentUserDept
+				},{
+					xtype : 'label',
+					style : 'padding-left:0px;padding-top:3px;margin-left:10px;',
+					text : '申请日期:',
+					width : 70
+				}, {
+					name : 'applyDate',
+					allowBlank : false,
+					editable : false,
+					readOnly : true,
+					style:"background:#F0F0F0;",
+					xtype : 'textfield',
+					id : 'applyDate',
+					width : 100,
+					value:formatDate(new Date(),'yyyy-MM-dd')
+				},
+				{
+					name : 'goodresultGridData',
+					xtype : 'hidden',
+					id : 'flow_goodresultGridData',
+					anchor : '95.5%',
+					allowBlank : false,
+					width : 150,
+					editable : true,
+					readOnly : false
+				},{
+					name : 'totalPrice',
+					xtype : 'hidden',
+					id : 'flow_totalPrice',
+					anchor : '95.5%',
+					allowBlank : false,
+					width : 150,
+					editable : true,
+					readOnly : false
+				}]
+				
+			},{
+				xtype : 'container',
+				layout : 'column',
+				id : 'typeContainer',
+				style : 'padding-left:0px;padding-top:10px;',
+				items : [{
+					xtype : 'label',
+					style : 'padding-left:0px;padding-top:3px;',
+					text : '申请类型:',
+					width : 80
+				}, {
+					xtype : 'combo',
+					id : 'flow_applyGoodType',
+					hiddenName : 'applyGoodType',
+					emptyText : '---请选择---',
+					editable:false,
+					selectOnFocus : true,
+					forceSelection : true,
+					triggerAction : 'all',
+					store:[['办公用品', '办公用品'], ['IT类', 'IT类']],
+					allowBlank:false
+				}, {
+					xtype : 'label',
+					style : 'padding-left:10px;padding-top:3px;',
+					text : '使用类型:',
+					width : 80
+				}, {
+					xtype : 'combo',
+					id : 'flow_applyGoodUseType',
+					hiddenName : 'applyGoodUseType',
+					emptyText : '---请选择---',
+					editable:false,
+					selectOnFocus : true,
+					forceSelection : true,
+					triggerAction : 'all',
+					store:[['部门使用', '部门使用'], ['项目使用', '项目使用']],
+					allowBlank:false,
+					listeners : {
+						select : function(comb,record){
+							var value = comb.getValue();
+							if(value == "项目使用"){
+								Ext.getCmp("flow_applyGoodProName").allowBlank = false;
+								Ext.getCmp("flow_applyGoodProCharger").allowBlank = false;
+								Ext.getCmp("flow_applyGoodContainer").setVisible(true);
+							}else{
+								Ext.getCmp("flow_applyGoodProName").allowBlank = true;
+								Ext.getCmp("flow_applyGoodProCharger").allowBlank = true;
+								Ext.getCmp("flow_applyGoodProName").setValue("");
+								Ext.getCmp("flow_applyGoodProId").setValue("");
+								Ext.getCmp("flow_applyGoodProCharger").setValue("");
+								Ext.getCmp("flow_applyGoodProChargerId").setValue("");
+								Ext.getCmp("flow_applyGoodContainer").setVisible(false);
+							}
+						}
+					}
+				}
+				]
+			},{
+				xtype : 'container',
+				layout : 'column',
+				id : 'flow_applyGoodContainer',
+				style : 'padding-left:0px;padding-top:10px;',
+				items : [{
+					xtype:'label',
+					text:'项目名称:',
+					style : 'padding-top:3px;',
+					width : 80
+				},{
+					xtype : 'textfield',
+					name : 'applyGoodProName',
+					id:'flow_applyGoodProName',
+					listeners : {
+						focus : function() {
+							ProjectNewSelector.getView(function(proId, proName) {
+								Ext.getCmp("flow_applyGoodProId").setValue(proId);
+								Ext.getCmp("flow_applyGoodProName").setValue(proName);
+							}, true).show();
+						}
+					}
+				},{
+					xtype:'label',
+					text:'项目负责人:',
+					style : 'padding-left:10px;padding-top:3px;',
+					width : 80
+				},{
+					xtype : 'textfield',
+					name : 'applyGoodProCharger',
+					id:'flow_applyGoodProCharger',
+					readOnly : true,
+					listeners : {
+						focus : function() {
+							UserSelector.getView(function(userId,fullname){
+								Ext.getCmp("flow_applyGoodProChargerId").setValue(userId);
+								Ext.getCmp("flow_applyGoodProCharger").setValue(fullname);
+							},true).show();
+						}
+					}
+				},{
+					xtype : 'hidden',
+					name : 'applyGoodProChargerId',
+					id:'flow_applyGoodProChargerId'
+				},{
+					xtype : 'hidden',
+					name : 'applyGoodProId',
+					id:'flow_applyGoodProId'
+				}]
+			}
+			,{
+				xtype : 'container',
+				layout : 'column',
+				id : 'desContainer',
+				style : 'padding-left:0px;padding-top:10px;',
+				items : [{
+					xtype : 'label',
+					style : 'padding-left:0px;padding-top:3px;',
+					text : '申请说明:',
+					width : 80
+				}, {
+					name : 'applyDescription',
+					xtype : 'textarea',
+					maxLength:200,
+					id : 'flow_applyDescription',
+					allowBlank : false,
+					width : 480,
+					height:80
+				}]
+				
+			},{
+				xtype:'hidden',
+				id:'totalPriceBigId',
+				name:'totalPriceBig'
+			},{
+				xtype : 'container',
+				layout : 'column',
+				id : 'dataContainer',
+				style : 'padding-left:0px;padding-top:10px;',
+				items : [{
+					xtype : 'label',
+					style : 'padding-left:0px;padding-top:3px;',
+					text : '申请明细列表:',
+					width :80
+				},{
+					xtype : 'label',
+					style : 'padding-left:0px;padding-top:3px;color:red',
+					text : '(*必填)',
+					width : 60
+				},{	
+					xtype:'label',
+					id:'totalPriceLabelId',
+					text:'',
+					style:'padding-left:0px;padding-top:3px;color:red'
+				},{
+					xtype:'grid',
+					id : 'flow_goodresultGridDataGrid',
+					height:150,
+					width:720,
+					stripeRows:true,
+					trackMouseOver : true,
+					clicksToEdit:1, 
+					plugins:[new Ext.ux.grid.RowEditor({
+						saveText: '保存',
+						cancelText:'取消',
+						errorText:'请输入完整信息',
+						errorSummary:false
+					})],
+						store: new Ext.data.ArrayStore({
+							url : '',
+							remoteSort : false,
+							fields : ['id','name','model','brand','unit','price','num'],
+							listeners:{
+							'update':function(value){
+								var r=this.getRange();								
+								var resultArray = [];  
+								var sum=0;
+								var prePrice=0;
+								var rlen = r.length;  
+								for (var i = 0; i < rlen; i++) {  
+									resultArray.push([]);  
+									if (r[i].fields) {  
+									    var fields = r[i].fields; 
+									    var flen = fields.length;  
+									    for (var z = 0; z < flen; z++) {
+											var fieldValue = r[i].get(fields.keys[z]);
+											if (Ext.isEmpty(fieldValue)||fieldValue == '请双击选择' || fieldValue == '请双击填写' ) {
+																continue;
+											}
+											if(fields.keys[z]=='id'){
+												resultArray[i].push('ID:'+fieldValue); 
+											}else if(fields.keys[z]=='name'){
+												resultArray[i].push('品名:'+fieldValue); 
+											}else if(fields.keys[z]=='model'){
+												resultArray[i].push('规格型号:'+fieldValue); 
+											}else if(fields.keys[z]=='brand'){
+												resultArray[i].push('品牌:'+fieldValue); 
+											}else if(fields.keys[z]=='unit'){
+												resultArray[i].push('单位:'+fieldValue); 
+											}else if(fields.keys[z]=='price'){
+												prePrice=fieldValue;
+												resultArray[i].push('单价:'+fieldValue);
+											}else if(fields.keys[z]=='num'){
+												 sum=sum+parseFloat(fieldValue)*parseFloat(prePrice);
+												 Ext.getCmp('flow_totalPrice').setValue(sum);
+												 var totalPriceLabel = AmountInWords(sum);
+						  	  		  			 var useType = Ext.getCmp("flow_applyGoodUseType").getValue();
+						  	  		  			 if(useType == "项目使用" && sum > 3000){
+						  	  		  			 	Ext.getCmp("totalPriceLabelId").setText("总金额："+totalPriceLabel+"(注：项目使用单笔申请不能超过贰千元(￥3000))");
+						  	  		  			 }else{
+													 Ext.getCmp("totalPriceLabelId").setText("总金额："+totalPriceLabel);
+						  	  		  			 }
+						  	  		  			 Ext.getCmp("totalPriceBigId").setValue(totalPriceLabel);
+						  	  		  			 
+						  	  		  			 resultArray[i].push('数量:'+fieldValue+';'); 
+											}
+										
+									    }
+									}  
+								}
+								if(rlen == 0){
+									Ext.getCmp('flow_totalPrice').setValue(0);
+								}
+								 //删除空元素
+							    for(var i = 0; i < resultArray.length; i++){
+							    	if(resultArray[i].length==0){
+							    		resultArray.splice(i,1);
+							    		i--;
+							    	}
+							    }
+								Ext.getCmp('flow_goodresultGridData').setValue(resultArray);
+							}
+						}
+					}),
+					cm:new Ext.grid.ColumnModel({
+							columns : [new Ext.grid.RowNumberer(), {
+								header : '编号',
+								dataIndex : 'id',
+								width:50,
+								editor:new Ext.grid.GridEditor(
+											new Ext.form.TextField({ 
+												id:'id',
+												readOnly:true
+		                        }))
+							}
+							,{
+								header : '品名',	
+								dataIndex : 'name',
+								width:120,
+								editor:new Ext.grid.GridEditor(
+											new Ext.form.TextField({ 
+												id:'name',
+												name:'name1',
+												allowBlank: false,
+												blankText:'品名不能为空',
+												readOnly:true,
+												listeners:{
+													'focus':function(){
+														GoodsSelector.getView(
+							        						 function(goodsIds, goodsNames,brands,specifications,stockCounts,units,prices){
+							        						 	 Ext.getCmp('id').setValue(goodsIds);
+								        						 Ext.getCmp('name').setValue(goodsNames);
+								        						 Ext.getCmp('model').setValue(specifications);
+								        						 Ext.getCmp('brand').setValue(brands);
+								        						 Ext.getCmp('unit').setValue(units);
+								        						 Ext.getCmp('price').setValue(prices);
+																},true    
+														).show();
+													}
+												}
+		                        }))
+							}
+							,{
+								header : '规格型号',	
+								dataIndex : 'model',
+								width:100,
+								editor:new Ext.grid.GridEditor(
+										new Ext.form.TextField({ 
+												allowBlank: false,
+												blankText:'规格型号不能为空' ,
+												id:'model',
+												readOnly:true
+								}))
+							}
+							,{
+								header : '品牌',	
+								dataIndex : 'brand',
+								editor:new Ext.grid.GridEditor(
+										new Ext.form.TextField({ 
+												allowBlank: false,
+												blankText:'品牌不能为空',
+												id:'brand',
+												readOnly:true
+								}))
+							},{
+								header : '单位',	
+								dataIndex : 'unit',
+								editor:new Ext.grid.GridEditor(
+										new Ext.form.TextField({ 
+												allowBlank: false,
+												blankText:'单位不能为空',
+												id:'unit',
+												readOnly:true
+								})),
+								width:60
+							},{
+								header : '单价',	
+								dataIndex : 'price',
+								editor:new Ext.grid.GridEditor(
+										new Ext.form.TextField({ 
+												allowBlank: false,
+												blankText:'单价不能为空',
+												id:'price',
+												readOnly:true
+								})),
+								width:50
+							},{
+								header : '数量',	
+								dataIndex : 'num',
+								editor:new Ext.grid.GridEditor(
+										new Ext.form.NumberField({ 
+												allowBlank: false,
+												blankText:'数量不能为空',
+												validator: function() { 
+															if(this.value!=''){
+															    return true;
+															}else{																
+																this.invalidText='数量不能为空';
+																return false;
+															}
+													} 
+								})),
+								width:60
+							}
+							],
+						defaults : {
+							sortable : false,
+							menuDisabled : false,
+							width : 100
+						}
+					}),
+					tbar :new Ext.Toolbar({
+						height : 30,				
+						items : [{
+								iconCls : 'btn-add',
+								text : '添加领用物品',
+								xtype : 'button',
+								handler :function () {
+									var DataRecord = Ext.data.Record.create([{name:'id'},{name:'name'},{name:'model'},{name:'brand'},{name:'unit'},{name:'price'},{name:'num'}]);
+									var store =Ext.getCmp('flow_goodresultGridDataGrid').store;
+									var grid = Ext.getCmp('flow_goodresultGridDataGrid'); 
+										
+										
+									var n1 = ''; var n2 = '请双击选择';var n3 = '';var n4='';var n5 = '';var n7='';var n8='';var n9='';
+									store.each(function(rec){  
+														n1 = '';
+														n2 = '请双击选择'; 
+														n3 = '';
+														n4 = '';
+														n5 = '';
+														n8 = '';
+														n9 = '';}); 
+										var newRowData = {id:n1,name:n2,model:n3,brand:n4,unit:n5,price:n9,num:n8}; 
+										var newRecord = new DataRecord(newRowData); 
+										store.add([newRecord]);
+										
+									grid.getSelectionModel().on('selectionchange', function(sm){  
+								        Ext.getCmp('goodremoveBtn').setDisabled(sm.getCount() < 1);  
+								    }); 
+								}
+							}
+						, {
+							iconCls : 'btn-del',
+							text : '删除领用物品',
+							id:'goodremoveBtn',
+							xtype : 'button',
+							handler :function () {
+								var store =Ext.getCmp('flow_goodresultGridDataGrid').store;
+								var grid = Ext.getCmp('flow_goodresultGridDataGrid'); 
+								var s = grid.getSelectionModel().getSelections();  
+				                for(var i = 0, r; r = s[i]; i++){  
+				                    store.remove(r);  
+				                }  
+							store.fireEvent("update");//更新事件
+				                    
+								}
+							}
+						]
+					}),
+					listeners:{
+						afterrender : function(){
+							Ext.getCmp("flow_applyGoodContainer").setVisible(false);
+						}
+					}
+				},{
+					xtype : 'textfield',
+					hidden : true,
+					validator : function(){
+					 	var totalPrice = Ext.getCmp('flow_totalPrice').getValue();
+						var totalPriceLabel = AmountInWords(totalPrice);
+  	  		  			var useType = Ext.getCmp("flow_applyGoodUseType").getValue();
+  	  		  			if(useType == "项目使用" && totalPrice > 3000){
+  		  					Ext.getCmp("totalPriceLabelId").setText("总金额："+totalPriceLabel+"(注：项目使用单笔申请不能超过贰千元(￥3000))");
+  		  					return false;
+  	  		  			}else if(totalPrice == 0){
+					 		Ext.getCmp("totalPriceLabelId").setText("总金额："+totalPriceLabel+"(注：必须选择要申请的用品才能提交)");
+					 		return false;
+  	  		  			}
+  	  		  			Ext.getCmp("totalPriceBigId").setValue(totalPriceLabel);
+  	  		  			return true
+					},
+					fieldLabel : '帮助验证的空的隐藏的textfield',
+					id : 'flow_applyGoodhelpValidateTextfield'
+				}]
+			}
+			]
+    	})
+    }
+})

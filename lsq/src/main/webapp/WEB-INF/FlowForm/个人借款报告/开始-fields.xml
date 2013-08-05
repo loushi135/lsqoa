@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="loanReport" label="报告人" type="varchar" length="128" isShowed="true"/>
+	<field name="loanDepatment" label="所属部门" type="varchar" length="128" isShowed="true"/>
+	<field name="personCompanyName" label="公司名称" type="varchar" length="128" isShowed="true"/>
+	<field name="loanMoney" label="金额" type="varchar" length="128" isShowed="true"/>
+	<field name="loanMonth" label="借款时长" type="varchar" length="128" isShowed="true"/>
+	<field name="loanYear" label="按年计算时长" type="varchar" length="128" isShowed="true"/>
+	<field name="loanCase" label="借款原因" type="varchar" length="128" isShowed="true"/>
+	<field name="loanCase" label="借款原因" type="varchar" length="128" isShowed="true"/>
+	<field name="loanMoneyBig" label="金额大写" type="varchar" length="128" isShowed="true"/>
+</fields>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.statistics.ProjectQuota"
+        table="project_quota"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="foreign" >
+            	<param name="property">project</param>  
+            </generator>
+        </id>
+         <property
+            name="quota"
+            type="java.math.BigDecimal"
+            update="true"
+            insert="true"
+            access="property"
+            column="quota"
+            precision="10"
+            scale="2"
+            not-null="false"
+            unique="false"
+        />
+        <one-to-one name="project" constrained="true" class="com.xpsoft.oa.model.statistics.ProjectNew"></one-to-one> 
+        <property
+            name="createtime"
+            type="java.util.Date"
+            update="false"
+            insert="true"
+            access="property"
+            column="createtime"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+		<many-to-one
+			name="createUser"
+			class="com.xpsoft.oa.model.system.AppUser"
+            not-null="false"
+			fetch="select"
+			insert="true"
+			update="false"
+		>
+			<column name="createUser" />
+		</many-to-one>
+     </class>
+</hibernate-mapping>

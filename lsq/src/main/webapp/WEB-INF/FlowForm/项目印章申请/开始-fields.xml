@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+	<field name="bpaDeptId" label="区域ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowSeal.proId" label="项目ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowSeal.proName" label="项目名称" type="varchar" length="128" isShowed="true"/>
+	<field name="flowSeal.content" label="项目章刻印内容" type="varchar" length="128" isShowed="true"/>
+	<field name="flowSeal.applyDate" label="申领时间" type="datetime" isShowed="true"/>
+	<field name="flowSeal.returnDate" label="归还时间" type="datetime" isShowed="true"/>
+	<field name="flowSeal.keeperId" label="保管责任人ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowSeal.keeperName" label="保管责任人" type="varchar" length="128" isShowed="true"/>
+	<field name="flowSeal.applyUserId" label="经办人ID" type="varchar" length="128" isShowed="false"/>
+	<field name="flowSeal.applyUserName" label="经办人名字" type="varchar" length="128" isShowed="true"/>
+</fields>

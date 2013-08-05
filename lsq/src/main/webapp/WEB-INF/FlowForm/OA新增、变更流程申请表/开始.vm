@@ -1,0 +1,159 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "OA新增、变更流程申请表",
+	layout : "form",
+	bodyStyle : 'padding:10px 10px 10px 10px',
+	border : true,
+	autoScroll : true,
+	bodyStyle: 'padding:10px 10px 10px 10px;',
+	defaults : {
+		anchor : '98%,98%'
+	},
+	defaultType : 'textfield',
+	width : 600,
+	autoHeight : true,
+	padding : "10px",
+	initComponent : function() {
+		
+				this.items = [ 		{
+										fieldLabel : '流程名称',
+										xtype:'combo',
+										allowBlank:false,
+										hiddenName : 'flowApply.flowName',
+										id : 'flow_flowApply.flowName',
+										maxLength:64,
+										mode:'remote',
+										emptyText:'新增流程请填写，变更流程请选择。',
+										triggerAction:'all',
+										store:new Ext.data.Store({
+												proxy : new Ext.data.HttpProxy({
+													url : __ctxPath + "/flow/listProDefinition.do",
+													params : {
+														typeId : this.typeId == 0
+													}
+												}),
+												reader : new Ext.data.JsonReader({
+													root : "result",
+													totalProperty : "totalCounts",
+													id : "id",
+													fields : [ {
+														name : "defId",
+														type : "int"
+													}, "proType", "name", "description", "createtime", "deployId" ]
+												}),
+												remoteSort : true
+											}),
+										valueField:'name',
+										displayField:'name'
+									}, {
+										fieldLabel : '需求背景',
+										xtype:'textarea',
+										name : 'flowApply.background',
+										id : 'flow_flowApply.background',
+										allowBlank : false
+									}, {
+										fieldLabel : '流程描述',
+										xtype:'textarea',
+										name : 'flowApply.flowDesc',
+										id : 'flow_flowApply.flowDesc',
+										allowBlank : false
+									}, {
+										fieldLabel : '流程节点',
+										xtype:'textarea',
+										name : 'flowApply.flowNode',
+										id : 'flow_flowApply.flowNode',
+										allowBlank : false
+									}, {
+										fieldLabel : '备注',
+										xtype:'textarea',
+										name : 'flowApply.remark',
+										id : 'flow_flowApply.remark'
+									},{
+										xtype : 'container',
+										autoHeight : true,
+										layout : 'column',
+										autoWidth : true,
+										defaultType : 'label',
+										style : 'padding-left:0px;padding-bottom:5px;',
+										items : [{
+													text : '附件:',
+													width:95,
+													style : "margin-top:15px;"
+												},{
+													xtype : 'hidden',
+													name : 'flowApply.attachIds',
+													id : 'flow_flowApply.attachIds'
+												},{
+													xtype : 'hidden',
+													name : 'flowApply.attachFiles',
+													id : 'flow_flowApply.attachFiles'
+												},{
+													xtype : 'panel',
+													id:'flow_flowApply.displayAttach',
+													columnWidth:.95,
+													height: 65,
+													frame:false,
+													autoScroll:true,
+													style : 'padding-left:10px;padding-top:0px;',
+													html : ''
+												},{
+													xtype : 'button',
+													iconCls : 'btn-upload',
+													text : '上传',
+													handler : function() {
+														var dialog = App.createUploadDialog({
+																				file_cat : 'flow/flowApply',
+																				callback : function(data) {
+																					var attachFiles = Ext.getCmp("flow_flowApply.attachFiles");
+																					var fileIds = Ext.getCmp('flow_flowApply.attachIds');
+																					var display = Ext.getCmp('flow_flowApply.displayAttach');
+																					display.body.update('');
+																					attachFiles.setValue('');
+																					fileIds.setValue('');
+																					for (var i = 0; i < data.length; i++) {
+																						if (fileIds.getValue() != '') {
+																							fileIds.setValue(fileIds.getValue()+ ',');
+																							attachFiles.setValue(attachFiles.getValue()+ ',');
+																						}
+																						attachFiles.setValue(attachFiles.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+																						fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																						Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																					}
+																				},
+																				permitted_max_size :1024*1024*20
+																			});
+															dialog.show(this);
+													}
+												}]
+									}, {
+										fieldLabel : '经办人',
+										readOnly:true,
+										name : 'flowApply.applyUser.fullname',
+										id : 'flow_flowApply.applyUser.fullname',
+										value:__currentUser
+									}, {
+										xtype : 'hidden',
+										name : 'flowApply.applyUser.userId',
+										id : 'flow_flowApply.applyUser.userId',
+										value:__currentUserId
+									}, {
+										fieldLabel : '相关部门',
+										name : 'flowApply.relatedUser.fullname',
+										id : 'flow_flowApply.relatedUser.fullname',
+										allowBlank : false,
+										listeners : {
+											focus : function() {
+												UserSelector.getView(function(ids, names) {
+													Ext.getCmp("flow_flowApply.relatedUser.fullname").setValue(names);
+													Ext.getCmp("flow_flowApply.relatedUser.userId").setValue(ids);
+												}, true).show();
+											}
+										}
+									}, {
+										xtype : 'hidden',
+										name : 'flowApply.relatedUser.userId',
+										id : 'flow_flowApply.relatedUser.userId'
+									}]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

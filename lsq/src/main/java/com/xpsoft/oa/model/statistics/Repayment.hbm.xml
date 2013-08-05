@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.xpsoft.oa.model.statistics.Repayment" table="repayment"
+		select-before-update="false" dynamic-update="false" dynamic-insert="false"
+		optimistic-lock="version">
+		<id name="id" column="id" type="java.lang.Long" length="19">
+			<generator class="native" />
+		</id>
+		<many-to-one name="payment"
+			class="com.xpsoft.oa.model.statistics.PaymentList" not-null="false"
+			fetch="join">
+			<column name="paymentId"></column>
+		</many-to-one>
+
+		<property name="returnAmount" type="java.math.BigDecimal"
+			update="true" insert="true" access="property" column="returnAmount"
+			length="10" not-null="false" scale="2" unique="false" />
+		<property name="returnDate" type="java.util.Date" update="true"
+			insert="true" access="property" column="returnDate" length="19"
+			not-null="false" unique="false" />
+		<property name="operator" type="java.lang.String" update="true"
+			insert="true" access="property" column="operator" length="128"
+			not-null="false" unique="false" />
+		<property name="returnAmountBig" type="java.lang.String"
+			update="true" insert="true" access="property" column="returnAmountBig"
+			length="128" not-null="false" unique="false" />
+		<property name="returnType" type="java.lang.String"
+			update="true" insert="true" access="property" column="returnType"
+			length="128" not-null="false" unique="false" />
+	</class>
+</hibernate-mapping>

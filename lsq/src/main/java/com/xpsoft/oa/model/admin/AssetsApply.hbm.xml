@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="com.xpsoft.oa.model.admin.AssetsApply"
+        table="assets_apply"
+        select-before-update="false"
+        dynamic-update="false"
+        dynamic-insert="false"
+        optimistic-lock="version"
+    >
+		<id
+            name="id"
+            column="id"
+            type="java.lang.Long"
+            length="19"
+        >
+            <generator class="native"/>
+        </id>
+         <property
+            name="name"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="name"
+            length="24"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="dept"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="dept"
+            length="24"
+            not-null="true"
+            unique="false"
+        />
+        <many-to-one name="useProject"
+         class="com.xpsoft.oa.model.statistics.ProjectNew" 
+         not-null="false"
+         fetch="join">
+        	<column name="useProjectId"></column>
+        </many-to-one>
+        <many-to-one name="useProjectManager"
+         class="com.xpsoft.oa.model.system.AppUser" 
+         not-null="false"
+         fetch="join">
+        	<column name="useProjectManagerId"></column>
+        </many-to-one>
+        <property
+            name="applyDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            access="property"
+            column="applyDate"
+            length="19"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="applyType"
+            type="java.lang.Integer"
+            update="true"
+            insert="true"
+            access="property"
+            column="applyType"
+            length="12"
+            not-null="true"
+            unique="false"
+        />
+        <property
+            name="applyDescription"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            access="property"
+            column="applyDescription"
+            length="255"
+            not-null="true"
+            unique="false"
+        />
+         <property
+            name="processRunId"
+            type="java.lang.Long"
+            update="false"
+            insert="true" 
+            access="property"
+            column="processRunId"
+            length="19"
+            not-null="false"
+            unique="false"
+        />
+         <property
+            name="isSubsidyOrNot"
+            type="java.lang.String"
+            update="false"
+            insert="true" 
+            access="property"
+            column="isSubsidyOrNot"
+            length="1"
+            not-null="false"
+            unique="false"
+        />
+  <!-- exported bi-directional one-to-many association to AssetsApplycontent -->
+	<set name="assetsApplycontents"
+	     table="assets_applycontent"
+	     lazy="true"
+	     inverse="false"
+	     cascade="all"
+	     sort="unsorted"
+	     where="price>=2000"
+	>
+		<key>
+			<column name="assetsapplyId"/>
+		</key>
+		<one-to-many
+			class="com.xpsoft.oa.model.admin.AssetsApplycontent"
+		/>
+	</set>     
+    </class>
+</hibernate-mapping>

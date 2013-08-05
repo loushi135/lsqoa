@@ -1,0 +1,253 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "离职审批表",
+	labelWidth : 100,
+	labelAlign : "left",
+	layout : "form",
+	width : 680,
+	height :350,
+	padding : "10px",
+	initComponent : function() {
+		this.items = [{
+					xtype : "label",
+					text : "离职审批表",
+					width : "",
+					style : "padding-left:290px;font-weight:bold;font-size:20px;"
+				},{
+					xtype:'panel',
+					layout:'column',
+					border:false,
+					defaultType : 'label',
+					style : "padding-top:3px;",
+					items:[
+						{
+									text : '所属公司:',
+									width : 90
+							},
+						{
+									xtype:'textfield',
+									name:'companyName',
+									readOnly:true,
+									style:"background:#F0F0F0;",
+									value:__companyName,
+									width:570
+						}
+					]
+				}
+				, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					style : "padding-top:5px;",
+					height : 30,
+					items : [{
+								xtype : "label",
+								text : "姓名:",
+								height : 30,
+								width : 90
+							}, {
+								xtype : "textfield",
+								name : "applyName",
+								allowBlank:false,
+								readOnly:true,
+								style:"background:#F0F0F0;",
+								value:__currentUser
+							},{
+								xtype : "label",
+								style : "margin-left:5px;",
+								text : "性别:",
+								height : 30,
+								width : 30
+							}, {
+								xtype : "combo",
+								readOnly:true,
+								hiddenName : "sex",
+								displayField : 'label',
+								valueField : 'value',
+								store:new Ext.data.SimpleStore({
+											fields : ['value', 'label'],
+											data : [['男','男'],['女','女']]
+										 }),
+								mode : 'local',
+								allowBlank:false,
+								triggerAction : 'all',
+								value:__currentUserSex==0?'女':'男',
+								width : 60
+							}, {
+								xtype : "label",
+								text : "部门:",
+								style : "padding-left:5px;",
+								height : 30
+							}, {
+								xtype : "textfield",
+								readOnly:true,
+								name : "deptName",
+								value:__currentUserDept,
+								allowBlank:false
+							}, {
+								xtype : "label",
+								text : "职位:",
+								style : "padding-left:5px;",
+								height : 30
+							}, {
+								xtype : "textfield",
+								readOnly:true,
+								name : "workPosition",
+								id:'flow_workPosition',
+								value:__currentUserPosition=='null'?'':__currentUserPosition,
+								allowBlank:false
+							}]
+				}
+				,{
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "进公司日期:",
+								width : 90
+							}, {
+								xtype : "textfield",
+								name : "comeInDate",
+//								format:'Y-m-d',
+								width : 130,
+								allowBlank:false,
+								readOnly:true,
+								style:"background:#F0F0F0;",
+//								editable:false,
+								value:Ext.util.Format.substr(__currentUserAccessionTime,0,10)
+							},{
+								xtype : "label",
+								text : "离职申请日期:",
+								style : "margin-left:5px;",
+								width : 90
+							}, {
+								xtype : "datefield",
+								name : "applyDate",
+								format:'Y-m-d',
+								editable:false,
+								value:new Date(),
+								width : 120,
+								listeners:{
+									select:function(){
+										Ext.getCmp('signDate').setText(new Date(this.value).format("Y年m月d日"));
+									}
+								}
+							}, {
+								xtype : "label",
+								text : "正式离职日期:",
+								width : 90,
+								style : "padding-left:3px;"
+							}, {
+								xtype : "datefield",
+								name : "leaveDate",
+								id:"flow_leaveDate",
+								editable:false,
+								allowBlank:false,
+								format:'Y-m-d',
+								width : 135
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					height : 80,
+					items : [ {
+								xtype : "label",
+								text : "离职原因:",
+								width : 90
+							}, {
+								xtype : "textarea",
+								name : "leaveReason",
+								id:'flow_leaveReason',
+								maxLength:255,
+								allowBlank:false,
+								width:560,
+								height:60
+							}]
+				}, {
+					xtype : "panel",
+					layout : "form",
+					border : true,
+					unstyled : false,
+					style:'padding-top:5px;',
+					height : 60,
+					items : [
+							{
+								xtype : "label",
+								text : "本人意见：本人提出离职并承诺在任职期间如有违法的事宜承担相关的法律责任；同意不再享受年终效益工资（含业绩考核奖金）。不以公司原来印制名片行使各类活动，一经发现公司将通过法律手段追究责任。",
+								width : '100%'
+							}
+//							,{
+//								xtype:'panel',
+//								layout:'column',
+//								border:false,
+//								style:'padding-top:5px',
+//								items:[
+//									{
+//										xtype:'label',
+//										text:'签名:',
+//										style:'margin-left:180px'
+//									},{
+//										xtype:'label',
+//										text:__currentUser,
+//										style:'margin-left:10px;color: #036; text-decoration: none; border-bottom: 1px solid #F90;'
+//									},{
+//										xtype:'label',
+//										id:'signDate',
+//										text: new Date().format("Y年m月d日"),
+//										style:'margin-left:80px;'
+//									}
+//								]
+//							}
+							]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					height : 25,
+					items : [ {
+								xtype : "label",
+								text : "是否同意以上说明:",
+								width : 120
+							}, {
+								xtype : "radiogroup",
+								name : "isAgree",
+								id:'flow_isAgree',
+								allowBlank:false,
+								width:200,
+								items:[
+									{
+										name:'isAgree',
+										boxLabel:'同意',
+										inputValue:'同意',
+										checked : true
+									},{
+										name:'isAgree',
+										boxLabel:'不同意',
+										inputValue:'不同意'
+									}
+								],
+								listeners:{
+									change : function(field,newValue,oldValue){
+										var isAgree = newValue.getRawValue();
+										if(isAgree=='不同意'){
+											Ext.getCmp('startFlowBtn').disable();
+										}else if(isAgree=='同意'){
+											Ext.getCmp('startFlowBtn').enable();
+										}
+									}
+								}
+							}]
+				}
+				]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})

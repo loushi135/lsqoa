@@ -1,0 +1,279 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+			xtype : "formpanel",
+			title : "签证变更申请",
+			labelWidth : 30,
+			labelAlign : "left",
+			layout : "form",
+			width : 670,
+			height : 450,
+			padding : "10px",
+			initComponent : function() {
+				var thiz = this;
+				this.items = [
+							{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'项目名称：',
+										columnWidth:.15
+									},{
+										xtype:'hidden',
+										id:'flow_projectChargerUserId',
+										name:'projectChargerUserId'
+									},{
+										xtype:'hidden',
+										id:'flow_signApplyDepartmentId',
+										name:'signApplyDepartmentId'
+									},
+									{
+										xtype:'textfield',
+										id:'flow_signApply.proName',
+										name:'signApply.proName',
+										maxLength : 64,
+										allowBlank :false,
+										emptyText:'请选择材料发包合同',
+										columnWidth:.4,
+										listeners:{
+											focus:thiz.selectMaterialContract
+										}
+									},
+									{
+										text:'签证编号：',
+										style:'margin-left:10px;',
+										columnWidth:.15
+									},{
+										xtype:'textfield',
+										id:'flow_signApply.signNo',
+										name:'signApply.signNo',
+										maxLength : 64,
+										readOnly:true,
+										style:"background:#F0F0F0;",
+										columnWidth:.3,
+										value:'流程审批通过后,系统自动生成!'
+									}
+								]
+							},{
+								xtype: 'container',
+								layout:'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items:[
+									{
+										text:'施工单位：',
+										columnWidth:.15
+									},
+									{
+										xtype:'textfield',
+										id:'flow_signApply.workUnit',
+										name:'signApply.workUnit',
+										maxLength : 64,
+										style:"background:#F0F0F0;",
+										emptyText:'请选择材料发包合同',
+										columnWidth:.4,
+										listeners:{
+											focus:thiz.selectMaterialContract
+										}
+									},
+									{
+										text:'合同编号：',
+										style:'margin-left:10px;',
+										columnWidth:.15
+									},{
+										xtype:'textfield',
+										id:'flow_signApply.contract.contractNo',
+										name:'signApply.contract.contractNo',
+										maxLength : 64,
+										readOnly:true,
+										columnWidth:.3,
+										emptyText:'请选择材料发包合同',
+										listeners:{
+											focus:thiz.selectMaterialContract
+										}
+									},{
+										xtype:'hidden',
+										id:'flow_signApply.contract.id',
+										name:'signApply.contract.id'
+									}
+								]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:25,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '承担费用单位：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textfield',
+											id:'flow_signApply.feeSupplierName',
+											name:'signApply.feeSupplierName',
+											allowBlank : false,
+											readOnly:true,
+											emptyText:'请选择承担费用单位',
+											columnWidth : 0.85,
+											listeners:{
+												focus:function(field){
+													new SuppliersAssessSelector(function(suppliersId,supplierName,supplierNo){
+														field.setValue(supplierName);
+														Ext.getCmp("flow_signApply.feeSupplier.suppliersId").setValue(suppliersId);
+													},true).show();
+												}
+											}
+										},{
+											xtype:'hidden',
+											id:'flow_signApply.feeSupplier.suppliersId',
+											name:'signApply.feeSupplier.suppliersId'
+										}
+									]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '签证原因：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_signApply.signReason',
+											name:'signApply.signReason',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '签证内容：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_signApply.signContent',
+											name:'signApply.signContent',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+							},{
+								xtype : 'container',
+								layout : 'column',
+								height:80,
+								defaults:{
+									xtype:'label',
+									style:{
+										margin:'0px 0px 3px 0px'
+									}
+								},
+								items : [ {
+											text : '备注说明：',
+											columnWidth:0.15
+										}, {
+											xtype : 'textarea',
+											id:'flow_signApply.remark',
+											name:'signApply.remark',
+											allowBlank : false,
+											columnWidth : 0.85
+										}]
+							},{
+								xtype : 'panel',
+								layout : 'column',
+								defaultType : 'label',
+								style:'padding-top:3px;margin-buttom:5px',
+								height: 70,
+								border:false,
+								items : [{
+											text : '附件：',
+											columnWidth:0.15
+										},{
+											xtype : 'hidden',
+											name : 'signApply.attachIDs',
+											id : 'flow_signApply.attachIDs'
+										},{
+											xtype : 'hidden',
+											name : 'signApply.attachFiles',
+											id : 'flow_signApply.attachFiles'
+										},{
+											xtype : 'panel',
+											id:'flow_signApply.displayAttach',
+											columnWidth : 0.75,
+											height: 60,
+											frame:false,
+											autoScroll:true,
+											html : ''
+										},{
+											xtype : 'button',
+											iconCls : 'btn-upload',
+											text : '上传',
+											columnWidth : 0.1,
+											handler : function() {
+												var dialog = App.createUploadDialog({
+																		file_cat : 'flow/signApply',
+																		callback : function(data) {
+																			Ext.getCmp('flow_signApply.displayAttach').body.update('');
+																			Ext.getCmp("flow_signApply.attachFiles").setValue('');
+																			Ext.getCmp('flow_signApply.attachIDs').setValue('');
+																			var entrantFile = Ext.getCmp("flow_signApply.attachFiles");
+																			var fileIds = Ext.getCmp('flow_signApply.attachIDs');
+																			var display = Ext.getCmp('flow_signApply.displayAttach');
+																			for (var i = 0; i < data.length; i++) {
+																				if (fileIds.getValue() != '') {
+																					fileIds.setValue(fileIds.getValue()+ ',');
+																					entrantFile.setValue(entrantFile.getValue()+ ',');
+																				}
+																				entrantFile.setValue(entrantFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+//																				entrantFile.setValue(entrantFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+																				fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																				Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																			}
+																		},
+																		permitted_max_size :1024*1024*20,
+																		permitted_extensions_size : [{'type':['jpg','png','gif','bmp','jpeg'],'MaxSize':1024*800}]
+																	});
+													dialog.show(this);
+											}
+										}
+										]
+								}
+							]
+				Ext.MyForm.superclass.initComponent.call(this);
+			},
+			selectMaterialContract:function(){
+				new MaterialContractSelector(function(id,contractNo,contractAmount,proName,proNo,suppliersName,suppliersId,projectId,departmentId,departmentIdName,projectChargerId,projectChargerName){
+							Ext.getCmp("flow_signApply.proName").setValue(proName);			
+							Ext.getCmp("flow_signApply.workUnit").setValue(suppliersName);			
+							Ext.getCmp("flow_signApply.contract.contractNo").setValue(contractNo);			
+							Ext.getCmp("flow_signApply.contract.id").setValue(id);
+							Ext.getCmp("flow_projectChargerUserId").setValue(projectChargerId);
+							Ext.getCmp("flow_signApplyDepartmentId").setValue(departmentId);
+					},true).show();
+			}
+		})

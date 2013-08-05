@@ -1,0 +1,591 @@
+Ext.MyForm = Ext.extend(Ext.form.FormPanel, {
+	xtype : "formpanel",
+	title : "转正审批表",
+	labelWidth : 100,
+	labelAlign : "left",
+	layout : "form",
+	width : 600,
+	autoHeight:true,
+	padding : "3px",
+	initComponent : function() {
+		this.items = [{
+					xtype : "label",
+					name : "MyLabel",
+					text : "转正审批表",
+					width : "",
+					style : "padding-left:250px;font-weight:bold;font-size:20px;"
+				},{
+								xtype:'hidden',
+								name:'applyUserId',
+								id:'flow_applyUserId'
+				}, {
+					fieldLabel : '快速回复',
+					xtype : 'combo',
+					mode : 'local',
+					editable : false,
+					anchor : '90%,90%',
+					triggerAction : 'all',
+					store : ['同意', '不同意'],
+					listeners : {
+						select : {
+							fn : function(field, record, index) {// select :
+								// (
+								// Ext.form.ComboBox
+								// combo,
+								// Ext.data.Record
+								// record,
+								// Number
+								// index )
+								var options = Ext.getCmp('superOption');
+								if (options != null) {
+									options.setValue(field.getValue());
+									if (field.getValue() == '不同意') {
+										Ext.getCmp('flow_workAchieve')
+												.setDisabled(true);
+										Ext.getCmp('flow_workEfficiency')
+												.setDisabled(true);
+										Ext.getCmp('flow_teamSpirit')
+												.setDisabled(true);
+										Ext.getCmp('flow_businessLevel')
+												.setDisabled(true);
+										Ext.getCmp('flow_consciousness')
+												.setDisabled(true);
+										Ext.getCmp('flow_innovationAbility')
+												.setDisabled(true);
+										Ext.getCmp('flow_developAbility')
+												.setDisabled(true);
+										Ext.getCmp('flow_workAttitude')
+												.setDisabled(true);
+										Ext.getCmp('flow_character')
+												.setDisabled(true);
+
+										Ext.getCmp('pass').setDisabled(true);
+										Ext.getCmp('unPass').setDisabled(false);
+										Ext.getCmp('backReturnBtn')
+												.setDisabled(false);
+										Ext.getCmp('freeTransCombo')
+												.setDisabled(false);
+									} else {
+										Ext.getCmp('flow_workAchieve')
+												.setDisabled(false);
+										Ext.getCmp('flow_workEfficiency')
+												.setDisabled(false);
+										Ext.getCmp('flow_teamSpirit')
+												.setDisabled(false);
+										Ext.getCmp('flow_businessLevel')
+												.setDisabled(false);
+										Ext.getCmp('flow_consciousness')
+												.setDisabled(false);
+										Ext.getCmp('flow_innovationAbility')
+												.setDisabled(false);
+										Ext.getCmp('flow_developAbility')
+												.setDisabled(false);
+										Ext.getCmp('flow_workAttitude')
+												.setDisabled(false);
+										Ext.getCmp('flow_character')
+												.setDisabled(false);
+
+										Ext.getCmp('pass').setDisabled(false);
+										Ext.getCmp('unPass').setDisabled(true);
+										Ext.getCmp('backReturnBtn')
+												.setDisabled(true);
+										Ext.getCmp('freeTransCombo')
+												.setDisabled(true);
+									}
+								}
+							}
+						}
+					}
+				}, {
+					fieldLabel : '审批意见',
+					xtype : 'textarea',
+					id : 'superOption',
+					name : 'superOption',
+					allowBlank : false,
+					anchor : '90%'
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					height : 60,
+					items : [{
+								xtype : "label",
+								name : "MyLabel1",
+								text : "工作成果:",
+								height : 50,
+								width : 60
+							}, {
+								xtype : "textarea",
+								maxLength:200,
+								name : "workAchieve",
+								id:'flow_workAchieve',
+								allowBlank:false,
+								width: 510,
+								height:50
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "工作效率:",
+								width : 60
+							}, {
+								xtype : "textfield",
+								name : "workEfficiency",
+								id:'flow_workEfficiency',
+								maxLength:64,
+								allowBlank:false,
+								width:215
+							}, {
+								xtype : "label",
+								text : "团队精神:",
+								width : 90,
+								style : "padding-left:30px;"
+							}, {
+								xtype : "textfield",
+								name : "teamSpirit",
+								id:'flow_teamSpirit',
+								maxLength:64,
+								allowBlank:false,
+								width:215
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "业务水平:",
+								width : 60
+							}, {
+								xtype : "textfield",
+								maxLength:64,
+								name : "businessLevel",
+								id:'flow_businessLevel',
+								allowBlank:false,
+								width:215
+							}, {
+								xtype : "label",
+								text : "成本意识:",
+								width : 90,
+								style : "padding-left:30px;"
+							}, {
+								xtype : "textfield",
+								maxLength:64,
+								name : "consciousness",
+								id:'flow_consciousness',
+								allowBlank:false,
+								width:215
+							}]
+				}, {
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "创新能力:",
+								width : 60
+							}, {
+								xtype : "textfield",
+								maxLength:64,
+								name : "innovationAbility",
+								id:'flow_innovationAbility',
+								allowBlank:false,
+								width:215
+							}, {
+								xtype : "label",
+								text : "发展潜力:",
+								width : 90,
+								style : "padding-left:30px;"
+							}, {
+								xtype : "textfield",
+								maxLength:64,
+								name : "developAbility",
+								id:'flow_developAbility',
+								allowBlank:false,
+								width:215
+							}]
+				},{
+					xtype : "panel",
+					layout : "column",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					height : 40,
+					items : [{
+								xtype : "label",
+								text : "工作态度:",
+								width : 60
+							}, {
+								xtype : "textfield",
+								maxLength:64,
+								name : "workAttitude",
+								id:'flow_workAttitude',
+								allowBlank:false,
+								width:215
+							}, {
+								xtype : "label",
+								text : "品德言行:",
+								width : 90,
+								style : "padding-left:30px;"
+							}, {
+								xtype : "textfield",
+								maxLength:64,
+								name : "character",
+								id:'flow_character',
+								allowBlank:false,
+								width:215
+							}]
+				},{
+					xtype : "label",
+					text : "用人部门负责人意见（以工作任务为期限填写A项）:"
+				},{
+					xtype : "panel",
+					layout : "form",
+					border : false,
+					unstyled : false,
+					style:'padding-top:5px;',
+					items : [{
+				           xtype:'panel',
+				           layout:'column',
+				           border:false,
+				           items:[{
+						 xtype: 'radiogroup',
+						 id   : 'flow_salaryOption',
+						 name: 'salaryOption',
+						 width:40,
+						 columns:1,
+						 items:[{
+				           		boxLabel: 'A:',
+							name: 'salaryOption',
+							checked : true,
+							inputValue: 'A',
+							listeners:{
+									check:function(cb,checked){
+										//var contractOptions = Ext.query("*[name=contractOption]");
+											if(checked){
+											     Ext.getCmp("flow_contractOption").reset();
+												 Ext.getCmp("flow_contractTime").reset();
+												 Ext.getCmp("flow_contractOption").disable();
+												 Ext.getCmp("flow_contractTime").disable();
+												 Ext.getCmp("flow_salaryMonthB").disable();
+												 Ext.getCmp("flow_salaryMonthB").reset();
+												 Ext.getCmp("flow_salaryBusinessB").disable();
+												 Ext.getCmp("flow_salaryBusinessB").reset();
+												 Ext.getCmp("flow_salaryMonthA").enable();
+												 Ext.getCmp("flow_salaryBusinessA").enable();
+											}else{
+												 Ext.getCmp("flow_salaryMonthA").disable();
+												 Ext.getCmp("flow_salaryMonthA").reset();
+												 Ext.getCmp("flow_salaryBusinessA").disable();
+												 Ext.getCmp("flow_salaryBusinessA").reset();
+												 Ext.getCmp("flow_salaryMonthB").enable();
+												 Ext.getCmp("flow_salaryBusinessB").enable();
+												 Ext.getCmp("flow_contractOption").enable();
+												 if(Ext.getCmp("flow_contractOption").getValue().inputValue=='合同制员工'){
+												  	 Ext.getCmp("flow_contractTime").enable();
+												 }
+//												Ext.each(contractOptions,function(item,i){
+//													//alert(typeof(Ext.get(item)))
+//													//alert(item.innerHTML)
+//													//alert(Ext.get(item).dom().value);
+//												})
+											}
+										}
+									}
+				           	},{
+
+						           		boxLabel: 'B:',
+									name: 'salaryOption',
+									inputValue: 'B',
+									listeners:{
+										check:function(cb,checked){
+										  //var contractOptions = Ext.query("*[name=contractOption]");
+											if(checked){
+												Ext.getCmp("flow_salaryMonthA").disable();
+												 Ext.getCmp("flow_salaryMonthA").reset();
+												 Ext.getCmp("flow_salaryBusinessA").disable();
+												 Ext.getCmp("flow_salaryBusinessA").reset();
+												 Ext.getCmp("flow_salaryMonthB").enable();
+												 Ext.getCmp("flow_salaryBusinessB").enable();
+												 Ext.getCmp("flow_contractOption").enable();
+												 if(Ext.getCmp("flow_contractOption").getValue().inputValue=='合同制员工'){
+												  	 Ext.getCmp("flow_contractTime").enable();
+												 }
+//												Ext.each(contractOptions,function(item,i){
+//													//alert(typeof(Ext.get(item)))
+//													//alert(item.innerHTML)
+//													//alert(Ext.get(item).dom().value);
+//												})
+											}else{
+											   	 Ext.getCmp("flow_contractOption").reset();
+												 Ext.getCmp("flow_contractTime").reset();
+												 Ext.getCmp("flow_contractOption").disable();
+												 Ext.getCmp("flow_contractTime").disable();
+												 Ext.getCmp("flow_salaryMonthB").disable();
+												 Ext.getCmp("flow_salaryMonthB").reset();
+												 Ext.getCmp("flow_salaryBusinessB").disable();
+												 Ext.getCmp("flow_salaryBusinessB").reset();
+												 Ext.getCmp("flow_salaryMonthA").enable();
+												 Ext.getCmp("flow_salaryBusinessA").enable();
+											}
+										}
+									}
+						     }]
+					  },{
+							xtype:'panel',
+							border:false,
+						        width:550,
+							items:[
+								{
+									xtype:'container',
+									layout:'column',
+									items:[
+										{
+											xtype:'label',
+											text:' 考核期满后月薪',
+											width:90
+										},{
+											xtype:'numberfield',
+											name:'salaryMonthA',
+											maxLength:8,
+											id:'flow_salaryMonthA',
+											width:80
+										},{
+											xtype:'label',
+											text:'元/月;',
+											width:50
+										},{
+											xtype:'label',
+											text:' 按业绩考核定:',
+											width:90
+										},{
+											xtype:'numberfield',
+											maxLength:8,
+											name:'salaryBusinessA',
+											id:'flow_salaryBusinessA',
+											width:80
+										},{
+											xtype:'label',
+											text:'元;',
+											width:50
+										}
+									]
+								},{
+										xtype:'panel',
+										border:false,
+										layout:'column',
+										items:[{
+												xtype:'label',
+												text:' 试用期满同意转正为：',
+												width:120
+											}
+										]
+									}
+									,{
+										xtype:'panel',
+										layout:'form',
+										border:false,
+										items:[
+											{
+												xtype:'panel',
+												border:false,
+												layout:'column',
+												items:[{
+													 xtype: 'radiogroup',
+													 id   : 'flow_contractOption',
+													 name: 'contractOption',
+													 disabled:true,
+													 style:'margin-left:50px;',
+													 width:200,
+													 items:[{
+													 	checked : true,
+													 	name:'contractOption',
+														boxLabel:'聘用制员工',
+														inputValue:'聘用制员工'
+													},{
+														name:'contractOption',
+														boxLabel:'合同制员工',
+														inputValue:'合同制员工'
+													}],
+													listeners:{
+														change:function(field,newValue,oldValue){
+															if(newValue.inputValue=='合同制员工'){
+																Ext.getCmp("flow_contractTime").enable();
+															}else{
+																Ext.getCmp("flow_contractTime").disable();
+															}
+														}
+													}
+												 },{
+														xtype:'label',
+													 	style:'margin-top:5px;',
+														text:'（合同期限为 '
+												},{
+													 xtype: 'radiogroup',
+													 id   : 'flow_contractTime',
+													 name: 'contractTime',
+													 disabled:true,
+													 style:'margin-left:5px;',
+													 width:100,
+													 items:[{
+													 	checked : true,
+													 	name: 'contractTime',
+														boxLabel:'2年',
+														inputValue:'2年'
+													},{
+														name: 'contractTime',
+														boxLabel:'3年',
+														inputValue:'3年'
+													}]
+												 },{
+														xtype:'label',
+														 style:'margin-top:5px;',
+														text:' )'
+													}
+												]
+											},{
+												xtype:'panel',
+												border:false,
+												layout:'column',
+												style:'padding-top:5px;',
+												items:[
+													{
+														xtype:'label',
+														style:'margin-left:50px;',
+														text:'转正后月薪：'
+													},{
+														xtype:'numberfield',
+														name:'salaryMonthB',
+														maxLength:8,
+														id:'flow_salaryMonthB',
+														disabled:true,
+														width:80
+													},{
+														xtype:'label',
+														text:'元/月;',
+														width:50
+													},{
+														xtype:'label',
+														text:' 基本年薪（按业绩考核定）:'
+													},{
+														xtype:'numberfield',
+														name:'salaryBusinessB',
+														maxLength:8,
+														id:'flow_salaryBusinessB',
+														disabled:true,
+														width:80
+													},{
+														xtype:'label',
+														text:'元;',
+														width:50
+													}
+												]
+											}
+										]
+									}
+							]
+						}
+
+				           ]
+				        }]
+				}
+//				,{
+//							xtype : 'panel',
+//							layout : 'column',
+//							defaultType : 'label',
+//							style:'padding-top:10px;',
+//							border:false,
+//							items:[
+//								{
+//									text : '部门领导:',
+//									width : 90
+//								},
+//								{
+//									xtype:'textfield',
+//									fieldLabel:'部门领导',
+//									name:'deptLeaderName',
+//									readOnly:true,
+//									style:"background:#F0F0F0;",
+//									value:__currentUser,
+//									width:450
+//								}
+//							]
+//							
+//				}
+				,{
+							xtype : 'panel',
+							layout : 'column',
+							defaultType : 'label',
+							style:'padding-top:3px;margin-buttom:5px',
+							height: 70,
+							border:false,
+							items : [{
+										text : '转正评估表:',
+										width : 90
+									},{
+										xtype : 'hidden',
+										name : 'staffActiveAttachIDs',
+										id : 'flow_staffActiveAttachIDs'
+									},{
+										xtype : 'hidden',
+										name : 'staffActiveAttachFiles',
+										id : 'flow_staffActiveAttachFiles'
+									},{
+										xtype : 'panel',
+										id:'flow_displayAttach',
+										width : 400,
+										height: 60,
+										frame:true,
+										autoScroll:true,
+										html : ''
+									},{
+										xtype : 'button',
+										iconCls : 'btn-upload',
+										text : '上传',
+										handler : function() {
+											var dialog = App.createUploadDialog({
+																	file_cat : 'flow/staffActive',
+																	callback : function(data) {
+																		Ext.getCmp('flow_displayAttach').body.update('');
+																		Ext.getCmp("flow_staffActiveAttachFiles").setValue('');
+																		Ext.getCmp('flow_staffActiveAttachIDs').setValue('');
+																		var fileIds = Ext.getCmp('flow_staffActiveAttachIDs');
+																		var display = Ext.getCmp('flow_displayAttach');
+																		var staffActiveFile = Ext.getCmp("flow_staffActiveAttachFiles");
+																		
+																		for (var i = 0; i < data.length; i++) {
+																			if (fileIds.getValue() != '') {
+																				fileIds.setValue(fileIds.getValue()+ ',');
+																				staffActiveFile.setValue(staffActiveFile.getValue()+ ',');
+																			}
+																			staffActiveFile.setValue(staffActiveFile.getValue()+data[i].filepath+":"+data[i].filename.replace(/\s+/g,""));
+//																			staffActiveFile.setValue(staffActiveFile.getValue()+"<a href=javascript:window.location.href=\""+__ctxPath+"/file-Download?filePath=attachFiles/"+data[i].filepath+"&fileName="+data[i].filename.replace(/\s+/g,"")+"\">"+data[i].filename.replace(/\s+/g,"")+"</a>");
+																			fileIds.setValue(fileIds.getValue()+data[i].fileId);
+																			Ext.DomHelper.append(display.body,'<span><a href="#" onclick="FileAttachDetail.show('+data[i].fileId+')">'+data[i].filename.replace(/\s+/g,"")+'</a>&nbsp;|&nbsp;</span>');
+																		}
+																	},
+																	permitted_max_size :1024*1024*20
+																});
+												dialog.show(this);
+										}
+									}
+									]
+							}
+				]
+		Ext.MyForm.superclass.initComponent.call(this);
+	}
+})
