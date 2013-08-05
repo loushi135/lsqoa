@@ -48,7 +48,7 @@ public class AssetsApplyAction extends BaseAction{
 	 * 显示列表
 	 */
 	public String list2000(){
-		
+		System.out.println("1");
 		QueryFilter filter = new QueryFilter(getRequest());
 
 		// filter.addFilter("Q_bpaStauts_N_EQ", 0+"");
